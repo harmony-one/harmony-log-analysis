@@ -1,5 +1,5 @@
 # Harmony's blockchain log analysis and visualization
-## Test Logs
+## Test Logs [example](https://github.com/harmony-one/harmony-log-analysis/blob/master/notebooks/test_log_analysis/2020_03_11_stress_test.ipynb) 
 - Statistics Summary
     - transaction per second
     - time per block
@@ -25,6 +25,6 @@
     - collect rewards per second
 
 ## Node Logs
-- Retry analysis
-- Crosslink Retry analysis
-- Processing time analysis
+- [Retry analysis](https://github.com/harmony-one/harmony-log-analysis/blob/master/notebooks/retry/OSTN_02_28-03_04.ipynb)
+- [Crosslink Retry analysis](https://github.com/harmony-one/harmony-log-analysis/blob/master/notebooks/crosslink_retry/crosslink_retry.ipynb)
+- [Processing time analysis](https://harmony-one.github.io/harmony-log-analysis/stress_test_03_14_processing_time_vs_delegations.html)
