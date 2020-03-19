@@ -1,6 +1,7 @@
 # Harmony's blockchain log analysis and visualization
-## [Test Logs](https://github.com/harmony-one/harmony-log-analysis/blob/master/notebooks/test_log_analysis/2020_03_11_stress_test.ipynb) (
+## [Test Logs](https://github.com/harmony-one/harmony-log-analysis/blob/master/notebooks/test_log_analysis/2020_03_11_stress_test.ipynb) 
 - Statistics Summary (transaction per second, time per block, size, gas)
+
 - Features vs Time / Block Height (with all shards /per shard)
     - staking transaction per second
     - total transaction per second
@@ -8,6 +9,7 @@
     - time per block
     - size
     - gas
+    
 - Staking Features vs Time / Block Height (per shard)
     - total staking transactions per second
     - create validator per second
