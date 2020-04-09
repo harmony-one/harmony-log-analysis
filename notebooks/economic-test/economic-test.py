@@ -689,10 +689,10 @@ def R2_test():
     curr_test = R3_test
     if failures > 0:
         logger.warning(f"Test-R2: Fail")
-        return True
+        return False
     else:
         logger.info(f"Test-R2: Succeed")
-        return False
+        return True
 
 def R3_test():
     global curr_test
