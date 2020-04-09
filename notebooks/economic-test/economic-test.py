@@ -1278,6 +1278,7 @@ def R11_test():
     logger.info(f"Test-R11: Earning is proportional to effective stake ")
     num = 1
     iterations = 0
+    curr_test = R14_test
     try:
         while iterations < num:
             print("test", iterations+1, "will begin ...")
@@ -1308,8 +1309,10 @@ def R11_test():
 
             if not stake_diff:
                 logger.info(f"in this iteration, no validators change the effective stake")
+                return "Need More Tests"
             if not apr_diff:
                 logger.info(f"in this iteration, no validators change the apr")
+                return "Need More Tests"
 
             flag = True
             for k,v in stake_diff.items():
@@ -1330,7 +1333,6 @@ def R11_test():
     except TypeError as e:
         logger.error(f"error: {e}")
         
-    curr_test = R14_test
     if flag:
         logger.info(f"Test-R11: Succeed")
         return True
