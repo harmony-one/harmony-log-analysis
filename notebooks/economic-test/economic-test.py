@@ -406,7 +406,7 @@ def E2_test():
             logger.info(f"checking whether we have validators who set their status active after election starts")
             eligible_new = set(eligible_current) - set(eligible_old)
             if not eligible_new:
-                logger.info(f"no validator joins after the election start in this test")
+                logger.info(f"no validator joined after the election start in current test")
             else:
                 new_count += 1
                 while block < last_block + 1:
@@ -425,7 +425,7 @@ def E2_test():
     except TypeError as e:
         logger.error(f"error: {e}")
     if new_count == 0:
-        logger.info(f"No validator joined after the election in all tests, need more tests")
+        logger.info(f"Test-E2: No validator joined after the election in all tests, need more tests")
         return "Need More Tests"
     if flag:
         logger.info(f"Test-E2: Succeed")
@@ -870,7 +870,7 @@ def R4_test():
                 del_rewards += d['reward']
                 if d_addr in dels:
                     del_rewards -= dels[d_addr]
-            if del_rewards != reward:
+            if format(del_rewards, '.20e') != format(reward, '.20e'):
                 logger.warning(f"Test-R4:Fail")
                 logger.warning(f"for validator {address}, validator reward: {reward:.20e}, delegators reward: {del_rewards:.20e}")
                 flag = False
@@ -932,7 +932,7 @@ def R5_test():
                 reward -= acc_rewards_prev[address]
             total_reward += reward
             validator_rewards += validator_reward
-    if total_reward != validator_rewards:        
+    if format(total_reward, '.20e') != format(validator_rewards, '.20e'):        
         logger.warning(f"Test-R5: Fail")
         logger.warning(f"block: {block}, validator block reward: {validator_rewards:.20e}, total reward: {total_reward:.20e}, signers: {signers}")
         flag = False
@@ -1015,7 +1015,7 @@ def R6_test():
                 delegation_reward_expected = percentage * total_delegation_reward
                 if d_addr == address:
                     delegation_reward_expected = delegation_reward_expected + commission
-                if delegation_reward_actual != delegation_reward_expected:
+                if format(delegation_reward_actual, '.20e') != format(delegation_reward_expected, '.20e'):
                     logger.warning(f"Test-R6: Fail")
                     logger.warning(f"for validator {address} delegation {d_addr}, expected: {delegation_reward_expected:.20e}, actual: {delegation_reward_actual:.20e}")
                     flag = False
@@ -1055,54 +1055,60 @@ def R7_test():
                 dels[d_addr] = d_reward
             delegations_prev[address] = dels
 
-    next_block = block+1
-    while block < next_block:
-        block = getBlockNumber()
-    logger.info(f"new block {block} reached, will begin testing...")
     iterations = 0
-    num = 1
+    num = 2
     flag = True
-    # get the validator info and compute validator rewards
-    acc_rewards_curr = dict()
-    delegations_curr = dict()
-    validator_infos = getAllValidatorInformation()
-    block_reward = 28e18
-    validator_rewards = 0
-    total_reward = 0
-    signers = 0
-    for i in validator_infos:
-        if i['currently-in-committee'] == True:
-            signers = signers + 1
-            # block reward of the validator
-            shard_metrics = i['metrics']['by-bls-key']
-            validator_reward = 0
-            for by_shard in shard_metrics:
-                validator_addr = by_shard['key']['earning-account']
-                by_shard_reward = block_reward * float(by_shard['key']['overall-percent']) / 0.32
-                validator_reward = validator_reward + by_shard_reward
+    while iterations < num:
+        next_block = block+1
+        while block < next_block:
+            block = getBlockNumber()
+        logger.info(f"new block {block} reached, will begin testing...")
+            # get the validator info and compute validator rewards
+        acc_rewards_curr = dict()
+        delegations_curr = dict()
+        validator_infos = getAllValidatorInformation()
+        block_reward = 28e18
+        validator_rewards = 0
+        total_reward = 0
+        signers = 0
+        for i in validator_infos:
+            if i['metrics']:
+                signers = signers + 1
+                # block reward of the validator
+                shard_metrics = i['metrics']['by-bls-key']
+                validator_reward = 0
+                for by_shard in shard_metrics:
+                    validator_addr = by_shard['key']['earning-account']
+                    by_shard_reward = block_reward * float(by_shard['key']['overall-percent']) / 0.32
+                    validator_reward = validator_reward + by_shard_reward
 
-            address = i['validator']['address']
-            reward_accumulated = i['lifetime']['reward-accumulated']
-            acc_rewards_curr[address] = reward_accumulated
-            reward = reward_accumulated
-            if address not in acc_rewards_prev:
-                continue
-            reward = reward_accumulated - acc_rewards_prev[address]
-            # this reward should match sum of delegation rewards
-            ds = i['validator']['delegations']
-            del_rewards = 0
-            dels = delegations_prev[address]
-            for d in ds:
-                d_addr = d['delegator-address']
-                d_reward = d['reward']
-                del_rewards = del_rewards + d_reward
-                if d_addr in dels:
-                    del_rewards = del_rewards - dels[d_addr] 
-            if del_rewards != reward:
-                logger.warning(f"Test-R7: Fail")
-                logger.warning(f"for validator {address}, expected block reward, {validator_reward}, validator block reward, {reward}, delegation reward, {del_rewards}")
-            flag = False
-                
+                address = i['validator']['address']
+                reward_accumulated = i['lifetime']['reward-accumulated']
+                acc_rewards_curr[address] = reward_accumulated
+                reward = reward_accumulated
+                if address not in acc_rewards_prev:
+                    continue
+                reward = reward_accumulated - acc_rewards_prev[address]
+                # this reward should match sum of delegation rewards
+                ds = i['validator']['delegations']
+                del_rewards = 0
+                dels_prev = delegations_prev[address]
+                dels = dict()
+                for d in ds:
+                    d_addr = d['delegator-address']
+                    d_reward = d['reward']
+                    dels[d_addr] = d_reward
+                    del_rewards = del_rewards + d_reward
+                    if d_addr in dels:
+                        del_rewards = del_rewards - dels_prev[d_addr]
+                delegations_curr[address] = dels
+                if format(del_rewards, '.20e') != format(reward, '.20e'):
+                    logger.warning(f"Test-R7: Fail")
+                    logger.warning(f"for validator {address}, expected block reward, {validator_reward:.20e}, validator block reward, {reward:.20e}, delegation reward, {del_rewards:.20e}")
+                    flag = False
+        acc_rewards_prev = acc_rewards_curr
+        delegations_prev = delegations_curr
+        iterations += 1
     curr_test = R8_test
     if flag:
         logger.info(f"Test-R7: Succeed")
@@ -1182,13 +1188,13 @@ def R11_test():
     curr_test = R14_test
     
     while iterations < num:
-        logger.info(f"test, {iterations+1} will begin ...")
+        logger.info(f"test {iterations+1} will begin ...")
         block, last_block = getCurrentAndLastBlock()
         if block == last_block:
             new_block = block+1
             while block < new_block:
                 block = getBlockNumber()
-        block, last_block = getCurrentAndLastBlock()
+            block, last_block = getCurrentAndLastBlock()
         epoch = getEpoch()
 
         second_last_block = last_block - 1
@@ -1363,7 +1369,7 @@ def U2_test():
     num = 1
     iterations = 0
     flag = True
-    
+    curr_test = S1_test
     while iterations < num:
         block, last_block = getCurrentAndLastBlock()
         # need at least 2 blocks left to compare difference
@@ -1385,7 +1391,8 @@ def U2_test():
 
         if not diff_undelegate:
             logger.info(f"no undelegation happens in current test, need more tests")
-
+            return "Need More Tests"
+        
         for k,v in diff_undelegate.items():
             if k in diff_stake:
                 if v != -(diff_stake[k]):
@@ -1397,8 +1404,7 @@ def U2_test():
                 logger.warning(f"Validator: {k}: total stakes doesn't change after undelegation")
                 flag = False
         iterations += 1 
-        
-    curr_test = S1_test
+           
     if flag:
         logger.info("Test-U2: Succeed")
         return True
@@ -1419,7 +1425,7 @@ def S1_test():
                 if not i['is-harmony-slot']:
                     num += 1
             perc[k] = num/count
-        logger.info(f"the percentage for each shard: ", perc)
+        logger.info(f"the percentage for each shard: {perc}")
     except TypeError as e:
         logger.error(f"error: {e}")
         
@@ -1617,5 +1623,8 @@ if __name__ == "__main__":
     logger.info(f"Not applicable for tests: {no}")
     if no_lst:
         logger.info(f"{no_lst}")
+    logger.info(f"Error tests: {error}")
+    if error_lst:
+        logger.info(f"{error_lst}")
        
 
