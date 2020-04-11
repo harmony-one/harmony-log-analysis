@@ -1278,8 +1278,9 @@ def CN1_test():
     block, last_block = getCurrentAndLastBlock()
     while last_block - block > 29:
         block = getBlockNumber()
-    if block == last_block:
-        logger.info(f"current at the last block, wait until the 9th block in the new epoch")
+    time.sleep(5)
+    if block == last_block or block == last_block -1:
+        logger.info(f"current at the last block or last second block, wait until the 9th block in the new epoch")
         while block < last_block+9:
             block = getBlockNumber()
     logger.info(f"current block: {block}, will begin collecting infos...")
@@ -1292,7 +1293,8 @@ def CN1_test():
     new_block = block + 1
     while block < new_block:
         block = getBlockNumber()
-    logger.info(f"new block reached, {block}, will begin testing")
+    logger.info(f"new block reached, {block}, will wait for 5 seconds to begin testing")
+    time.sleep(5)
     next_rewards, status = getRewardsAndStatus(cutoff_rewards)
     flag = True
     for k,v in next_rewards.items():
