@@ -4,6 +4,7 @@ import logging
 import utils
 from utils import *
 import datetime
+import time
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("economic-test")
@@ -231,11 +232,13 @@ def E4_test(single):
             validator_infos = getAllValidatorInformation()
             for i in validator_infos:
                 address = i['validator']['address']
+                by_key_metrics = i['metrics']['by-bls-key']
+                slots = len(by_key_metrics)
                 if address in eligible_stake:
                     if i['currently-in-committee']:
-                        elected[address] = float(eligible_stake[address])
+                        elected[address] = float(eligible_stake[address] / slots)
                     else:
-                        non_elected[address] = float(eligible_stake[address])
+                        non_elected[address] = float(eligible_stake[address] / slots)
             sorted_elected = sorted(elected.items(), key = lambda kv: kv[1])
             sorted_non_elected = sorted(non_elected.items(), key = lambda kv: kv[1], reverse = True)
 
@@ -280,10 +283,17 @@ def M2_test(single):
         # get the median from rpc call
         median = getEposMedian()
         # calculate the median manually
-        slot_winners = getMedianRawStakeSnapshot()['epos-slot-winners']
+        validator_infos = getAllValidatorInformation()
         stake = []
-        for i in slot_winners:
-            stake.append((float(i['eposed-stake'])))
+        for i in validator_infos:
+            total_delegation = i['total-delegation']
+            if i['metrics'] == None:
+                continue
+            by_key_metrics = i['metrics']['by-bls-key']
+            slots = len(by_key_metrics)
+            delegation = total_delegation / slots
+            for i in range(slots):
+                stake.append(delegation)
         cal_median = float(get_median(stake))
         # compare the calculated median and rpc median
         if cal_median != median:
