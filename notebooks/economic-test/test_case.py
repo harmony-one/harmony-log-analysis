@@ -283,10 +283,17 @@ def M2_test(single):
         # get the median from rpc call
         median = getEposMedian()
         # calculate the median manually
-        slot_winners = getMedianRawStakeSnapshot()['epos-slot-winners']
+        validator_infos = getAllValidatorInformation()
         stake = []
-        for i in slot_winners:
-            stake.append((float(i['eposed-stake'])))
+        for i in validator_infos:
+            total_delegation = i['total-delegation']
+            if i['metrics'] == None:
+                continue
+            by_key_metrics = i['metrics']['by-bls-key']
+            slots = len(by_key_metrics)
+            delegation = total_delegation / slots
+            for i in range(slots):
+                stake.append(delegation)
         cal_median = float(get_median(stake))
         # compare the calculated median and rpc median
         if cal_median != median:
