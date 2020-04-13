@@ -231,14 +231,15 @@ def E4_test(single):
             non_elected = dict()
             validator_infos = getAllValidatorInformation()
             for i in validator_infos:
-                address = i['validator']['address']
-                by_key_metrics = i['metrics']['by-bls-key']
-                slots = len(by_key_metrics)
-                if address in eligible_stake:
-                    if i['currently-in-committee']:
-                        elected[address] = float(eligible_stake[address] / slots)
-                    else:
-                        non_elected[address] = float(eligible_stake[address] / slots)
+                if i['metrics']:
+                    address = i['validator']['address']
+                    by_key_metrics = i['metrics']['by-bls-key']
+                    slots = len(by_key_metrics)
+                    if address in eligible_stake:
+                        if i['currently-in-committee']:
+                            elected[address] = float(eligible_stake[address] / slots)
+                        else:
+                            non_elected[address] = float(eligible_stake[address] / slots)
             sorted_elected = sorted(elected.items(), key = lambda kv: kv[1])
             sorted_non_elected = sorted(non_elected.items(), key = lambda kv: kv[1], reverse = True)
 
