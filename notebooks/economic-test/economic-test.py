@@ -67,7 +67,7 @@ if __name__ == "__main__":
         if i == 'election':
             curr_test = E1_test
         elif i == 'median':
-            curr_test = M1_test
+            curr_test = M2_test
         elif i == 'reward':
             curr_test = R1_test
         elif i == 'consensus':
