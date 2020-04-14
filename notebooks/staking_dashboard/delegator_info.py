@@ -45,40 +45,45 @@ if __name__ == "__main__":
     validator_infos = getAllValidatorInformation()
     del_reward = defaultdict(int)
     del_stake = defaultdict(int)
+    undel = defaultdict(int)
     val_address = []
-    name = dict()
-    website = dict()
+    
     # get the accumualted reward in current block
     for info in validator_infos:
         address = info['validator']['address']
         val_address.append(address)
-        name[address] = info['validator']['name']
-        website[address] = info['validator']['website']
         for d in info['validator']['delegations']:
             del_address = d['delegator-address']
             reward = d['reward']/1e18
             del_reward[del_address] += reward
             amount = d['amount']/1e18
             del_stake[del_address] += amount
+            for u in d['undelegations']:
+                undel[del_address] += u['amount']/1e18
+                
     del_address = set(del_reward.keys()) - set(val_address)
     balance = dict()
     transaction = dict()
     for i in del_address:
-        balance[i] = getBalance(i)/1e18
+        balance[i] = float(getBalance(i)/1e18)
         transaction[i] = getTransactionCount(i)
-    balance_df = pd.DataFrame(balance.items(), columns=['address', 'balance (ONEs available = initial balance - staked ONEs + claim rewards)'])
+    balance_df = pd.DataFrame(balance.items(), columns=['address', 'balance (ONEs available = initial balance - current delegation - pending undelgation  + claim rewards)'])
     transaction_df = pd.DataFrame(transaction.items(), columns = ['address', 'transaction-count'])
     new_del_reward = dict()
     new_del_stake = dict()
+    new_undel = dict()
     for k,v in del_reward.items():
         if k in del_address:
             new_del_reward[k] = v
             new_del_stake[k] = del_stake[k]
+            new_undel[k] = undel[k]
     reward_df = pd.DataFrame(new_del_reward.items(), columns=['address', 'lifetime-reward (total rewards - claim rewards)'])
     stake_df = pd.DataFrame(new_del_stake.items(), columns=['address', 'stake (total delegated stake)'])
+    undel_df = pd.DataFrame(new_undel.items(), columns=['address', 'pending undelegation'])
     df = reward_df.join(stake_df.set_index('address'), on = 'address')
     df = df.join(balance_df.set_index('address'), on = 'address')
     df = df.join(transaction_df.set_index('address'), on = 'address')
+    df = df.join(undel_df.set_index('address'), on = 'address')
     print("-- Save csv files to ./csv/ folder --")
     df.to_csv(path.join(data, 'delegator.csv'))
 
