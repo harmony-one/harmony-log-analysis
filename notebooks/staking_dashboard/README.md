@@ -8,7 +8,7 @@ Get validators or delegators' information on staking dashboard: https://staking.
 `./csv/*`
 
 ## Validator Info
-To get information including `name, address, website, details, security-contact, identity, epos-status, currently-in-committee, apr, delegator-num, bls-key-num, current-epoch-signed, current-epoch-signing-percentage, current-epoch-to-sign, num-beacon-blocks-until-next-epoch, reward, uptime-percentage`
+To get information including name, address, website, details, security-contact, identity, epos-status, currently-in-committee, apr, delegator-num, bls-key-num, current-epoch-signed, current-epoch-signing-percentage, current-epoch-to-sign, num-beacon-blocks-until-next-epoch, reward, uptime-percentage
 
 ### Download newest script
 `curl -O https://raw.githubusercontent.com/harmony-one/harmony-log-analysis/master/notebooks/staking_dashboard/validators-info.py`
