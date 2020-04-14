@@ -59,14 +59,14 @@ if __name__ == "__main__":
             reward = d['reward']/1e18
             del_reward[del_address] += reward
             amount = d['amount']/1e18
-            del_stake[del_address] = amount
+            del_stake[del_address] += amount
     del_address = set(del_reward.keys()) - set(val_address)
     balance = dict()
     transaction = dict()
     for i in del_address:
-        balance[i] = float(getBalance(i)/1e18)
+        balance[i] = getBalance(i)/1e18
         transaction[i] = getTransactionCount(i)
-    balance_df = pd.DataFrame(balance.items(), columns=['address', 'balance'])
+    balance_df = pd.DataFrame(balance.items(), columns=['address', 'balance (ONEs available = initial balance - staked ONEs + claim rewards)'])
     transaction_df = pd.DataFrame(transaction.items(), columns = ['address', 'transaction-count'])
     new_del_reward = dict()
     new_del_stake = dict()
@@ -74,8 +74,8 @@ if __name__ == "__main__":
         if k in del_address:
             new_del_reward[k] = v
             new_del_stake[k] = del_stake[k]
-    reward_df = pd.DataFrame(new_del_reward.items(), columns=['address', 'lifetime-reward'])
-    stake_df = pd.DataFrame(new_del_stake.items(), columns=['address', 'stake'])
+    reward_df = pd.DataFrame(new_del_reward.items(), columns=['address', 'lifetime-reward (total rewards - claim rewards)'])
+    stake_df = pd.DataFrame(new_del_stake.items(), columns=['address', 'stake (total delegated stake)'])
     df = reward_df.join(stake_df.set_index('address'), on = 'address')
     df = df.join(balance_df.set_index('address'), on = 'address')
     df = df.join(transaction_df.set_index('address'), on = 'address')
