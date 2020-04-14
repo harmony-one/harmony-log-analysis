@@ -38,7 +38,8 @@ if __name__ == "__main__":
             
     print("-- Data Processing --")
     validator_infos = getAllValidatorInformation()
-    dels = defaultdict(int)
+    del_reward = defaultdict(int)
+    del_stake = defaultdict(int)
     val_address = []
     name = dict()
     website = dict()
@@ -51,20 +52,25 @@ if __name__ == "__main__":
         for d in info['validator']['delegations']:
             del_address = d['delegator-address']
             reward = d['reward']/1e18
-            dels[del_address] += reward
-
-    del_address = set(dels.keys()) - set(val_address)
+            del_reward[del_address] += reward
+            amount = d['amount']/1e18
+            del_stake[del_address] = amount
+    del_address = set(del_reward.keys()) - set(val_address)
     balance = dict()
     for i in del_address:
-        balance[i] = getBalance(i)/1e18
+        balance[i] = float(getBalance(i)/1e18)
     balance_df = pd.DataFrame(balance.items(), columns=['address', 'balance'])
     
-    new_dels = dict()
-    for k,v in dels.items():
+    new_del_reward = dict()
+    new_del_stake = dict()
+    for k,v in del_reward.items():
         if k in del_address:
-            new_dels[k] = v
-    reward = pd.DataFrame(new_dels.items(), columns=['address', 'lifetime-reward'])
-    df = reward.join(balance_df.set_index('address'), on = 'address')
+            new_del_reward[k] = v
+            new_del_stake[k] = del_stake[k]
+    reward_df = pd.DataFrame(new_del_reward.items(), columns=['address', 'lifetime-reward'])
+    stake_df = pd.DataFrame(new_del_stake.items(), columns=['address', 'stake'])
+    df = reward_df.join(stake_df.set_index('address'), on = 'address')
+    df = df.join(balance_df.set_index('address'), on = 'address')
     print("-- Save csv files to ./csv/ folder --")
     df.to_csv(path.join(data, 'delegator.csv'))
 

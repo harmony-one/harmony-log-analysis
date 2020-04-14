@@ -166,7 +166,7 @@ if __name__ == "__main__":
     uptime_df = pd.DataFrame(list(zip(uptime, address)), columns = ['uptime-percentage','address'])
     df = df.join(uptime_df.set_index("address"), on = 'address')
     
-    print("-- Save csv files to ../csv/ folder --")
+    print("-- Save csv files to ./csv/ folder --")
     df.to_csv(path.join(data, args.output_file) + ".csv", index = False)
     
     if args.epos_status or args.all:
