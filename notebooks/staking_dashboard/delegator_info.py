@@ -30,6 +30,12 @@ def getTransactionCount(address):
     params = [address, 'latest']
     return int(get_information(method, params)['result'],16)
 
+def getEpoch():
+    method = "hmy_getEpoch"
+    params = []
+    epoch = get_information(method, params)['result']
+    return int(epoch, 16)
+
 if __name__ == "__main__":
     
     base = path.dirname(path.realpath(__file__))
@@ -47,7 +53,7 @@ if __name__ == "__main__":
     del_stake = defaultdict(int)
     undel = defaultdict(int)
     val_address = []
-    
+    epoch = getEpoch()
     # get the accumualted reward in current block
     for info in validator_infos:
         address = info['validator']['address']
@@ -59,7 +65,8 @@ if __name__ == "__main__":
             amount = d['amount']/1e18
             del_stake[del_address] += amount
             for u in d['undelegations']:
-                undel[del_address] += u['amount']/1e18
+                if epoch - u['epoch'] <= 7:
+                    undel[del_address] += u['amount']/1e18
                 
     del_address = set(del_reward.keys()) - set(val_address)
     balance = dict()
