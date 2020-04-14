@@ -20,6 +20,11 @@ def getAllValidatorInformation():
     params = [-1]
     return get_information(method, params)['result']
 
+def getBalance(address):
+    method = "hmy_getBalance"
+    params = [address, "latest"]
+    return int(get_information(method, params)['result'],16)
+
 if __name__ == "__main__":
     
     base = path.dirname(path.realpath(__file__))
@@ -49,11 +54,17 @@ if __name__ == "__main__":
             dels[del_address] += reward
 
     del_address = set(dels.keys()) - set(val_address)
+    balance = dict()
+    for i in del_address:
+        balance[i] = getBalance(i)/1e18
+    balance_df = pd.DataFrame(balance.items(), columns=['address', 'balance'])
+    
     new_dels = dict()
     for k,v in dels.items():
         if k in del_address:
             new_dels[k] = v
     reward = pd.DataFrame(new_dels.items(), columns=['address', 'lifetime-reward'])
+    df = reward.join(balance_df.set_index('address'), on = 'address')
     print("-- Save csv files to ./csv/ folder --")
-    reward.to_csv("./csv/delegator.csv")
+    df.to_csv(path.join(data, 'delegator.csv'))
 
