@@ -25,6 +25,11 @@ def getBalance(address):
     params = [address, "latest"]
     return int(get_information(method, params)['result'],16)
 
+def getTransactionCount(address):
+    method = "hmy_getTransactionCount"
+    params = [address, 'latest']
+    return int(get_information(method, params)['result'],16)
+
 if __name__ == "__main__":
     
     base = path.dirname(path.realpath(__file__))
@@ -57,10 +62,12 @@ if __name__ == "__main__":
             del_stake[del_address] = amount
     del_address = set(del_reward.keys()) - set(val_address)
     balance = dict()
+    transaction = dict()
     for i in del_address:
         balance[i] = float(getBalance(i)/1e18)
+        transaction[i] = getTransactionCount(i)
     balance_df = pd.DataFrame(balance.items(), columns=['address', 'balance'])
-    
+    transaction_df = pd.DataFrame(transaction.items(), columns = ['address', 'transaction-count'])
     new_del_reward = dict()
     new_del_stake = dict()
     for k,v in del_reward.items():
@@ -71,6 +78,7 @@ if __name__ == "__main__":
     stake_df = pd.DataFrame(new_del_stake.items(), columns=['address', 'stake'])
     df = reward_df.join(stake_df.set_index('address'), on = 'address')
     df = df.join(balance_df.set_index('address'), on = 'address')
+    df = df.join(transaction_df.set_index('address'), on = 'address')
     print("-- Save csv files to ./csv/ folder --")
     df.to_csv(path.join(data, 'delegator.csv'))
 
