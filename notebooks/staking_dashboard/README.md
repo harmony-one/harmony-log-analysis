@@ -4,6 +4,8 @@ Get validators or delegators' information on staking dashboard: https://staking.
 ## Requirements
 `python3 -m pip install requests pandas numpy`
 
+If you meet permission denied errors, try using `python3 -m pip install --user requests pandas numpy`
+
 ## Output
 `./csv/*`
 
