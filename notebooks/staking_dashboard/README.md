@@ -13,7 +13,7 @@ If you meet permission denied errors, try using `python3 -m pip install --user r
 To get information including name, address, website, details, security-contact, identity, epos-status, currently-in-committee, apr, delegator-num, bls-key-num, current-epoch-signed, current-epoch-signing-percentage, current-epoch-to-sign, num-beacon-blocks-until-next-epoch, reward, uptime-percentage
 
 ### Download newest script
-`curl -O https://raw.githubusercontent.com/harmony-one/harmony-log-analysis/master/notebooks/staking_dashboard/validators-info.py`
+`curl -O https://raw.githubusercontent.com/harmony-one/harmony-log-analysis/master/notebooks/staking_dashboard/validator_info.py`
 
 ### Commands
 Run command: default is to get all the information of validators and save it to a csv file and stored in `./csv/validator_info.csv`: `python3 validators-info.py`
