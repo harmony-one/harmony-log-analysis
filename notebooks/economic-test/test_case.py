@@ -287,7 +287,7 @@ def M2_test(single):
         slot_winners = getMedianRawStakeSnapshot()['epos-slot-winners']
         stake = []
         for i in slot_winners:
-            stake.append((float(i['eposed-stake'])))
+            stake.append((float(i['raw-stake'])))
         cal_median = float(get_median(stake))
         # compare the calculated median and rpc median
         if cal_median != median:
@@ -334,7 +334,7 @@ def M3_test(single):
         slot_winners = getMedianRawStakeSnapshot()['epos-slot-winners']
         stake = []
         for i in slot_winners:
-            stake.append((float(i['eposed-stake'])))
+            stake.append((float(i['raw-stake'])))
         cal_median = float(get_median(stake))
         # compare the calculated median and rpc median
         if cal_median != median:
