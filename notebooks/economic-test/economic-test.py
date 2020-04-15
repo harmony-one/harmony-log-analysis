@@ -45,7 +45,7 @@ if __name__ == "__main__":
     group = []
     
     if not args.all and not args.single_test and not args.groups and not args.no_external:
-        print('Keyword to define the test scope is required, e.g. --all, --single test E1_test, --groups election, --no_external.')
+        print('Keyword to define the test scope is required, e.g. --all, --single_test E1_test, --groups election, --no_external.')
         exit(1)
         
     if args.all:
