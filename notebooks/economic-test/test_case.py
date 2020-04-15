@@ -752,10 +752,11 @@ def R7_test(single):
     logger.info(f"current and last block numbers: {block}, {last_block}")
     while last_block - block > 32:
         block = getBlockNumber()
-    if block == last_block:
-        logger.info(f"current at the last block, wait until the 6th block in the new epoch")
+    if block == last_block or block + 1 == last_block:
+        logger.info(f"current at the last block (or last block - 1), wait until the 5th/6th block in the new epoch")
         while block < last_block+6:
             block = getBlockNumber()
+            time.sleep (5)
     logger.info(f"current block {block}, will begin collecting infos...")
 
     acc_rewards_prev = dict()
