@@ -20,7 +20,7 @@ Run command: default is to get all the information of validators and save it to 
 
 To change the output file name: `python3 validator_info.py --output_file new_name`
 
-To print the statistics of epos-status: `python3 validtaor_info.py --epos_status`
+To print the statistics of epos-status: `python3 validator_info.py --epos_status`
 
 To print the new validators who are not in the `harmony.one/keys`: `python3 validator_info.py --new_validators`
 
