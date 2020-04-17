@@ -51,7 +51,7 @@ if __name__ == "__main__":
         
     elif args.start_block and args.end_block:
         start_block = int(args.start_block)
-        end_block = int(args.end_block)Env
+        end_block = int(args.end_block)
         shard = utils.data_processing(data, start_block, end_block)
     else:
         shard = utils.data_processing(data)
