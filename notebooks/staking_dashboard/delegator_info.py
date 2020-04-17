@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 # coding: utf-8
+
 import json
 import pandas as pd
 import os
 from os import path
 import requests
+import csv
+import re
 from collections import defaultdict
+
 
 def get_information(method, params):
     url = 'https://api.s0.os.hmny.io/'
@@ -18,6 +22,12 @@ def get_information(method, params):
 def getAllValidatorInformation():
     method = 'hmy_getAllValidatorInformation'
     params = [-1]
+    return get_information(method, params)['result']
+
+
+def getValidatorInfo(validator):
+    method = "hmy_getValidatorInformation"
+    params = [validator]
     return get_information(method, params)['result']
 
 def getBalance(address):
@@ -36,7 +46,18 @@ def getEpoch():
     epoch = get_information(method, params)['result']
     return int(epoch, 16)
 
-if __name__ == "__main__":
+def read_csv(csv_file) -> (list):
+    encoding = 'utf-8'
+    r = requests.get(csv_file)
+    s = [x.decode(encoding) for x in r.content.splitlines()]
+    v = []
+    for line in csv.reader(s):
+        address = line[2].strip()
+        if re.match('one1', address) != None:
+            v.append(address)
+    return v
+
+if __name__ == "__main__":  
     
     base = path.dirname(path.realpath(__file__))
     data = path.abspath(path.join(base, 'csv'))
@@ -91,6 +112,14 @@ if __name__ == "__main__":
     df = df.join(balance_df.set_index('address'), on = 'address')
     df = df.join(transaction_df.set_index('address'), on = 'address')
     df = df.join(undel_df.set_index('address'), on = 'address')
-    print("-- Save csv files to ./csv/ folder --")
+    print("-- Save csv files to ./csv/delegator.csv --")
     df.to_csv(path.join(data, 'delegator.csv'))
+    
+    print("-- Filter the delegators in the google sheet --")
+    html = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSTwUjKWIQ-Qa1EcroUBX_-JdOMsOvsPVPpVxTkD5WWlBBWC0mt9CthPZYq10QVJZ-imm2yPo-NAZry/pub?gid=1153119183&single=true&output=csv'
+    delegator = read_csv(html)
+    df['filter'] = df.apply(lambda c: True if c['address'] in delegator else False, axis = 1)
+    filter_df = df[df['filter']].reset_index(drop = True)
+    filter_df.to_csv(path.join(data, 'filter_delegator.csv'))
+    print("-- Save csv files to ./csv/filter_delegator.csv --")
 
