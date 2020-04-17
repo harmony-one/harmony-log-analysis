@@ -1,5 +1,5 @@
 # Harmony's blockchain log analysis and visualization
-## [Test Logs](https://github.com/harmony-one/harmony-log-analysis/blob/master/notebooks/test_log_analysis/2020_03_11_stress_test.ipynb) 
+## [Test Logs](https://github.com/harmony-one/harmony-log-analysis/blob/master/notebooks/explorer_mini_log_analysis/README.md) 
 
 ## Node Logs
 - [Retry analysis](https://github.com/harmony-one/harmony-log-analysis/tree/master/notebooks/retry)
