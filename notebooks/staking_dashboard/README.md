@@ -22,6 +22,8 @@ To change the output file name: `python3 validator_info.py --output_file new_nam
 
 To print the statistics of epos-status: `python3 validator_info.py --epos_status`
 
+To print the statistics of unique users' epos-status: `python3 validator_info.py --epos_status_unique`
+
 To print the new validators who are not in the `harmony.one/keys`: `python3 validator_info.py --new_validators`
 
 To print both information: `python3 validator_info.py --all`
