@@ -77,28 +77,30 @@ def data_processing(data, *args):
 
         # plain transaction_per_second
         s["transaction_per_second"] = s.apply(lambda c: c["transactions"]/c["time_diff"].seconds                                                if c["time_diff"].seconds != 0 else np.nan, axis = 1)
-        # staking transaction_per_second
-        s["staking_transaction_per_second"] = s.apply(lambda c: c["total"]/c["time_diff"].seconds                                               if c["time_diff"].seconds != 0 else np.nan, axis = 1)
-        # total transacton per second
-        s["total_transaction_per_second"] = s["transaction_per_second"] + s["staking_transaction_per_second"]
+        
+        if "total" in s.columns:
+            # staking transaction_per_second
+            s["staking_transaction_per_second"] = s.apply(lambda c: c["total"]/c["time_diff"].seconds                                               if c["time_diff"].seconds != 0 else np.nan, axis = 1)
+            # total transacton per second
+            s["total_transaction_per_second"] = s["transaction_per_second"] + s["staking_transaction_per_second"]
 
-        # info for staking
-        s.rename(columns={"total": "total_staking"}, inplace = True)
-        if "CreateValidator" in s.columns:
-            # create validator per second
-            s["create_validator_per_second"] = s.apply(lambda c: c["CreateValidator"]/c["time_diff"].seconds                                                        if c["time_diff"].seconds != 0 else np.nan, axis = 1)
-        if "EditValidator" in s.columns:
-            # edit validator per second
-            s["edit_validator_per_second"] = s.apply(lambda c: c["EditValidator"]/c["time_diff"].seconds                                                        if c["time_diff"].seconds != 0 else np.nan, axis = 1)
-        if "Delegate" in s.columns:
-            # delegate per second
-            s["delegate_per_second"] = s.apply(lambda c: c["Delegate"]/c["time_diff"].seconds                                                        if c["time_diff"].seconds != 0 else np.nan, axis = 1)
-        if "Undelegate" in s.columns:
-            # undelegate per second
-            s["undelegate_per_second"] = s.apply(lambda c: c["Undelegate"]/c["time_diff"].seconds                                                        if c["time_diff"].seconds != 0 else np.nan, axis = 1)
-        if "CollectRewards" in s.columns:
-            # CollectRewards per second
-            s["collect_rewards_per_second"] = s.apply(lambda c: c["CollectRewards"]/c["time_diff"].seconds                                                        if c["time_diff"].seconds != 0 else np.nan, axis = 1)
+            # info for staking
+            s.rename(columns={"total": "total_staking"}, inplace = True)
+            if "CreateValidator" in s.columns:
+                # create validator per second
+                s["create_validator_per_second"] = s.apply(lambda c: c["CreateValidator"]/c["time_diff"].seconds                                                        if c["time_diff"].seconds != 0 else np.nan, axis = 1)
+            if "EditValidator" in s.columns:
+                # edit validator per second
+                s["edit_validator_per_second"] = s.apply(lambda c: c["EditValidator"]/c["time_diff"].seconds                                                        if c["time_diff"].seconds != 0 else np.nan, axis = 1)
+            if "Delegate" in s.columns:
+                # delegate per second
+                s["delegate_per_second"] = s.apply(lambda c: c["Delegate"]/c["time_diff"].seconds                                                        if c["time_diff"].seconds != 0 else np.nan, axis = 1)
+            if "Undelegate" in s.columns:
+                # undelegate per second
+                s["undelegate_per_second"] = s.apply(lambda c: c["Undelegate"]/c["time_diff"].seconds                                                        if c["time_diff"].seconds != 0 else np.nan, axis = 1)
+            if "CollectRewards" in s.columns:
+                # CollectRewards per second
+                s["collect_rewards_per_second"] = s.apply(lambda c: c["CollectRewards"]/c["time_diff"].seconds                                                        if c["time_diff"].seconds != 0 else np.nan, axis = 1)
             
         s.drop(['time_diff', 'block_diff'], axis=1, inplace = True)
         s.dropna(inplace = True)
@@ -116,25 +118,26 @@ def draw_graph_time(df, png_path, html_dir, colors):
     
     hover = df.columns.tolist()
     
-    fig = px.line(df, x="timestamp", y="staking_transaction_per_second", color='shard', color_discrete_sequence=colors,                   title = 'Staking Transaction Per Second vs Time', hover_data=hover)
-    fig.update_layout(xaxis_title="utc_time")
-#     fig.show(renderer="svg",width=900, height=500)
-    fig.show()
-    fig.write_html(html_dir + "staking_transaction_per_second_vs_time.html")
-    print("HTML saved in ")
-    display_path = html_path + "staking_transaction_per_second_vs_time.html"
-    display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
-    fig.write_image(png_path + "staking_transaction_per_second_vs_time.png",width=900, height=500)
-    
-    fig = px.line(df, x="timestamp", y="total_transaction_per_second", color='shard', color_discrete_sequence=colors,                   title = 'Total Transaction Per Second vs Time', hover_data=hover)
-    fig.update_layout(xaxis_title="utc_time")
-#     fig.show(renderer="svg",width=900, height=500)
-    fig.show()
-    fig.write_html(html_dir + "total_transaction_per_second_vs_time.html")
-    print("HTML saved in ")
-    display_path = html_path + "total_transaction_per_second_vs_time.html"
-    display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
-    fig.write_image(png_path + "total_transaction_per_second_vs_time.png",width=900, height=500)
+    if "staking_transaction_per_second" in df.columns:
+        fig = px.line(df, x="timestamp", y="staking_transaction_per_second", color='shard', color_discrete_sequence=colors,                   title = 'Staking Transaction Per Second vs Time', hover_data=hover)
+        fig.update_layout(xaxis_title="utc_time")
+    #     fig.show(renderer="svg",width=900, height=500)
+        fig.show()
+        fig.write_html(html_dir + "staking_transaction_per_second_vs_time.html")
+        print("HTML saved in ")
+        display_path = html_path + "staking_transaction_per_second_vs_time.html"
+        display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
+        fig.write_image(png_path + "staking_transaction_per_second_vs_time.png",width=900, height=500)
+
+        fig = px.line(df, x="timestamp", y="total_transaction_per_second", color='shard', color_discrete_sequence=colors,                   title = 'Total Transaction Per Second vs Time', hover_data=hover)
+        fig.update_layout(xaxis_title="utc_time")
+    #     fig.show(renderer="svg",width=900, height=500)
+        fig.show()
+        fig.write_html(html_dir + "total_transaction_per_second_vs_time.html")
+        print("HTML saved in ")
+        display_path = html_path + "total_transaction_per_second_vs_time.html"
+        display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
+        fig.write_image(png_path + "total_transaction_per_second_vs_time.png",width=900, height=500)
                     
     fig = px.line(df, x='timestamp', y='transaction_per_second', color='shard', color_discrete_sequence=colors,                   title = 'Transaction Per Second vs Time', hover_data=hover)
     fig.update_layout(xaxis_title="utc_time")
@@ -187,23 +190,24 @@ def draw_graph_block(df, png_path, html_dir, colors):
     
     hover = df.columns.tolist()
     
-    fig = px.line(df, x="block", y="staking_transaction_per_second", color='shard', color_discrete_sequence=colors,                   title = 'Staking Transaction Per Second vs Block Height', hover_data=hover)
-#     fig.show(renderer="svg",width=900, height=500)
-    fig.show()
-    fig.write_html(html_dir + "staking_transaction_per_second_vs_block_height.html")
-    print("HTML saved in ")
-    display_path = html_path + "staking_transaction_per_second_vs_block_height.html"
-    display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
-    fig.write_image(png_path + "staking_transaction_per_second_vs_block_height.png",width=900, height=500)
+    if "staking_transaction_per_second" in df.columns:
+        fig = px.line(df, x="block", y="staking_transaction_per_second", color='shard', color_discrete_sequence=colors,                   title = 'Staking Transaction Per Second vs Block Height', hover_data=hover)
+    #     fig.show(renderer="svg",width=900, height=500)
+        fig.show()
+        fig.write_html(html_dir + "staking_transaction_per_second_vs_block_height.html")
+        print("HTML saved in ")
+        display_path = html_path + "staking_transaction_per_second_vs_block_height.html"
+        display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
+        fig.write_image(png_path + "staking_transaction_per_second_vs_block_height.png",width=900, height=500)
 
-    fig = px.line(df, x="block", y="total_transaction_per_second", color='shard', color_discrete_sequence=colors,                   title = 'Total Transaction Per Second vs Block Height', hover_data=hover)
-#     fig.show(renderer="svg",width=900, height=500)
-    fig.show()
-    fig.write_html(html_dir + "total_transaction_per_second_vs_block_height.html")
-    print("HTML saved in ")
-    display_path = html_path + "total_transaction_per_second_vs_time.html"
-    display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
-    fig.write_image(png_path + "total_transaction_per_second_vs_block_height.png",width=900, height=500)
+        fig = px.line(df, x="block", y="total_transaction_per_second", color='shard', color_discrete_sequence=colors,                   title = 'Total Transaction Per Second vs Block Height', hover_data=hover)
+    #     fig.show(renderer="svg",width=900, height=500)
+        fig.show()
+        fig.write_html(html_dir + "total_transaction_per_second_vs_block_height.html")
+        print("HTML saved in ")
+        display_path = html_path + "total_transaction_per_second_vs_time.html"
+        display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
+        fig.write_image(png_path + "total_transaction_per_second_vs_block_height.png",width=900, height=500)
 
     fig = px.line(df, x='block', y='transaction_per_second', color='shard', color_discrete_sequence=colors,                   title = 'Transaction Per Second vs Block Height', hover_data=hover)
 #     fig.show(renderer="svg",width=900, height=500)
@@ -255,41 +259,42 @@ def draw_graph_time_per_shard(df, png_path, html_dir, idx, epo_idx):
     colors = ["#00AEE9"]
     hover = df.columns.tolist()
     
-    # staking only happens in shard 0
-    if idx == 0:
-        fig = px.line(df, x="timestamp", y="staking_transaction_per_second", color='shard', color_discrete_sequence=colors,                  title = shard_idx + ' Staking Transaction Per Second vs UTC Time', hover_data=hover)
-        fig.update_layout(xaxis_title="utc_time")
-        for i in epo_idx:
-            fig.add_shape(type="line", x0=df.iloc[i]["timestamp"], y0=0,x1=df.iloc[i]["timestamp"],y1=1,
-                    line=dict(
-                    width=1,
-                    dash="dot",
-                ))
-        fig.update_shapes(dict(xref='x', yref='paper'))
-#         fig.show(renderer="svg",width=900, height=500)
-        fig.show()
-        fig.write_html(html_dir + shard_idx + "_staking_transaction_per_second_vs_utc_time.html")
-        print("HTML saved in ")
-        display_path = html_path + shard_idx + "_staking_transaction_per_second_vs_utc_time.html"
-        display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
-        fig.write_image(png_path + shard_idx + "_staking_transaction_per_second_vs_utc_time.png",width=900, height=500)
+    if "staking_transaction_per_second" in df.columns:
+        # staking only happens in shard 0
+        if idx == 0:
+            fig = px.line(df, x="timestamp", y="staking_transaction_per_second", color='shard', color_discrete_sequence=colors,                  title = shard_idx + ' Staking Transaction Per Second vs UTC Time', hover_data=hover)
+            fig.update_layout(xaxis_title="utc_time")
+            for i in epo_idx:
+                fig.add_shape(type="line", x0=df.iloc[i]["timestamp"], y0=0,x1=df.iloc[i]["timestamp"],y1=1,
+                        line=dict(
+                        width=1,
+                        dash="dot",
+                    ))
+            fig.update_shapes(dict(xref='x', yref='paper'))
+    #         fig.show(renderer="svg",width=900, height=500)
+            fig.show()
+            fig.write_html(html_dir + shard_idx + "_staking_transaction_per_second_vs_utc_time.html")
+            print("HTML saved in ")
+            display_path = html_path + shard_idx + "_staking_transaction_per_second_vs_utc_time.html"
+            display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
+            fig.write_image(png_path + shard_idx + "_staking_transaction_per_second_vs_utc_time.png",width=900, height=500)
 
-        fig = px.line(df, x="timestamp", y="total_transaction_per_second", color='shard', color_discrete_sequence=colors,                      title = shard_idx + ' Total Transaction Per Second vs UTC Time', hover_data=hover)
-        fig.update_layout(xaxis_title="utc_time")
-        for i in epo_idx:
-            fig.add_shape(type="line", x0=df.iloc[i]["timestamp"], y0=0,x1=df.iloc[i]["timestamp"],y1=1,
-                    line=dict(
-                    width=1,
-                    dash="dot",
-                ))
-        fig.update_shapes(dict(xref='x', yref='paper'))
-#         fig.show(renderer="svg",width=900, height=500)
-        fig.show()
-        fig.write_html(html_dir + shard_idx + "_total_transaction_per_second_vs_utc_time.html")
-        print("HTML saved in ")
-        display_path = html_path + shard_idx + "_total_transaction_per_second_vs_utc_time.html"
-        display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
-        fig.write_image(png_path + shard_idx + "_total_transaction_per_second_vs_utc_time.png",width=900, height=500)
+            fig = px.line(df, x="timestamp", y="total_transaction_per_second", color='shard', color_discrete_sequence=colors,                      title = shard_idx + ' Total Transaction Per Second vs UTC Time', hover_data=hover)
+            fig.update_layout(xaxis_title="utc_time")
+            for i in epo_idx:
+                fig.add_shape(type="line", x0=df.iloc[i]["timestamp"], y0=0,x1=df.iloc[i]["timestamp"],y1=1,
+                        line=dict(
+                        width=1,
+                        dash="dot",
+                    ))
+            fig.update_shapes(dict(xref='x', yref='paper'))
+    #         fig.show(renderer="svg",width=900, height=500)
+            fig.show()
+            fig.write_html(html_dir + shard_idx + "_total_transaction_per_second_vs_utc_time.html")
+            print("HTML saved in ")
+            display_path = html_path + shard_idx + "_total_transaction_per_second_vs_utc_time.html"
+            display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
+            fig.write_image(png_path + shard_idx + "_total_transaction_per_second_vs_utc_time.png",width=900, height=500)
 
     fig = px.line(df, x='timestamp', y='transaction_per_second', color='shard', color_discrete_sequence=colors,               title = shard_idx + ' Transaction Per Second vs UTC Time', hover_data=hover)
     fig.update_layout(xaxis_title="utc_time")
@@ -374,39 +379,40 @@ def draw_graph_block_per_shard(df, png_path, html_dir, idx, epo_idx):
     colors = ["#00AEE9"]
     hover = df.columns.tolist()
     
-    # staking only happens in shard_0
-    if idx == 0:
-        fig = px.line(df, x="block", y="staking_transaction_per_second", color='shard', color_discrete_sequence=colors,                      title = shard_idx + ' Staking Transaction Per Second vs Time', hover_data=hover)
-        for i in epo_idx:
-            fig.add_shape(type="line", x0=df.iloc[i]["block"], y0=0,x1=df.iloc[i]["block"],y1=1,
-                    line=dict(
-                    width=1,
-                    dash="dot",
-                ))
-        fig.update_shapes(dict(xref='x', yref='paper'))
-#         fig.show(renderer="svg",width=900, height=500)
-        fig.show()
-        fig.write_html(html_dir + shard_idx + "_staking_transaction_per_second_vs_block_height.html")
-        print("HTML saved in " )
-        display_path = html_path + shard_idx + "_staking_transaction_per_second_vs_block_height.html"
-        display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
-        fig.write_image(png_path + shard_idx + "_staking_transaction_per_second_vs_block_height.png")
+    if "staking_transaction_per_second" in df.columns:
+        # staking only happens in shard_0
+        if idx == 0:
+            fig = px.line(df, x="block", y="staking_transaction_per_second", color='shard', color_discrete_sequence=colors,                      title = shard_idx + ' Staking Transaction Per Second vs Time', hover_data=hover)
+            for i in epo_idx:
+                fig.add_shape(type="line", x0=df.iloc[i]["block"], y0=0,x1=df.iloc[i]["block"],y1=1,
+                        line=dict(
+                        width=1,
+                        dash="dot",
+                    ))
+            fig.update_shapes(dict(xref='x', yref='paper'))
+    #         fig.show(renderer="svg",width=900, height=500)
+            fig.show()
+            fig.write_html(html_dir + shard_idx + "_staking_transaction_per_second_vs_block_height.html")
+            print("HTML saved in " )
+            display_path = html_path + shard_idx + "_staking_transaction_per_second_vs_block_height.html"
+            display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
+            fig.write_image(png_path + shard_idx + "_staking_transaction_per_second_vs_block_height.png")
 
-        fig = px.line(df, x="block", y="total_transaction_per_second", color='shard', color_discrete_sequence=colors,                      title = shard_idx + ' Total Transaction Per Second vs Time', hover_data=hover)
-        for i in epo_idx:
-            fig.add_shape(type="line", x0=df.iloc[i]["block"], y0=0,x1=df.iloc[i]["block"],y1=1,
-                    line=dict(
-                    width=1,
-                    dash="dot",
-                ))
-        fig.update_shapes(dict(xref='x', yref='paper'))
-#         fig.show(renderer="svg",width=900, height=500)
-        fig.show()
-        fig.write_html(html_dir + shard_idx + "_total_transaction_per_second_vs_block_height.html")
-        print("HTML saved in ")
-        display_path = html_path + shard_idx + "_total_transaction_per_second_vs_block_height.html"
-        display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
-        fig.write_image(png_path + shard_idx + "_total_transaction_per_second_vs_block_height.png")
+            fig = px.line(df, x="block", y="total_transaction_per_second", color='shard', color_discrete_sequence=colors,                      title = shard_idx + ' Total Transaction Per Second vs Time', hover_data=hover)
+            for i in epo_idx:
+                fig.add_shape(type="line", x0=df.iloc[i]["block"], y0=0,x1=df.iloc[i]["block"],y1=1,
+                        line=dict(
+                        width=1,
+                        dash="dot",
+                    ))
+            fig.update_shapes(dict(xref='x', yref='paper'))
+    #         fig.show(renderer="svg",width=900, height=500)
+            fig.show()
+            fig.write_html(html_dir + shard_idx + "_total_transaction_per_second_vs_block_height.html")
+            print("HTML saved in ")
+            display_path = html_path + shard_idx + "_total_transaction_per_second_vs_block_height.html"
+            display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
+            fig.write_image(png_path + shard_idx + "_total_transaction_per_second_vs_block_height.png")
     
     fig = px.line(df, x='block', y='transaction_per_second', color='shard', color_discrete_sequence=colors, title = shard_idx + ' Transaction Per Second vs Block Height', hover_data=hover)
     for i in epo_idx:

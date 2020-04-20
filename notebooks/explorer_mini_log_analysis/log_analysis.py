@@ -106,5 +106,5 @@ if __name__ == "__main__":
     message = 'automate push graphs {:s}'.format(date)
     os.system('git commit -m "{:s}"'.format(message))
     os.system("git push -u origin master")
-    print("check the link: https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/part/" + date + ".html")
+    print("check the link: https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/part/" + date)
 
