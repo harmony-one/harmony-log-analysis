@@ -3,7 +3,7 @@ This project provides the analysis for the [mini explorer logs](https://github.c
 
 One is to produce automatic daily report in github pages, inclduing statistics summary and visualization on features vs time. It will update new report on 0:10 UTC everyday, check by changing the date in the [link](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/2020_04_16).
 
-The second is to provide customization for the report, like selecting time window, block window, and choose to draw graphs per shard or all shards, draw staking features or all features. Check the instruction of the running [commands](https://github.com/harmony-one/harmony-log-analysis/tree/master/notebooks/explorer_mini_log_analysis#commands) below. After running the command, it will print the github page [link](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/part/2020_04_16) for you to visit. 
+The second is to provide customization for the report, like selecting time window, block window, and choose to draw graphs per shard or all shards, draw staking features or all features. Check the instruction of the running [commands](https://github.com/harmony-one/harmony-log-analysis/tree/master/projects/explorer_mini_log_analysis#commands) below. After running the command, it will print the github page [link](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/part/2020_04_16) for you to visit. 
 
 ## Content
 ### Statistics Summary 
