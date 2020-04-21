@@ -1029,9 +1029,9 @@ def CN1_test(single):
             flag = False
             logger.warning(f"Test-CN1: Fail")
             if reward_per_block == 0:
-                logger.warning(f"Slow validator doesn't get reward\n")
+                logger.warning(f"Slow validator {k} doesn't get reward\n")
             if status[k] == 'not eligible to be elected next epoch':
-                logger.warning(f"Slow validator is no longer eligible\n")
+                logger.warning(f"Slow validator {k} is no longer eligible\n")
 
     if flag:
         logger.info(f"Test-CN1: Succeed\n")

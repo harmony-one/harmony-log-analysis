@@ -9,7 +9,7 @@ from test_case import *
 def run_test(curr_test):
     global success, fail, more, manual, error, no, count, fail_lst, more_lst, check_lst, error_lst, no_lst, single
     test_name = curr_test.__name__
-    logging.info(f"\n{'=' * 15} Starting {test_name} {'=' * 15}\n")                        
+    test_case.logger.info(f"\n{'=' * 15} Starting {test_name} {'=' * 15}\n")                        
     res, curr_test = curr_test(single) 
     if res == True:
         success += 1
@@ -88,23 +88,23 @@ if __name__ == "__main__":
         while curr_test:
             curr_test = run_test(curr_test)
    
-    logging.info(f"\n{'=' * 25} Test Results {'=' * 25}\n")
-    logging.info(f"Total Tests: {count}")
-    logging.info(f"Successful Tests: {success}")
-    logging.info(f"Failed Tests: {fail}")
+    test_case.logger.info(f"\n{'=' * 25} Test Results {'=' * 25}\n")
+    test_case.logger.info(f"Total Tests: {count}")
+    test_case.logger.info(f"Successful Tests: {success}")
+    test_case.logger.info(f"Failed Tests: {fail}")
     if fail_lst:
-        logging.info(f"{fail_lst}")
-    logging.info(f"Test doesn't meet requirements, need more tests: {more}")
+        test_case.logger.info(f"{fail_lst}")
+    test_case.logger.info(f"Test doesn't meet requirements, need more tests: {more}")
     if more_lst:
-        logging.info(f"{more_lst}")
-    logging.info(f"Need to manual check: {manual}")
+        test_case.logger.info(f"{more_lst}")
+    test_case.logger.info(f"Need to manual check: {manual}")
     if check_lst:
-        logger.info(f"{check_lst}")
-    logging.info(f"Not applicable for tests: {no}")
+        test_case.logger.info(f"{check_lst}")
+    test_case.logger.info(f"Not applicable for tests: {no}")
     if no_lst:
-        logging.info(f"{no_lst}")
-    logging.info(f"Error tests: {error}")
+        test_case.logger.info(f"{no_lst}")
+    test_case.logger.info(f"Error tests: {error}")
     if error_lst:
-        logging.info(f"{error_lst}")
+        test_case.logger.info(f"{error_lst}")
        
 
