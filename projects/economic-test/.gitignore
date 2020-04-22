@@ -1,4 +1,4 @@
-logs/*
+
 __pycache__/*
 .ipynb_checkpoints/*
 old_version_test/*

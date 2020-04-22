@@ -1,0 +1,752 @@
+2020-04-20 23:10:25,049: INFO: 
+=============== Starting E1_test ===============
+
+2020-04-20 23:10:25,049: INFO: Test-E1: A staked validator whose stake is in the top #slots stakes is always considered for election
+2020-04-20 23:10:25,590: INFO: current and last block numbers: 60513, 60533
+2020-04-20 23:10:25,590: INFO: current block, 60513, begin collecting eligible validators...
+2020-04-20 23:13:26,308: INFO: first block in new epoch reached, 60534, will wait for 5 seconds to begin testing...
+2020-04-20 23:13:31,787: INFO: Test E1: Succeed
+
+2020-04-20 23:13:31,788: INFO: 
+=============== Starting E2_test ===============
+
+2020-04-20 23:13:31,788: INFO: Test-E2: Joining after the election start must not consider the validator
+2020-04-20 23:13:32,018: INFO: current and last block numbers: 60534, 60571
+2020-04-20 23:13:32,018: INFO: wait for the last second block ...
+2020-04-20 23:18:47,301: INFO: last second block in the current epoch reached 60570 will begin collecting existing eligible validators after 5 seconds
+2020-04-20 23:18:56,607: INFO: last block in the current epoch reached 60571 will begin collecting new eligible validators after 5 seconds
+2020-04-20 23:19:02,022: INFO: checking whether we have validators who set their status active after election starts
+2020-04-20 23:19:02,022: INFO: no validator joined after the election start in current test
+2020-04-20 23:19:02,023: INFO: Test-E2: No validator joined after the election in all tests, need more tests
+
+2020-04-20 23:19:02,023: INFO: 
+=============== Starting E3_test ===============
+
+2020-04-20 23:19:02,023: INFO: Test-E3: Joining before election start must consider the validator for election
+2020-04-20 23:19:02,481: INFO: current and last block numbers: 60571, 60571
+2020-04-20 23:19:02,481: INFO: current block is the last block in epoch, waiting for the new epoch...
+2020-04-20 23:19:05,792: INFO: current and last block numbers: 60572, 60609
+2020-04-20 23:24:25,769: INFO: second last block in current epoch reached, 60608, wait for 6 seconds to reach the end of the block
+2020-04-20 23:24:31,775: INFO: begin collecting eligible validators...
+2020-04-20 23:24:43,878: INFO: first block in new epoch reached, 60610, will wait for 5 seconds to begin testing...
+2020-04-20 23:24:49,237: INFO: Test E3: Succeed
+
+2020-04-20 23:24:49,239: INFO: 
+=============== Starting E4_test ===============
+
+2020-04-20 23:24:49,239: INFO: Test-E4: Low staker will never get elected over high staker
+2020-04-20 23:24:49,472: INFO: current and last block numbers: 60610, 60647
+2020-04-20 23:30:03,702: INFO: second last block in current epoch reached, 60646, wait for 6 seconds to reach the end of the block
+2020-04-20 23:30:09,707: INFO: begin collecting eligible validators...
+2020-04-20 23:30:13,050: INFO: first block of new epoch reached, 60647, will begin checking all the elgible validators' election result...
+2020-04-20 23:30:13,570: INFO: Test-E4: Succeed
+
+2020-04-20 23:30:13,571: INFO: 
+=============== Starting M2_test ===============
+
+2020-04-20 23:30:13,571: INFO: Test-M2: Median is correctly computed for even and odd number of available slots
+2020-04-20 23:30:13,947: INFO: current and last block numbers: 60647, 60647
+2020-04-20 23:30:13,947: INFO: currently at the last block, wait for new epoch starts...
+2020-04-20 23:30:21,994: INFO: current epoch: 1596, begin testing...
+2020-04-20 23:30:22,455: INFO: Test-M2: Succeed
+
+2020-04-20 23:30:22,455: INFO: 
+=============== Starting M3_test ===============
+
+2020-04-20 23:30:22,455: INFO: Test-M3: Median function stability: run median computation for x number of epoch to verify stability
+2020-04-20 23:30:22,455: INFO: test 1 will begin ...
+2020-04-20 23:30:22,687: INFO: current and last block numbers: 60648, 60685
+2020-04-20 23:30:22,688: INFO: wait until the new epoch begins ...
+2020-04-20 23:36:00,448: INFO: new epoch first block reached 60686, will wait for 5 secondss to begin testing...
+2020-04-20 23:36:05,904: INFO: test 2 will begin ...
+2020-04-20 23:36:06,135: INFO: current and last block numbers: 60686, 60723
+2020-04-20 23:36:06,135: INFO: wait until the new epoch begins ...
+2020-04-20 23:41:38,198: INFO: new epoch first block reached 60724, will wait for 5 secondss to begin testing...
+2020-04-20 23:41:43,618: INFO: Test-M3: Succeed
+
+2020-04-20 23:41:43,618: INFO: 
+=============== Starting M5_test ===============
+
+2020-04-20 23:41:43,618: INFO: Test-M5: No effective stake is out of range: [median-0.15*median, median+0.15*median]
+2020-04-20 23:41:43,824: INFO: median stake is 5296400500000000302907392
+2020-04-20 23:41:43,825: INFO: lower bond is 4501940425000000472219648
+2020-04-20 23:41:43,825: INFO: upper bond is 6090860575000000133595136
+2020-04-20 23:41:43,825: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,825: WARNING: validator: one1zcntyvm3a8xl5umwwdhcn5k5wnqklaetp0gyug bls public key: c9993defc6410169380b3708060308faef5a5e11e575b50dc2a0ca7b39e7fea916cce5c6536368f1aa22355970c13495
+2020-04-20 23:41:43,825: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,825: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,825: WARNING: validator: one17tj2jjehdlg8xfgp48xpeyqur2qf6nvs88jvyu bls public key: 89778b500d0fd1710a34d161673b57a149d462340446743f6f5f4631eb856667525368ded0841b8f5034b4ff4f839e01
+2020-04-20 23:41:43,825: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,825: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,825: WARNING: validator: one1ezhppjt02kdnxn08pg4lwlj8m8wgrpq5kmsfdv bls public key: 02a531c4a472fe76f335839b540ada38da71f7193927dedb04a6103464515e026e296370f088b593030f02190e7feb19
+2020-04-20 23:41:43,826: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,826: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,826: WARNING: validator: one1x8kgyyqgslzrm7jrlj4m7rpg285etdywjk7gez bls public key: 5e8635085788492a87d3eab69732ae72a55087e95c210ad20a726dd169a69b5792cb94616f6eccc4ea0a54a4a77ca88c
+2020-04-20 23:41:43,826: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,826: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,826: WARNING: validator: one1xgv66f7emaacgu842zyg5xyyykkkl8l8hhhwfn bls public key: 77d294d96b6094e7fa83d1b99d18d6fa1e84fe7d12923696fc57fbcca69d71e57eb8e6cde2ca5ca0a62cc74989b4b78b
+2020-04-20 23:41:43,826: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,826: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,826: WARNING: validator: one1cr8qrjl6khac9d5auyslvxln864vmqd5xll2zh bls public key: 42fa89ee6e6296133ac05bbfd8c95976540ef369683864f0aaa3c7f0f5390046d077a3f4156e51654ba8c14234654c12
+2020-04-20 23:41:43,826: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,827: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,827: WARNING: validator: one1hfr0t87ertrxffz98usf5cm8m45xh7zhx2jksh bls public key: 2dd77f120d46c3302cb9a86f2b1f907c5e8b1fa415cbe891e29a008206b1c9e78617d52304dfe4177bce3ef43bc6ea15
+2020-04-20 23:41:43,827: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,827: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,827: WARNING: validator: one12f484m9f8d9yhh8va3sc09r8lwkcufu2flya2h bls public key: e0acf2c421fcf8ca73529b80210b3a992f9d0ea9db36bdf524b0e23dad848f5971fae35b9fa2b129f118deb004f2a109
+2020-04-20 23:41:43,827: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,827: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,827: WARNING: validator: one1rknqd0uttha0s3wq8l6095m9ktwuuzpuzf6v98 bls public key: 98470a7ff7652233f07cbadb21ffde669b65ca753aeda8aa94473ce2ba197fc394887c4011ac82398db0dd5403b78688
+2020-04-20 23:41:43,827: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,828: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,828: WARNING: validator: one1r7z4pk2jsl4mz97vm4p8gkkc7cj5vfxpqnkaqf bls public key: 844c27e76aaa2c476e8a3f973b34f9f83b0cee6ea7a0865dae1ebde5d17e3d5a23a864a609f9e24ffba8630eece41219
+2020-04-20 23:41:43,828: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,828: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,828: WARNING: validator: one1skf8ysw75nqk2a2th36w9s57zlsf0lkz52265a bls public key: b8e4be469faed71e5cfb7c13ce08544f1d0e66ec51b4a30b7da51f482eb5d2821b7d2260fef5e264ce276bc52e01d018
+2020-04-20 23:41:43,828: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,828: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,828: WARNING: validator: one1j53ehfrlsv8flhg24dyd7fzp06smplv2952gng bls public key: 453e778cbcfc0f7ac7d93032860f197c5efee2015f74197e3bb742906e48e730010bd3483fac6688cc52358a349b2711
+2020-04-20 23:41:43,828: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,828: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,828: WARNING: validator: one1htajfd9ncg3jfvw56k5400mtqm9f8nc583l2ln bls public key: d679a4b943102defdb6405146371b8989a69c75b8009f1e379a6d4d9a858df4ffb71b92931249efb13def4a499a67799
+2020-04-20 23:41:43,829: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,829: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,829: WARNING: validator: one1ekup98s5tqxtr5hdzsz664cfy579jpq6w5smrr bls public key: 13a320b065a8d9241cddda4d780d7a6f84b911e7c0a10dc8d38e667e473db07d68edbea00a1450491dc06d08c5c16813
+2020-04-20 23:41:43,829: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,829: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,829: WARNING: validator: one1r6pr7092dtsx0d6nr3kwakkm9clajn6yt5d5fs bls public key: ddc81d9b8fa6dac95b56bd35de4738db2ba5284d1577ccbb7b60501ebf8aef9910254eff9431ec4d0ff2652b357f5997
+2020-04-20 23:41:43,829: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,829: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,829: WARNING: validator: one18ydqhm6rggp0r4w3zjgnr6gcayafvwn9fu2tyc bls public key: c4b196c55f17c84d1662526494882e2d910655e0391c3a93cbd0d56261c9f07d500c40b9fc12c1a75af3b0b31346240f
+2020-04-20 23:41:43,829: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,830: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,830: WARNING: validator: one1vd3hetkcpfcaad9v5n4gu694f26x63hqnwcurk bls public key: 801d11e469b17dcfa8ed3ddabb8bb7c88ee187dfcacf12553101ac0a07ee56d4c3e7d5f987eb2cc155c07ee5c62f8003
+2020-04-20 23:41:43,830: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,830: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,830: WARNING: validator: one173vfjagnq767uwrnq66lshdv3u0kf8y3sjyly2 bls public key: cb60ff53d99865eb194c337276191f05bb8e5da1a60fe20c10e07c861a474bf69b010c2474f72a4378f4e319b118d797
+2020-04-20 23:41:43,830: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,830: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,830: WARNING: validator: one14nt6nwd3p9v5dk7er3rkvg6y0nh8v9k7j3nuqq bls public key: fc3e0723b1e5ef32d34117218308d4c2a4200ad309d58e93b4109043a41362abd7615d3a6445ee9baf216dd2b42f9117
+2020-04-20 23:41:43,830: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,830: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,830: WARNING: validator: one1jfpkksqsvtt5c487u42gyp3040d2l6trq9eppp bls public key: 52723d1df6fa37b708f5917f2653d910f5b16936abca2f33b0993f1fccfd78c9d392bd4ffb76531044c2364085e50a03
+2020-04-20 23:41:43,831: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,831: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,831: WARNING: validator: one1rcv3chw86tprvhpw4fjnpy2gnvqy4gp4fmhdd9 bls public key: 0f481d3d3109edfe112823906b1c37bfaef151621eca27d160590308b402aed2726cbe6b0166f1e51e825b646c998594
+2020-04-20 23:41:43,831: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,831: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,831: WARNING: validator: one1rcv3chw86tprvhpw4fjnpy2gnvqy4gp4fmhdd9 bls public key: 47d8b40941cfff9daa245ed9d8a377790ac35ebe39b50a6f35d4abe2a99b1f6161cf8a28f36fabdb93f8709147339b08
+2020-04-20 23:41:43,831: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,831: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,831: WARNING: validator: one16pavfhark2j7h7235hgrfrx3lwlj7xnkslesa7 bls public key: 324ed2e36044dda94d7f4495134f6c838aefc194766cbcdb969537098936040976320808a68a8cb34eaa10e01d7f9092
+2020-04-20 23:41:43,831: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,831: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,831: WARNING: validator: one1qhc0ageuh5lel82vwtzq6fvwsy7xvyu3nj7rvx bls public key: 89d3f4cf6c6eb1b9122d5f6dc875fa96e5e35826f3fe132ab4e4f60ebf8075cbd6297fc7d3f5c267643f6b1d9557980c
+2020-04-20 23:41:43,832: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,832: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,832: WARNING: validator: one1rpjplrqrtnrppzt3n4tz2q9auk7k6245mgv35p bls public key: f6d15a2d40d17703b2988a24dba1bd1e449401ad55f52b13dcb4aa58564fe58c017db2db9b8af4c238006d81252c990a
+2020-04-20 23:41:43,832: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,832: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,832: WARNING: validator: one1c9h3u72czs6sk755tjyse7x5t70m38ppnkx922 bls public key: e6791a7fd6ad130035dc16cb9a463bc6932f782d3599b7317873b76e137df0d4b23903d93655efec4067442e8f532c09
+2020-04-20 23:41:43,832: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,832: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,832: WARNING: validator: one1hxqssk08xz96du0etpy727zxejqgs0yj0tjde7 bls public key: 73885355d436261e22de0529e198f0ff2f1d740926893a4a0d43478d6a21fd73f828013e85e93e20fcb69852affe990a
+2020-04-20 23:41:43,832: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,832: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,832: WARNING: validator: one1rd6wgcpcq8jn40md379ftlew8ukewu8ztl4n4x bls public key: 59045a780785e3d5cebc2532be7ebd1ee4f236594e8484bff36dd1d0c59b1f94c344507eede9c9ad0fd283a11c452515
+2020-04-20 23:41:43,833: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,833: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,833: WARNING: validator: one15nr9mha7fz5w2kx2dd7rfnpyd2j68h5dsexrt9 bls public key: fdd56e007ee3c4add8c737424387445423f5574da2961e5eec51c89c82f40a5b360f7e3883b40bf012c84ef4a2b7648f
+2020-04-20 23:41:43,833: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,833: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,833: WARNING: validator: one1hyqgueh0fv7mwwtt82f74wq9guzmw8ytf74qhn bls public key: 6f82c791237562e5c53ffceaa70f2a203fa79d3bdcd1d80e828925e4c08fb5797c550bea5083a7a9f8be49de6737388a
+2020-04-20 23:41:43,833: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,833: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,833: WARNING: validator: one1xpezw8k5e76t0jntvlgtug0t9wdzletvnl7r9f bls public key: 7ef1b171c125cfe184a1f5dca1ac730f65d8f68e5a79b33da06de43db0bcafbbee86c37decb99f9c6bfb1d11c6431695
+2020-04-20 23:41:43,833: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,833: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,833: WARNING: validator: one1z2mk04tjw0ttascmvznu9pq7zpuz9e3l0qxssp bls public key: 63e0d3bc39629d268ca5182e021f07d3a6d79aa517133153f1089770f7e8143087aec3de55544f2e8b25759398f65001
+2020-04-20 23:41:43,834: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,834: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,834: WARNING: validator: one1jpfcmr4nw26the65vud7fqxxv04823lyn42u33 bls public key: 3cbb919af3b4ab81533257fe642553664f0404accbd94b40c18b39f114b59bb00e9103d166ccffd09e1956983e868001
+2020-04-20 23:41:43,834: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,834: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,834: WARNING: validator: one1jtq979pugs6484mpyz5ahvjgzcvv02sdclhg2n bls public key: daef554e7333e6a4af944deca565cfe3ec62009e7c73b5b9d96bfa7655679addc14d5475fb1171d4b06bd370a3a1f116
+2020-04-20 23:41:43,834: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,834: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,834: WARNING: validator: one1wwzq9jcqkhxtzrzcxpeg2d4xc64p8zl22uusn4 bls public key: c9ad33129458a924148cc99cf962a824a948421cd12fcec0780e3a5974211cfb55bed53cfbd1009c3ef57f7b1cf04289
+2020-04-20 23:41:43,834: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,834: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,834: WARNING: validator: one1e5wqxk8j6uemlar3vezkla89xyg22chzn2ttny bls public key: 9441acec924695440e1da697028b797dfe17b7fa14f096fa198f8fd2f3dab79a2bd34c09e96075a64711db408b24b692
+2020-04-20 23:41:43,835: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,835: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,835: WARNING: validator: one1wxlm29z9u08udhwuulgssnnh902vh9wfnt5tyh bls public key: 20026c7ecc0c7b2bb5fd217d3a16cae4dff30b8c610d476da1a41f467db43f4d3fff706a6ebef4983564c67fc164f80a
+2020-04-20 23:41:43,835: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,835: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,835: WARNING: validator: one1k0q8agszu8etphtfnx0934ltsyyrhvnwnjka2z bls public key: c1fdce5d96a15193bf9db6b679bc6efc1f95d5b48827a84bd4aa8eb06fe9d087cd47c6c999803e83d19e685e81d6e493
+2020-04-20 23:41:43,835: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,835: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,835: WARNING: validator: one1nzkhudzmyczmy0ukvjewlx4zyqjmc8ujhfhq90 bls public key: dc735a503388d93a86ad56ab8d2f0c79dbec64b9331812beeab068553959650e848e6fbb3fc280081e90abb50074bd16
+2020-04-20 23:41:43,835: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,836: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,836: WARNING: validator: one1la07f5wduc3379ffzlpqrl4rcvlchyvtwf3uyj bls public key: 26f5128639f480843e52a8328bb37d9c0b74e4dab75e8945dbcb4977c5995b3cc29807181a5a64d2c433ac4ed81e7d81
+2020-04-20 23:41:43,836: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,836: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,836: WARNING: validator: one1zxnkjncuxtt5u8df4hg4cxcwa3anqk6c2chz59 bls public key: ae8b1b2a5e9de95db0e1028c1161ea952870410b428c16f318b0110cd6939b8d8139201ef89ec56a9f1e56fcb54e438f
+2020-04-20 23:41:43,836: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,836: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,836: WARNING: validator: one1f722chyzqpwsam95rla8gm9llunvq6zffuwqdh bls public key: 8479abb3b6fb4fc84492e47aaa0ccef9cc04bea1dd81a8d423ce70e8205b29ee5818db33ed58b1fc064c4b65bdfebd8f
+2020-04-20 23:41:43,836: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,836: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,837: WARNING: validator: one1myz6h2hhl83lzd3f6uj0umlq2d9pr9u7ggtzk6 bls public key: 863990d9eec134394d01091392697dc9e2fe55f293a443bf058d888d164e513e3d9635863f0f323b7b1968e95459a687
+2020-04-20 23:41:43,837: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,837: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,837: WARNING: validator: one1x29shrfh7n79pm2xxn2cu24vwrwxt5sjawp3j7 bls public key: 31f8d70afcc31a6f8c90fafefeaa20c638ba13108bba01d0db91e751170f875a54f4afa40e891b597b12c2c1df1a3c92
+2020-04-20 23:41:43,837: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,837: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,837: WARNING: validator: one136f6ry9akqj8kj3zlgx38zy8f433h346dnxgxy bls public key: 9c6dbc793297467d4fce5b07f7f5661410586ea2839f888d88a406dfd6104c0a6820863c0290a26b3d48e4066d60e28a
+2020-04-20 23:41:43,837: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,837: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,837: WARNING: validator: one1lsvf8fms0emzvw45eazx855cdjh6x467fa4ad8 bls public key: 2d848e108d36985cc4b355fefb700eebf59ff56b57c69e5e93bf4efbce21dd6769674a12f1ce7ba5cfccbaae13ea218c
+2020-04-20 23:41:43,837: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,838: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,838: WARNING: validator: one1qpwkx8d63p44t7vgh7stl3s8phr6szej3pjnmh bls public key: 625173f32927631ad020afde95d406568f5fc7f9fba2f32443f83d1cc271a5995a6d7a1cb987d846346f0e9e96a44818
+2020-04-20 23:41:43,838: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,838: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,838: WARNING: validator: one19u5edyp3fkl9326ct7sudmgs92wcerd5vnu5y5 bls public key: f44dc96c5edbb6d4182902bd196b16df98fd999bf475e8f1a36d184eef1587fdf6242eddad78116ad26865975f38f10a
+2020-04-20 23:41:43,838: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,838: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,838: WARNING: validator: one17msyyjfwuknrtw4npq8mqhl36aq69qsnw42q0n bls public key: 7954b24a5c502f3f16006a7f76bd0727e4f332e36e2122197c57ab70e56a1ce88bd98773cade2d8c071af90774665b85
+2020-04-20 23:41:43,838: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,838: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,839: WARNING: validator: one14nxnrgag980uuw9qwknmpak77gaxh3sghdfmwm bls public key: 21611319be72794797d131cb0b0943931167c4bc30626c04c5ccde60ce106a06f3e3a0fdcf7d074eae6b4b4bf9263c0a
+2020-04-20 23:41:43,839: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,839: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,839: WARNING: validator: one1gm8xwupd9e77ja46eaxv8tk4ea7re5zknaauvq bls public key: 8184ae3b4c83756ae70e31db625fafc021d07b189140391152ad19df11841e920b93ee3ed71f8d498f3fdc570f415f93
+2020-04-20 23:41:43,839: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,839: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,839: WARNING: validator: one1es8mknwyq4zr45qvey82pa578q3th062sk6lzj bls public key: a4955e29ea83ff526211afc8bec440bed5058833bf5b2160404c46538e331a6a394d02a6c8c984a92de10393f7e6f009
+2020-04-20 23:41:43,839: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,839: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,839: WARNING: validator: one19lrfewf9v37lxyfnsehkzqlvgluzyehhr3ds2p bls public key: 5f1a8b31c48fad23cdaf8f72e305211e71277bf8351f9874e0ef5080afae2dbfb5a5c17c65a81c8209f4ed5ffe2cfe91
+2020-04-20 23:41:43,840: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,840: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,840: WARNING: validator: one17xz463re6h6hfpj28s6xgrx7eacec3yppfgu3u bls public key: f92c5631824378205ea2423fbe0a820ab3345a4af120a87236e6228c0a75287ac33ca1156e05abbed3169af8f49c1383
+2020-04-20 23:41:43,840: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,840: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,840: WARNING: validator: one1ksztxsw2qj8gw76el7czqjyvpmal6zrw6pvszz bls public key: 846a759fc33a588fe36a4f25bcaee4c8b0f1409531155e24e781bfb7aa2342370f602ce62fc84475ac9638c836d83e96
+2020-04-20 23:41:43,840: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,840: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,840: WARNING: validator: one153xv3faztcpd6mmkuwdz7n2ne30uhllyakvcd4 bls public key: 68a66b6014d04374dc10dc69dafa9634a593c490c813e1c8e1dfafb03923348ea1947b2a63a6f8150b39ef04f96a6289
+2020-04-20 23:41:43,840: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,840: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,840: WARNING: validator: one153xv3faztcpd6mmkuwdz7n2ne30uhllyakvcd4 bls public key: 6ae0de809dcb07ce248cd5efd012cbe5cc456426c9774a77e611992efc43c3511568519187d315ba113483f13fbd750d
+2020-04-20 23:41:43,841: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,841: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,841: WARNING: validator: one1njyvqvw3jq2klrl77udzuj4xlh8tslgj434urs bls public key: 45d77a2785ec6f22c9a303c48766d7a7ed1977aa6b9d37a59516769c5a63c111494bd84460689bf381c2357ecdd58893
+2020-04-20 23:41:43,841: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,841: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,841: WARNING: validator: one1njyvqvw3jq2klrl77udzuj4xlh8tslgj434urs bls public key: 3f51ace20fca04e662f7c34cbe40748eaf9118f29bfe158d5dbd3510912016f139986f0e055e6d1c11dc30679320de0c
+2020-04-20 23:41:43,841: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,841: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,841: WARNING: validator: one1njyvqvw3jq2klrl77udzuj4xlh8tslgj434urs bls public key: 8f0dd07318a53b77ed513a640711e71a3dadb21850325a655cb39ae42ac95c07180aae395ebe76bf7559c1e2a7774400
+2020-04-20 23:41:43,841: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,841: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,841: WARNING: validator: one1njyvqvw3jq2klrl77udzuj4xlh8tslgj434urs bls public key: c3e0db33549b27c3bb7454684c33deceffdc2ee6dfda6837ab6a829676cf5fe664d2a69e9c1e346b3fb89474b1411888
+2020-04-20 23:41:43,841: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,842: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,842: WARNING: validator: one1njyvqvw3jq2klrl77udzuj4xlh8tslgj434urs bls public key: f436aec06dd896504c0cb6497bdfcb2d6c57f4c08badcc4f08ecdc777269ec0528d0cd3b6b145ddb8629875120fedb08
+2020-04-20 23:41:43,842: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,842: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,842: WARNING: validator: one1y5sjr75g77f5ujatg5ldj47gmrxutr265jn5zl bls public key: ebe147068f9f39493aeddf401f03709b675483c51cbfcade857b032f1a49eb03e9bf2adb303f29d28d5929e49075d590
+2020-04-20 23:41:43,842: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,842: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,842: WARNING: validator: one15u9quw6lsf6kt4whxe8resrxdncs2ax67rwa53 bls public key: 581a62177d3368ddc5e88cc4fbdaf719bc5adf5ab38eab912e3df013b47c6cbd7c20b850e364adac6828fa960484b80e
+2020-04-20 23:41:43,842: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,842: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,842: WARNING: validator: one1egemh5e9xjy3x8d3cq0kq7mw4sw4jjwgkc7axs bls public key: d90b4af4db279822edc6b4aa6a2b083512d0b6a873d8e71c814b7994e0f32b97f6a6d81d21344d7fa85e76f76af5e783
+2020-04-20 23:41:43,842: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,842: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,843: WARNING: validator: one1rwjdxuvamndpml255w5j8syv7f3kghmrgf40dt bls public key: 56055a6afadf8cf05cdda549a219de906654554a86f68057dd58fac82ded7cd7e9060872d5e0ce838fd99f2baba57b88
+2020-04-20 23:41:43,843: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,843: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,843: WARNING: validator: one1dt4md3nh3apdsmm8t0p2lsul2my5c2t93ky06k bls public key: e51276b7d84c593298cb0331559ce2790d9d2343364ea6f0a8e4a00c84952d59b0bc0569b028aaaaefd317772a7eda86
+2020-04-20 23:41:43,843: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,843: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,843: WARNING: validator: one1rl88uu9x9u29x7d746546mre3jdr2zvrpx6n22 bls public key: 1b1bcca2e25ba06994c3cdea9476d59845242a21a5fe43c9c9f17c26325dcf7f1546258dd97fdaaf97d77af0c3ea260e
+2020-04-20 23:41:43,843: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,843: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,843: WARNING: validator: one1qkcewekpy9p4vdk3dfnzw3jdenuegfc5a8pes3 bls public key: 0619bbe9b430c2fd8be1b0c0579f763f7d23d1484666f1224f4a3ad00d0041b4e306b87e1c690500fac8857261eca702
+2020-04-20 23:41:43,843: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,843: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,844: WARNING: validator: one1xdnyc4c85vkh69am2wdd7rmcyzprmem5tnm9ck bls public key: 30c41b92a7253f78050010ce4a24ad9ee0821420c12b1586ac56d20f14486b9167e2e400ff24251aac9cc309e69a938f
+2020-04-20 23:41:43,844: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,844: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,844: WARNING: validator: one1359p2pazkaq9avv739uykszt0x9k0v224yar2p bls public key: 512e008b88819a0d75d21702afe90bdc633dc9121c0ea74ca56892732a11ea34898639fe614d3bd25ef68d69288a8502
+2020-04-20 23:41:43,844: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,844: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,844: WARNING: validator: one1jqw0pat0r793j5n9vg2732u7xg04x57sfa6cug bls public key: 98a0c0af38aa5762a023a2641badaa45e2a6af546401ee76b467441fcadb3d70fd91396f6febe018af0da4c6b91c7c07
+2020-04-20 23:41:43,844: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,844: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,844: WARNING: validator: one1nawmlqdfcq6cu0mv0qczhnjfrw6tz72g40dzp3 bls public key: 4bd2a5648d9f9f40e7c9f423a47fc3d2570b32bf7b870ace795f6e9f5bdfc2da7f87850eed9fa8672002b2e59b150f8d
+2020-04-20 23:41:43,844: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,845: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,845: WARNING: validator: one1c4keaqwlj8ljhdy6yzur5en40vnf3nzxv7qkda bls public key: 0b4a1b26d04bd69f050620bc8902465ee1eb5ccb57ae4ee4bed5c75bb17fa71759eed179e39fe22f26f3db8234805596
+2020-04-20 23:41:43,845: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,845: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,845: WARNING: validator: one129ztaxq5hu9cugmu7lg0m0a4zugfnq5wptvl2d bls public key: 6f4b6f1e4bb74487704bb75272efac0029c56179c0ec3c1a110a9de59e221797bab3a48150680528cab6694a0af6b288
+2020-04-20 23:41:43,845: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,845: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,845: WARNING: validator: one1gzt0fgsszcgl7lf2kxkgw7dkkqwatpx9u6gm66 bls public key: 69010c7c3c360a4196169f7610ea0ef65a7657baa06e2a170600f98762b84b64a02425fb1a40c99b939c8f9fe2eea285
+2020-04-20 23:41:43,845: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,845: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,846: WARNING: validator: one1rr5jwz2njdss2yu8mh9ffag08x7m0cquhvz3e8 bls public key: 8a6ea7f0bc91c6f84b9b5bd89b678c22854ffb60d5eba9ecba1cbc235cab7dc5f96be9df93abfef6a44ae086f6170f06
+2020-04-20 23:41:43,846: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,846: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,846: WARNING: validator: one1l383hvyt34fdl3cvv9pggpu5wtwmm0ykn0ck6z bls public key: 21b1fd1f695d463047cc7603735c25b0e2cd2d7bc3dbe1fc0d01d7facdba9073854a721fc2f4081e4e7fea23735bcf8b
+2020-04-20 23:41:43,846: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,846: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,846: WARNING: validator: one17scslp5maj0dm4vyl06xc27dzhzy8968tmhn6k bls public key: 4d20730a9e3f2a8996c4fb3ae22e779a3cbc0efe4658b4dce07ca663176911f149bdc9ba054599def546a26e9af25c86
+2020-04-20 23:41:43,846: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,846: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,846: WARNING: validator: one1unc4nv7dwjywdlnwezqy4944cxpcyjeruum8ee bls public key: 417a914ca4fb5e07f53988e0ae9c775cb2e063121a1d349c340e13996a089e28849ecac12bf7bf96c40bd1f2a4fd370c
+2020-04-20 23:41:43,846: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,847: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,847: WARNING: validator: one19et0hagya58q9kc4ama7npp5ldtpydxpxg3528 bls public key: 9ace5f7b7226095aef39e6abe29cf09f21a7e834c6b82e76b1a3401dc2319e9a3e53ce2931dfcfc8b303e0c442943f8a
+2020-04-20 23:41:43,847: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,847: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,847: WARNING: validator: one1k2zgm3xjjcfhepjku6z0h5aa5kp9y2r0m2wpvq bls public key: bec3f4622879f79a613bec7932c42936052daeeff5480cee573a7e40ee909ca9cd4a2b39490ece38d48dd7e059f5430a
+2020-04-20 23:41:43,847: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,847: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,847: WARNING: validator: one1vll689y3dwz9h3d9g4rh5z68yfpvqzxgwyxgm9 bls public key: b745fbe8ca819b4c17e8a5701788813f4ff7b011cd5d92fc1f296d303e783763402b7d2f535a3447d08b150afe71188d
+2020-04-20 23:41:43,847: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,847: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,848: WARNING: validator: one17fsf4xen0d9ma2xccgdl7uukmvursn8zk6733y bls public key: 398c01ebe9e326076b330c02bf18ff051e1e6c1b2a45483e164d1e98fe9a0d77c26157f9b38a00eb1a5b7d1148a40115
+2020-04-20 23:41:43,848: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,848: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,848: WARNING: validator: one1hwn68w7m5g8daltvrjkmq23qn58nrvr3yz6ryt bls public key: 48ad00d97fb657f3476b5a8466798f33a23b16615091ebcd3587c14c9aad9e2e28c28fd12a7e9c887e621eb2f7860d00
+2020-04-20 23:41:43,848: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,848: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,848: WARNING: validator: one10akp7kg93nuu2dlgm3rktkjxzcppzzxslttymm bls public key: 86232c8b71023740ec4878020f923df5783ae1af27ca2990a0ab7e565f445829a4786ed20fd542423df324f8c97ab582
+2020-04-20 23:41:43,848: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,848: WARNING: Test-M5: Fail
+2020-04-20 23:41:43,848: WARNING: validator: one1f97c9rg72zea87deh69nd83tgfgwkfywejvehd bls public key: e92b5e5a3a9442ae9bfb5321833bc65e9f48c17e7ce7d9a9e94a26ae4f0184bd27a4f249b7b0119d49a99cafc635458d
+2020-04-20 23:41:43,848: WARNING: effective stake is out of range. The effective stake is 4501940424999999935348736
+
+2020-04-20 23:41:43,849: INFO: total slots verified: 200
+2020-04-20 23:41:43,849: INFO: 
+=============== Starting R1_test ===============
+
+2020-04-20 23:41:43,849: INFO: Test R1: Harmony nodes should not earn block rewards
+2020-04-20 23:42:07,308: INFO: Test-R1: Succeed
+
+2020-04-20 23:42:07,308: INFO: 
+=============== Starting R2_test ===============
+
+2020-04-20 23:42:07,308: INFO: Test-R2: Not elected validators should not earn reward
+2020-04-20 23:42:07,541: INFO: current and last block numbers: 60727, 60761
+2020-04-20 23:42:13,871: INFO: new block reached, 60728, will wait for 3 seconds to begin testing...
+2020-04-20 23:42:17,194: INFO: Test-R2: Succeed
+
+2020-04-20 23:42:17,197: INFO: 
+=============== Starting R3_test ===============
+
+2020-04-20 23:42:17,197: INFO: Test-R3: High stakers earn more reward than low stakers
+2020-04-20 23:42:17,424: INFO: current and last block numbers: 60728, 60761
+2020-04-20 23:42:22,961: INFO: current block 60729, will wait for 3 seconds to begin collecting infos...
+2020-04-20 23:42:26,351: INFO: obtained block stakes and rewards, total stakes found = 184, total rewards found = 184
+2020-04-20 23:42:31,758: INFO: new block reached, 60730, will wait for 5 seconds to begin comparing stakes and rewards
+2020-04-20 23:42:35,086: INFO: comparison to begin, two lengths: 50, 50
+2020-04-20 23:42:35,086: INFO: on shard 1: Succeed
+2020-04-20 23:42:35,086: INFO: comparison to begin, two lengths: 55, 55
+2020-04-20 23:42:35,086: INFO: on shard 2: Succeed
+2020-04-20 23:42:35,086: INFO: comparison to begin, two lengths: 50, 50
+2020-04-20 23:42:35,087: INFO: on shard 3: Succeed
+2020-04-20 23:42:35,087: INFO: comparison to begin, two lengths: 45, 45
+2020-04-20 23:42:35,087: INFO: on shard 0: Succeed
+2020-04-20 23:42:35,087: INFO: Test-R3: Succeed
+
+2020-04-20 23:42:35,087: INFO: 
+=============== Starting R4_test ===============
+
+2020-04-20 23:42:35,087: INFO: Test-R4: Reward given out to delegators sums up to the total delegation reward for each validator
+2020-04-20 23:42:35,337: INFO: current and last block numbers: 60730, 60761
+2020-04-20 23:42:35,337: INFO: current block 60730, will begin collecting infos...
+2020-04-20 23:42:40,497: INFO: new block reached, 60731, will begin testing...
+2020-04-20 23:42:40,497: INFO: current block: 60731
+2020-04-20 23:42:40,920: INFO: Test-R4: Succeed
+
+2020-04-20 23:42:40,921: INFO: 
+=============== Starting R5_test ===============
+
+2020-04-20 23:42:40,921: INFO: Test-R5: Reward given out to block signers sums up to the total block reward
+2020-04-20 23:42:41,164: INFO: current and last block numbers: 60731, 60761
+2020-04-20 23:42:41,165: INFO: current block 60731, will begin collecting infos...
+2020-04-20 23:42:49,280: INFO: new block 60732 reached, will begin testing...
+2020-04-20 23:42:49,673: WARNING: Test-R5: Fail
+2020-04-20 23:42:49,673: WARNING: block: 60732, validator block reward: 1.12000000000000032768e+20, total reward: 9.91319181899974246400e+19, signers: 184
+
+2020-04-20 23:42:49,674: INFO: 
+=============== Starting R6_test ===============
+
+2020-04-20 23:42:49,674: INFO: Test-R6: Tests whether the delegation reward is distributed correctly
+2020-04-20 23:42:49,961: INFO: current and last block numbers: 60732, 60761
+2020-04-20 23:42:49,961: INFO: current block 60732, will begin collecting infos...
+2020-04-20 23:42:58,087: INFO: new block 60733 reached, will begin testing...
+2020-04-20 23:42:58,429: INFO: Test-R6: Succeed
+
+2020-04-20 23:42:58,431: INFO: 
+=============== Starting R7_test ===============
+
+2020-04-20 23:42:58,431: INFO: Test-R7: Sum of validator and delegator earning should match the block reward
+2020-04-20 23:42:58,687: INFO: current and last block numbers: 60733, 60761
+2020-04-20 23:42:58,687: INFO: current block 60733, will begin collecting infos...
+2020-04-20 23:43:07,082: INFO: new block 60734 reached, will begin testing...
+2020-04-20 23:43:15,755: INFO: new block 60735 reached, will begin testing...
+2020-04-20 23:43:16,118: INFO: Test-R7: Succeed
+
+2020-04-20 23:43:16,119: INFO: 
+=============== Starting R8_test ===============
+
+2020-04-20 23:43:16,119: INFO: Test-R8: Block reward inversely proportional to staked amount
+2020-04-20 23:43:16,119: WARNING: Test-R8: Not Applicable
+2020-04-20 23:43:16,119: INFO: 
+=============== Starting R9_test ===============
+
+2020-04-20 23:43:16,119: INFO: Test-R9: Block reward never drops below minimum or raises above maximum block reward
+2020-04-20 23:43:16,361: INFO: current and last block numbers: 60735, 60761
+2020-04-20 23:43:16,361: INFO: current block: 60735, will begin collecting infos...
+2020-04-20 23:43:24,526: INFO: new block reached: 60736, will begin testing...
+2020-04-20 23:43:24,911: INFO: Test R9: Succeed
+
+2020-04-20 23:43:24,913: INFO: 
+=============== Starting R11_test ===============
+
+2020-04-20 23:43:24,913: INFO: Test-R11: Earning is proportional to effective stake 
+2020-04-20 23:43:24,913: INFO: test 1 will begin ...
+2020-04-20 23:43:25,153: INFO: current and last block numbers: 60736, 60761
+2020-04-20 23:46:58,527: INFO: second last block in current epoch reached 60760, will wait for 6 seconds...
+2020-04-20 23:47:04,534: INFO: begin collecting stakes and aprs...
+2020-04-20 23:47:16,445: INFO: first block in new epoch reached, 60762, will wait for 5 seconds...
+2020-04-20 23:47:21,447: INFO: compare the changes...
+2020-04-20 23:47:21,932: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,932: WARNING: one1egemh5e9xjy3x8d3cq0kq7mw4sw4jjwgkc7axs's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,932: WARNING: apr doesn't decrease, apr changes: 0.00760141491493016
+
+2020-04-20 23:47:21,932: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,932: WARNING: one17ggg46nxt86av0sqw9xgqxc5nnhglex5wq78kk's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,932: WARNING: apr doesn't decrease, apr changes: 0.00217431496230025
+
+2020-04-20 23:47:21,932: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,932: WARNING: one18w3vp4nu620hhc77mfpv7wljp5wsrvnpr4kh5y's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,932: WARNING: apr doesn't decrease, apr changes: 0.03532509523640545
+
+2020-04-20 23:47:21,933: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,933: WARNING: one1fxtdau23qk0fl63e40g3h4nfwsj0k8uutx59qx's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,933: WARNING: apr doesn't decrease, apr changes: 0.0021743151681818396
+
+2020-04-20 23:47:21,933: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,933: WARNING: one1gm8xwupd9e77ja46eaxv8tk4ea7re5zknaauvq's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,933: WARNING: apr doesn't decrease, apr changes: 0.006525415783614097
+
+2020-04-20 23:47:21,933: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,933: WARNING: one1y5sjr75g77f5ujatg5ldj47gmrxutr265jn5zl's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,933: WARNING: apr doesn't decrease, apr changes: 0.016488332090641267
+
+2020-04-20 23:47:21,933: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,933: WARNING: one1j6yxw3elz4yvx3dku46uxynkvxd43n0eg0p3pf's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,934: WARNING: apr doesn't decrease, apr changes: 0.0015257259321975192
+
+2020-04-20 23:47:21,934: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,934: WARNING: one19qdw8ge9wgt3e2759stjevuccz4qflw4rr3lwg's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,934: WARNING: apr doesn't decrease, apr changes: 0.0021765820207697018
+
+2020-04-20 23:47:21,934: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,934: WARNING: one19fwj7f3e2kgz48cqe6vs43d6q08f5tpt3zhlu5's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,934: WARNING: apr doesn't decrease, apr changes: 0.002284869466919248
+
+2020-04-20 23:47:21,934: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,934: WARNING: one17xz463re6h6hfpj28s6xgrx7eacec3yppfgu3u's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,934: WARNING: apr doesn't decrease, apr changes: 0.006629924395773479
+
+2020-04-20 23:47:21,934: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,935: WARNING: one1pwt0hfjcyc0wpu2c2qy3xpnwkrn95kf98m0r95's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,935: WARNING: apr doesn't decrease, apr changes: 0.0021765820207697018
+
+2020-04-20 23:47:21,935: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,935: WARNING: one1fvkmfe2w6v3pr72yg3qv6vxpdtqunvcdht99f5's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,935: WARNING: apr doesn't decrease, apr changes: 0.03446421362807989
+
+2020-04-20 23:47:21,935: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,935: WARNING: one1f722chyzqpwsam95rla8gm9llunvq6zffuwqdh's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,935: WARNING: apr doesn't decrease, apr changes: 0.005544793204172782
+
+2020-04-20 23:47:21,935: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,936: WARNING: one1r6pr7092dtsx0d6nr3kwakkm9clajn6yt5d5fs's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,936: WARNING: apr doesn't decrease, apr changes: 0.06617729248934423
+
+2020-04-20 23:47:21,936: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,936: WARNING: one1ekup98s5tqxtr5hdzsz664cfy579jpq6w5smrr's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,936: WARNING: apr doesn't decrease, apr changes: 0.004138650683535805
+
+2020-04-20 23:47:21,936: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,936: WARNING: one1pdl9qsz55kmzjmprl4rg59h90l0z8fff9v9svn's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,936: WARNING: apr doesn't decrease, apr changes: 0.0021765820207697018
+
+2020-04-20 23:47:21,936: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,936: WARNING: one1k0q8agszu8etphtfnx0934ltsyyrhvnwnjka2z's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,936: WARNING: apr doesn't decrease, apr changes: 0.07273373080849033
+
+2020-04-20 23:47:21,937: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,937: WARNING: one1syx0rmtttr8jehlxvnkpyx4hvrlevmcx3tcghy's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,937: WARNING: apr doesn't decrease, apr changes: 0.0005309227225604174
+
+2020-04-20 23:47:21,937: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,937: WARNING: one15yyplkh5gsndfspttzjmaz0d49n9wyuhzu3cke's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,937: WARNING: apr doesn't decrease, apr changes: 0.0021722580942953873
+
+2020-04-20 23:47:21,937: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,937: WARNING: one1tdlauptgjtjpjmqsauhc7jcymr5xklwgnv5l23's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,937: WARNING: apr doesn't decrease, apr changes: 0.0021765820207697018
+
+2020-04-20 23:47:21,937: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,938: WARNING: one1uq0dprttr2k3xn5ssd8dnkhj49yhvza3reynlr's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,938: WARNING: apr doesn't decrease, apr changes: 0.0021765820207697018
+
+2020-04-20 23:47:21,938: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,938: WARNING: one15wz3294k252cz2f8fm86dzev5wcflqteay4mq7's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,938: WARNING: apr doesn't decrease, apr changes: 0.0021765820207697018
+
+2020-04-20 23:47:21,938: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,938: WARNING: one1dts6snty059wk48k9lyyraly6p9642gl2dg02j's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,938: WARNING: apr doesn't decrease, apr changes: 0.0021765820207697018
+
+2020-04-20 23:47:21,938: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,938: WARNING: one1c8mckkvg9rcltdjep4dp2crdxe70nx9v3egg7z's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,939: WARNING: apr doesn't decrease, apr changes: 0.012559043437676332
+
+2020-04-20 23:47:21,939: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,939: WARNING: one15nr9mha7fz5w2kx2dd7rfnpyd2j68h5dsexrt9's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,939: WARNING: apr doesn't decrease, apr changes: 0.004980227820902572
+
+2020-04-20 23:47:21,939: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,939: WARNING: one1jfpkksqsvtt5c487u42gyp3040d2l6trq9eppp's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,939: WARNING: apr doesn't decrease, apr changes: 0.004278309692772764
+
+2020-04-20 23:47:21,939: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,939: WARNING: one1du5yacdfaeezww9mzxje7vgdy9j0lhyl5lgt68's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,939: WARNING: apr doesn't decrease, apr changes: 0.004880695174337202
+
+2020-04-20 23:47:21,939: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,940: WARNING: one15cazch6k02clu4eqzw92mgk6l639sh9qpcx3ma's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,940: WARNING: apr doesn't decrease, apr changes: 0.002284869466919248
+
+2020-04-20 23:47:21,940: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,940: WARNING: one1g2v0upzz532gtwc2jrmxrg53fv2z92wd3slx3f's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,940: WARNING: apr doesn't decrease, apr changes: 0.0021765820207697018
+
+2020-04-20 23:47:21,940: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,940: WARNING: one1pnlj6lqn9a7fu52rq46nvgepcwqp7mcwhxsp3c's effective stake decrease: -6.492557499999963e+22
+2020-04-20 23:47:21,940: WARNING: apr doesn't decrease, apr changes: 0.005062840303023064
+
+2020-04-20 23:47:21,940: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,940: WARNING: one1jgxwsl3f5mgad9yuawz2sgk9dlmkcyfd5y9r74's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,941: WARNING: apr doesn't decrease, apr changes: 0.07126375683330766
+
+2020-04-20 23:47:21,941: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,941: WARNING: one173vfjagnq767uwrnq66lshdv3u0kf8y3sjyly2's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,941: WARNING: apr doesn't decrease, apr changes: 0.004179416555675108
+
+2020-04-20 23:47:21,941: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,941: WARNING: one1pf9x35787w6gpgpyp7erkvl9t2rw8qvz34cg04's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,941: WARNING: apr doesn't decrease, apr changes: 0.002848646692864998
+
+2020-04-20 23:47:21,941: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,941: WARNING: one1uz957sjlp6j2fgg5nxutm7d0sy0xqq0ysh80pu's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,941: WARNING: apr doesn't decrease, apr changes: 0.14357412057624674
+
+2020-04-20 23:47:21,941: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,942: WARNING: one1xgv66f7emaacgu842zyg5xyyykkkl8l8hhhwfn's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,942: WARNING: apr doesn't decrease, apr changes: 0.003921886369454786
+
+2020-04-20 23:47:21,942: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,942: WARNING: one1gtrgkfj7ynzp4xhs7pyzgkf8lz2xqqqe85f5h7's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,942: WARNING: apr doesn't decrease, apr changes: 0.002173781448234602
+
+2020-04-20 23:47:21,942: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,942: WARNING: one15rqtwc655zt5xrswqpfqnh747ghtjzkxr4ec8m's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,942: WARNING: apr doesn't decrease, apr changes: 0.09899800546783782
+
+2020-04-20 23:47:21,942: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,942: WARNING: one14nt6nwd3p9v5dk7er3rkvg6y0nh8v9k7j3nuqq's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,942: WARNING: apr doesn't decrease, apr changes: 0.004232570198380525
+
+2020-04-20 23:47:21,943: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,943: WARNING: one1kdjs72qn8efcnxycjj2wxnm0x5j9fyl0srfcdu's effective stake decrease: -6.100174999999993e+23
+2020-04-20 23:47:21,943: WARNING: apr doesn't decrease, apr changes: 0.0006238166191588346
+
+2020-04-20 23:47:21,943: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,943: WARNING: one1vd3hetkcpfcaad9v5n4gu694f26x63hqnwcurk's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,943: WARNING: apr doesn't decrease, apr changes: 0.004179416555675108
+
+2020-04-20 23:47:21,943: WARNING: Test-R11: Fail
+2020-04-20 23:47:21,943: WARNING: one1myz6h2hhl83lzd3f6uj0umlq2d9pr9u7ggtzk6's effective stake decrease: -4.508824999999995e+23
+2020-04-20 23:47:21,943: WARNING: apr doesn't decrease, apr changes: 0.005544793204172782
+
+2020-04-20 23:47:21,943: INFO: 
+=============== Starting R14_test ===============
+
+2020-04-20 23:47:21,944: INFO: Test-R14: Shard fairness: rate of earning on shards is similar if the block time are same
+2020-04-20 23:47:22,040: INFO: current block number, 60762
+2020-04-20 23:47:25,427: INFO: next block reached, 60763, will begin testing
+2020-04-20 23:47:25,977: INFO: the average apr for each shard: [(0, 0.7346738003827054), (1, 0.806846557739653), (2, 0.7110087097988133), (3, 0.659792505817613)]
+
+2020-04-20 23:47:25,977: INFO: 
+=============== Starting CN1_test ===============
+
+2020-04-20 23:47:25,977: INFO: Test-CN1: Slow validator is never starved (should be able to sign blocks)
+2020-04-20 23:47:26,210: INFO: current and last block numbers: 60763, 60799
+2020-04-20 23:48:32,313: INFO: current block: 60770, will begin collecting infos...
+2020-04-20 23:48:36,220: INFO: new block reached, 60771, will wait for 5 seconds to begin testing
+2020-04-20 23:48:41,615: INFO: Test-CN1: Succeed
+
+2020-04-20 23:48:41,615: INFO: 
+=============== Starting U1_test ===============
+
+2020-04-20 23:48:41,615: INFO: Test-U1: Delegator/validator stake locked until undelegate
+2020-04-20 23:48:41,875: INFO: current and last block numbers: 60771, 60799
+2020-04-20 23:48:41,970: INFO: current epoch number, 1599, current block number, 60771, will begin testing...
+2020-04-20 23:48:45,010: INFO: next block reached, 60772, current epoch, 1599, will compare the stakes
+2020-04-20 23:48:45,522: INFO: No stake reduces at current test, need more tests
+
+2020-04-20 23:48:45,523: INFO: 
+=============== Starting U2_test ===============
+
+2020-04-20 23:48:45,523: INFO: Test-U2: After undelegate, the total stake amount for that validator should subtract the undelegation amount before next epoch
+2020-04-20 23:48:45,908: INFO: current and last block numbers: 60772, 60799
+2020-04-20 23:48:46,003: INFO: current epoch numebr: 1599, block number: , 60772, will begin testing...
+2020-04-20 23:52:45,571: INFO: last block number reaches, 60799, will compare the stakes and undelegations
+2020-04-20 23:52:46,154: INFO: no undelegation happens in current test, need more tests
+
+2020-04-20 23:52:46,154: INFO: 
+=============== Starting S1_test ===============
+
+2020-04-20 23:52:46,154: INFO: Test-S1: Equilibrium: percentage of external validators on each shard is balanced
+2020-04-20 23:52:46,426: INFO: the percentage for each shard: {'shard-0': 0.40594059405940597, 'shard-1': 0.4444444444444444, 'shard-2': 0.48717948717948717, 'shard-3': 0.47368421052631576}
+
+2020-04-20 23:52:46,426: INFO: 
+=============== Starting S6_test ===============
+
+2020-04-20 23:52:46,427: INFO: Test-S6: Total staked tokens cannot exceed circulating supply
+2020-04-20 23:52:46,521: INFO: current block, 60799
+2020-04-20 23:52:46,670: INFO: supply: 5219932235.294107
+2020-04-20 23:52:46,671: INFO: stake: 1818879111.8661447
+2020-04-20 23:52:54,272: INFO: Test-S6: Succeed
+
+2020-04-20 23:52:54,272: INFO: 
+=============== Starting S7_test ===============
+
+2020-04-20 23:52:54,272: INFO: Test-S7: Stake is equally distributed across slots
+2020-04-20 23:52:54,367: INFO: current block: 60800
+2020-04-20 23:53:03,502: INFO: Test-S7: Succeed
+
+2020-04-20 23:53:03,503: INFO: 
+========================= Test Results =========================
+
+2020-04-20 23:53:03,503: INFO: Total Tests: 24
+2020-04-20 23:53:03,504: INFO: Successful Tests: 15
+2020-04-20 23:53:03,504: INFO: Failed Tests: 3
+2020-04-20 23:53:03,504: INFO: ['M5_test', 'R5_test', 'R11_test']
+2020-04-20 23:53:03,504: INFO: Test doesn't meet requirements, need more tests: 3
+2020-04-20 23:53:03,504: INFO: ['E2_test', 'U1_test', 'U2_test']
+2020-04-20 23:53:03,504: INFO: Need to manual check: 2
+2020-04-20 23:53:03,504: INFO: ['R14_test', 'S1_test']
+2020-04-20 23:53:03,504: INFO: Not applicable for tests: 1
+2020-04-20 23:53:03,504: INFO: ['R8_test']
+2020-04-20 23:53:03,504: INFO: Error tests: 0
