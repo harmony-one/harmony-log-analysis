@@ -18,10 +18,10 @@ To run the test when no external validators: `python3 economic-test.py --no_exte
 `./logs/*`
 
 ## Status
-newest test: [04/20](https://github.com/harmony-one/harmony-log-analysis/blob/master/projects/economic-test/logs/report_log_20200420231025_047261.log]
-Total Tests: 24
-Successful Tests: 15
-Failed Tests: 3 ['M5_test', 'R5_test', 'R11_test']
-Test doesn't meet requirements, need more tests: 3 ['E2_test', 'U1_test', 'U2_test']
-Need to manual check: 2 ['R14_test', 'S1_test']
-Not applicable for tests: 1 ['R8_test']
+newest test: [04/20](https://github.com/harmony-one/harmony-log-analysis/blob/master/projects/economic-test/logs/report_log_20200420231025_047261.log)
+- Total Tests: 24
+- Successful Tests: 15
+- Failed Tests: 3 ['M5_test', 'R5_test', 'R11_test']
+- Test doesn't meet requirements, need more tests: 3 ['E2_test', 'U1_test', 'U2_test']
+- Need to manual check: 2 ['R14_test', 'S1_test']
+- Not applicable for tests: 1 ['R8_test']
