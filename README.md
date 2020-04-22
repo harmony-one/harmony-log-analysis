@@ -7,9 +7,7 @@
 - [Processing time analysis](https://github.com/harmony-one/harmony-log-analysis/blob/master/projects/processing_time/README.md)
 - [Mainnet crash analysis](https://github.com/harmony-one/harmony-log-analysis/blob/master/projects/mainnet_down_analysis/README.md)
 
-## Staking Dashboard
-- [Validator info & Delegator Info](https://github.com/harmony-one/harmony-log-analysis/blob/master/projects/staking_dashboard/README.md)
-- [Daily monitor](https://github.com/harmony-one/harmony-log-analysis/blob/master/projects/staking_dashboard/daily_monitor.py)
+## [Staking Dashboard](https://github.com/harmony-one/harmony-log-analysis/blob/master/projects/staking_dashboard/README.md)
 
 ## [Economic Test](https://github.com/harmony-one/harmony-log-analysis/blob/master/projects/economic-test/README.md)
 
