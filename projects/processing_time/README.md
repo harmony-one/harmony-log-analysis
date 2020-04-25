@@ -6,10 +6,10 @@ We noticed sometimes the processing the time increases when the block height inc
 
 ## Result
 - Delegation Scaling
-	- We noticed processing time increase matches the validator/delegation scaling to around 2500 in OSTN (refer the Delegation Information vs Processing Time graph in the [notebook](https://harmony-one.github.io/harmony-log-analysis/notebooks/OSTN_03_15_processing_time_vs_delegations.html))
-	- But processing time doesn't increase a lot when we just scaling delegators to 50k in stn (refer the Delegation Information vs Processing Time graph in the [notebook](https://harmony-one.github.io/harmony-log-analysis/notebooks/stress_test_03_14_processing_time_vs_delegations.html)
+	- We noticed processing time increase matches the validator/delegation scaling to around 2500 in OSTN (refer the Delegation Information vs Processing Time graph in the [notebook](https://harmony-one.github.io/harmony-log-analysis/notebooks/processing_time/OSTN_03_15_processing_time_vs_delegations.html))
+	- But processing time doesn't increase a lot when we just scaling delegators to 50k in stn (refer the Delegation Information vs Processing Time graph in the [notebook](https://harmony-one.github.io/harmony-log-analysis/notebooks/processing_time/stress_test_03_14_processing_time_vs_delegations.html)
  
 - Different Economic Activity Processing Time
-	- [ostn-03-19](https://harmony-one.github.io/harmony-log-analysis/notebooks/ostn_03_19_processing_time.html)
-	- [ostn-03-20](https://harmony-one.github.io/harmony-log-analysis/notebooks/ostn_03_20_processing_time_comparison.html)
-	- [new ostn lauch: before vs after](https://harmony-one.github.io/harmony-log-analysis/notebooks/ostn_03_20_processing_time_comparison.html) 
+	- [ostn-03-19](https://harmony-one.github.io/harmony-log-analysis/notebooks/processing_time/ostn_03_19_processing_time.html)
+	- [ostn-03-20](https://harmony-one.github.io/harmony-log-analysis/notebooks/processing_time/ostn_03_20_processing_time_comparison.html)
+	- [new ostn lauch: before vs after](https://harmony-one.github.io/harmony-log-analysis/notebooks/processing_time/ostn_03_20_processing_time_comparison.html) 
