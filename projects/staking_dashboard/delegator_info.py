@@ -40,6 +40,18 @@ def getTransactionCount(address):
     params = [address, 'latest']
     return int(get_information(method, params)['result'],16)
 
+def getNormalTransactionCount(address):
+    method = "hmyv2_getTransactionsHistory"
+    params = [{
+        "address": address,
+        "fullTx": False,
+        "pageIndex": 0,
+        "pageSize": 1000,
+        "txType": "ALL",
+        "order": "ASC"
+    }]
+    return get_information(method, params)['result']
+
 def getEpoch():
     method = "hmy_getEpoch"
     params = []
@@ -91,12 +103,16 @@ if __name__ == "__main__":
                 
     del_address = set(del_reward.keys()) - set(val_address)
     balance = dict()
-    transaction = dict()
+    recent_transaction = dict()
+    normal_transaction = dict()
     for i in del_address:
         balance[i] = float(getBalance(i)/1e18)
-        transaction[i] = getTransactionCount(i)
+        recent_transaction[i] = getTransactionCount(i)
+        normal_transaction[i] = len(getNormalTransactionCount(i)['transactions'])
     balance_df = pd.DataFrame(balance.items(), columns=['address', 'balance (ONEs available = initial balance - current delegation - pending undelgation  + claim rewards)'])
-    transaction_df = pd.DataFrame(transaction.items(), columns = ['address', 'transaction-count'])
+    recent_transaction_df = pd.DataFrame(recent_transaction.items(), columns = ['address', 'latesst-transaction-count'])
+    normal_transaction_df = pd.DataFrame(normal_transaction.items(), columns = ['address', 'normal-transaction-count'])
+
     new_del_reward = dict()
     new_del_stake = dict()
     new_undel = dict()
@@ -110,7 +126,8 @@ if __name__ == "__main__":
     undel_df = pd.DataFrame(new_undel.items(), columns=['address', 'pending undelegation'])
     df = reward_df.join(stake_df.set_index('address'), on = 'address')
     df = df.join(balance_df.set_index('address'), on = 'address')
-    df = df.join(transaction_df.set_index('address'), on = 'address')
+    df = df.join(recent_transaction_df.set_index('address'), on = 'address')
+    df = df.join(normal_transaction_df.set_index('address'), on = 'address')
     df = df.join(undel_df.set_index('address'), on = 'address')
     print("-- Save csv files to ./csv/delegator.csv --")
     df.to_csv(path.join(data, 'delegator.csv'))
