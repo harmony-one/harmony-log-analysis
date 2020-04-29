@@ -356,9 +356,9 @@ def M5_test(single):
     logger.info(f"Test-M5: No effective stake is out of range: [median-0.15*median, median+0.15*median]")
     # get the median stake and the upper and lower level 
     result = getMedianRawStakeSnapshot()
-    median = int(float(result['epos-median-stake']))
-    lower = int(median- 0.15*median)
-    upper = int(median + 0.15*median)
+    median = float(result['epos-median-stake'])
+    lower = (median- 0.15*median)
+    upper = (median + 0.15*median)
     logger.info("median stake is " + str(median))
     logger.info("lower bond is " + str(lower))
     logger.info("upper bond is " + str(upper))
@@ -368,7 +368,7 @@ def M5_test(single):
     flag = True
     for i in validator_infos:
         addr = i['slot-owner']
-        stake = int(float(i['eposed-stake']))
+        stake = float(i['eposed-stake'])
         bls_key = i['bls-public-key']
         count += 1
         if stake > upper or stake < lower:
@@ -841,7 +841,7 @@ def R7_test(single):
 def R8_test(single):
     logger.info(f"Test-R8: Block reward inversely proportional to staked amount")
     logger.warning(f"Test-R8: Not Applicable")
-    curr_test = R9_test
+    curr_test = None
     return "Not Applicable", curr_test
 
 def R9_test(single):
@@ -896,7 +896,7 @@ def R9_test(single):
     if single:
         curr_test = None
     else:
-        curr_test = R11_test    
+        curr_test = R14_test    
     if flag:
         logger.info(f"Test R9: Succeed\n")
         return True, curr_test
@@ -905,75 +905,10 @@ def R9_test(single):
     
 def R11_test(single):
     logger.info(f"Test-R11: Earning is proportional to effective stake ")
-    num = 1
-    iterations = 0
-    if single:
-        curr_test = None
-    else:
-        curr_test = R14_test
+    logger.warning(f"Test-R11: Not Applicable")
+    curr_test = None
+    return "Not Applicable", curr_test
     
-    while iterations < num:
-        logger.info(f"test {iterations+1} will begin ...")
-        block, last_block = getCurrentAndLastBlock()
-        logger.info(f"current and last block numbers: {block}, {last_block}")
-        if block == last_block:
-            new_block = block+1
-            while block < new_block:
-                block = getBlockNumber()
-            block, last_block = getCurrentAndLastBlock()
-            logger.info(f"current and last block numbers: {block}, {last_block}")
-        epoch = getEpoch()
-
-        second_last_block = last_block - 1
-        while block < second_last_block:
-            block = getBlockNumber()
-        logger.info(f"second last block in current epoch reached {block}, will wait for 6 seconds...")
-        time.sleep(6)
-        logger.info(f"begin collecting stakes and aprs...")
-        stakes, aprs = getStakesAndAprs()
-
-        # in the last block, we can not get the total effective stakes, no metrics. 
-        new_block = block + 2
-        while block < new_block:
-            block = getBlockNumber()
-        logger.info(f"first block in new epoch reached, {block}, will wait for 5 seconds...")
-        time.sleep(5)
-        logger.info(f"compare the changes...")
-        new_stakes, new_aprs = getStakesAndAprs()
-
-        apr_diff = diffAndFilter(aprs, new_aprs)
-        # get the validators whose effective stake changes
-        stake_diff = diffAndFilter(stakes, new_stakes)
-
-        if not stake_diff:
-            logger.info(f"in this iteration, no validators change the effective stake\n")
-            return "Need More Tests", curr_test
-        if not apr_diff:
-            logger.info(f"in this iteration, no validators change the apr\n")
-            return "Need More Tests", curr_test
-
-        flag = True
-        for k,v in stake_diff.items():
-            if k in apr_diff:
-                if v > 0: 
-                    if apr_diff[k] <= 0:
-                        flag = False
-                        logger.warning(f"Test-R11: Fail")
-                        logger.warning(f"{k}'s effective stake increase: {v}")
-                        logger.warning(f"but apr doesn't increase, apr changes: {apr_diff[k]}\n")
-                if v < 0:
-                    if apr_diff[k] >= 0:
-                        flag = False
-                        logger.warning(f"Test-R11: Fail")
-                        logger.warning(f"{k}'s effective stake decrease: {v}")
-                        logger.warning(f"apr doesn't decrease, apr changes: {apr_diff[k]}\n")
-        iterations += 1 
-
-    if flag:
-        logger.info(f"Test-R11: Succeed\n")
-        return True, curr_test
-    else:
-        return False, curr_test
     
 def R14_test(single):
     logger.info(f"Test-R14: Shard fairness: rate of earning on shards is similar if the block time are same")

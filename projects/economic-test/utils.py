@@ -253,7 +253,8 @@ def diffAndFilter2(map1, map2):
     for key, val in map2.items():
         diff = dict()
         for k, v in map2[key].items():
-            diff[k] = v - map1[key][k]
+            if v - map1[key][k] != 0:
+                diff[k] = v - map1[key][k]
         map3[key] = diff
     return map3
 
