@@ -30,6 +30,6 @@ if __name__ == "__main__":
         staking.append(len(res['stakingTransactions']))
 
     df = pd.DataFrame(list(zip(time, transactions, staking)), columns = ['time', 'transactions', 'staking-transactions'])
-    df.to_pickle("2020_04_19_mainnet.pkl")
+    df.to_pickle("2020_04_19_ostn.pkl")
     print("successfully save the dataframe to pickle")
 
