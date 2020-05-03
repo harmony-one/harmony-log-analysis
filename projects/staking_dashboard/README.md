@@ -37,4 +37,11 @@ To get the accumulated rewards(after claiming), balance, and stakes for pure del
 ### Commands
 Run command: `python3 delegator_info.py`
 
+## Transaction History 
+To get the transaction history of one acoount
 
+### Download newest script
+`curl -O https://raw.githubusercontent.com/harmony-one/harmony-log-analysis/master/projects/staking_dashboard/transaction_history.py`
+
+### Commands
+Run command: `python3 transaction_history.py`
