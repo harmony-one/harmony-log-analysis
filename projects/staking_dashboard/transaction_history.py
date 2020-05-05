@@ -43,7 +43,7 @@ def getNormalTransaction(shard, address):
         "address": address,
         "fullTx": True,
         "pageIndex": 0,
-        "pageSize": 10000,
+        "pageSize": 100000,
         "txType": "ALL",
         "order": "ASC"
     }]
