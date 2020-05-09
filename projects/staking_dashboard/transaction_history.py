@@ -1,17 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 import json
 import requests
 import pandas as pd
 import datetime
-
-
-# In[2]:
-
+import os
+from os import path
+import argparse
 
 def get_information(url, method, params) -> dict:
     headers = {'Content-Type': 'application/json'}
@@ -33,9 +29,6 @@ def get_information(url, method, params) -> dict:
         return content['result']
 
 
-# In[3]:
-
-
 def getNormalTransaction(shard, address):
     url = endpoint[shard]
     method = "hmyv2_getTransactionsHistory"
@@ -49,20 +42,33 @@ def getNormalTransaction(shard, address):
     }]
     return get_information(url, method, params)
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--address', required = True, help = 'ONE address to query from')
+    parser.add_argument('--name', required = True, help = 'Your Name who is query from')
+    args = parser.parse_args()
+    endpoint = ['https://api.s0.os.hmny.io/', 'https://api.s1.os.hmny.io/', 'https://api.s2.os.hmny.io/', 'https://api.s3.os.hmny.io/']
+    addr = args.address
+    name = args.name
 
-# In[4]:
-
-
-endpoint = ['https://api.s0.os.hmny.io/', 'https://api.s1.os.hmny.io/', 'https://api.s2.os.hmny.io/', 'https://api.s3.os.hmny.io/']
-addr = 'one16xh2u9r4677egx4x3s0u966ave90l37hh7wq72'
-res = []
-for i in range(len(endpoint)):
-    txs = getNormalTransaction(i, addr)['transactions']
-    if txs != None:
-        res.extend(txs)
-df = pd.DataFrame.from_dict(res, orient='columns')
-df['timestamp'] = df['timestamp'].apply(lambda c: datetime.datetime.fromtimestamp(c))
-df['value'] = df['value'].apply(lambda c: int(c/1e18))
-maggie = df[['timestamp','from','to','value']]
-maggie.to_csv('./csv/maggie_transaction.csv')
+    base = path.dirname(path.realpath(__file__))
+    csv = path.abspath(path.join(base, 'csv'))
+    if not path.exists(csv):
+        try:
+            os.makedirs(csv)
+        except:
+            print("Could not make data directory")
+            exit(1)
+    print("===== Start Data Processing =====")
+    res = []
+    for i in range(len(endpoint)):
+        txs = getNormalTransaction(i, addr)
+        if txs != None:
+            res.extend(txs['transactions'])
+    df = pd.DataFrame.from_dict(res, orient='columns')
+    df['timestamp'] = df['timestamp'].apply(lambda c: datetime.datetime.fromtimestamp(c))
+    df['value'] = df['value'].apply(lambda c: int(c/1e18))
+    txs = df[['timestamp','from','to','value']]
+    txs.to_csv(path.join(csv, f'{name}_transaction.csv'))
+    print("csv successfully save to ./csv/{}_transaction.csv".format(name))
 

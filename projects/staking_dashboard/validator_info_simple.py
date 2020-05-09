@@ -11,9 +11,7 @@ import re
 from collections import defaultdict
 import datetime
 from threading import Thread
-from queue import Queue
 import gspread
-import time
 
 def get_information(url, method, params) -> dict:
     headers = {'Content-Type': 'application/json'}
@@ -39,6 +37,11 @@ def getAllValidatorInformation():
     params = [-1]
     return get_information(url, method, params)
 
+def getAllValidatorInformationByBlockNumber(block):
+    method = 'hmy_getAllValidatorInformationByBlockNumber'
+    params = [-1, block]
+    return get_information(method, params)['result']
+
 def getBalance(shard, address):
     url = endpoint[shard]
     method = "hmy_getBalance"
@@ -46,21 +49,6 @@ def getBalance(shard, address):
     res = get_information(url, method, params)
     if res != None:
         return int(res,16)/1e18
-
-def getTransactionHistory(shard, address):
-    url = endpoint[shard]
-    method = "hmyv2_getTransactionsHistory"
-    params = [{
-        "address": address,
-        "fullTx": True,
-        "pageIndex": 0,
-        "pageSize": 100000,
-        "txType": "ALL",
-        "order": "ASC"
-    }]
-    res = get_information(url, method, params)
-    if res != None:
-        return res['transactions']
 
 def getTransactionCount(shard, address):
     url = endpoint[shard]
@@ -77,6 +65,21 @@ def getTransactionsCount(shard, address) -> int:
     res = get_information(url, method, params)
     if res != None:
         return res
+
+def getTransactionHistory(shard, address):
+    url = endpoint[shard]
+    method = "hmyv2_getTransactionsHistory"
+    params = [{
+        "address": address,
+        "fullTx": True,
+        "pageIndex": 0,
+        "pageSize": 100000,
+        "txType": "ALL",
+        "order": "ASC"
+    }]
+    res = get_information(url, method, params)
+    if res != None:
+        return res['transactions']
 
 def getStakingTransactionCount(address):
     url = 'https://api.s0.os.hmny.io/'
@@ -98,17 +101,6 @@ def getBlockNumber():
     num = get_information(url, method, params)
     return int(num, 16)
 
-def read_csv(csv_file) -> (list):
-    encoding = 'utf-8'
-    r = requests.get(csv_file)
-    s = [x.decode(encoding) for x in r.content.splitlines()]
-    v = []
-    for line in csv.reader(s):
-        address = line[3].strip()
-        if re.match('one1', address) != None:
-            v.append(address)
-    return v
-
 
 if __name__ == "__main__":  
     
@@ -117,23 +109,23 @@ if __name__ == "__main__":
     
     base = path.dirname(path.realpath(__file__))
     data = path.abspath(path.join(base, 'csv'))
-    data = path.join(data, 'pure_delegator')
+    data = path.join(data, 'all_validator')
     if not path.exists(data):
         try:
             os.mkdir(data)
         except:
             print("Could not make csv directory")
             exit(1)
-  
+            
     print("-- Start Data Processing --")
     validator_infos = getAllValidatorInformation()
+    del_reward = defaultdict(float)
+    del_stake = defaultdict(float)
+    val_address = []
+    undel = defaultdict(float)
     epoch = getEpoch()
     block = getBlockNumber()
     print(f"Current Epoch number: {epoch}, Block number: {block}")
-    del_reward = defaultdict(float)
-    del_stake = defaultdict(float)
-    undel = defaultdict(float)
-    val_address = []
     # get the accumualted reward in current block
     for info in validator_infos:
         address = info['validator']['address']
@@ -146,21 +138,19 @@ if __name__ == "__main__":
             del_stake[del_address] += amount
             for u in d['undelegations']:
                 if epoch - u['epoch'] <= 7:
-                    undel[del_address] += u['amount']/1e18
+                    undel[del_address] += u['amount']/1e18       
 
-    del_address = set(del_reward.keys()) - set(val_address)
     balance = defaultdict(float)
     txs_sum = defaultdict(float)
     staking_transaction = defaultdict(int)
     normal_transaction = defaultdict(int)
-    address_lst = list(del_address)
-    address_lst.remove("one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur")
+    address_lst = val_address
     thread_lst = defaultdict(list)
     for i in range(len(address_lst)):
-        thread_lst[i%25].append(i)
+        thread_lst[i%50].append(i)
     def collect_data(shard, x):
         global staking_transaction, normal_transaction, balance, txs_sum
-        for i in thread_lst[x]:
+        for i in thread_lst[x]: 
             addr = address_lst[i]
             if shard == 0:
                 staking_transaction[addr] = getStakingTransactionCount(addr)
@@ -179,14 +169,14 @@ if __name__ == "__main__":
                     if i['from'] == addr:
                         txs_sum[addr] -= i['value']/1e18
     threads = []
-    for x in range(25):
+    for x in range(50):
         for shard in range(len(endpoint)):
             threads.append(Thread(target = collect_data, args = [shard, x]))
     for t in threads:
         t.start()
     for t in threads:
         t.join()
-        
+    
     print("-- Finish Data Processing --")
     epoch = getEpoch()
     block = getBlockNumber()
@@ -201,7 +191,7 @@ if __name__ == "__main__":
     new_del_stake = dict()
     new_undel = dict()
     for k,v in del_reward.items():
-        if k in address_lst:
+        if k in val_address:
             new_del_reward[k] = v
             new_del_stake[k] = del_stake[k]
             new_undel[k] = undel[k]
@@ -216,18 +206,12 @@ if __name__ == "__main__":
     df = df.join(staking_transaction_df.set_index('address'), on = 'address')
     df = df.join(normal_transaction_df.set_index('address'), on = 'address')
     time = datetime.datetime.now().strftime("%Y_%m_%d %H:%M:%S") 
-    
-    print("-- Filter the delegators in the google sheet --")
-    html = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTDAqXO-xVP4UwJlNJ6Qaws4N-TZ3FNZXqiSidPzU1I8pX5DS063d8h0jw84QhPmMDVBgKhopHhilFy/pub?gid=0&single=true&output=csv'
-    delegator = read_csv(html)
-    df['filter'] = df.apply(lambda c: True if c['address'] in delegator else False, axis = 1)
-    print("-- Save csv files to ./csv/pure_delegator/{:s}_delegator.csv --".format(time))
-    df.to_csv(path.join(data, '{:s}_delegator.csv'.format(time)))
+
+    print("-- Save csv files to ./csv/all_validator/{:s}_validator.csv --".format(time))
+    df.to_csv(path.join(data, '{:s}_validator.csv'.format(time)))
     gc = gspread.service_account('/home/ubuntu/jupyter/harmony-log-analysis/projects/staking_dashboard/jsonFileFromGoogle.json')
     sh = gc.open("harmony-ostn-tracker")
-    worksheet = sh.get_worksheet(1)
+    worksheet = sh.get_worksheet(2)
     worksheet.update([df.columns.values.tolist()] + df.values.tolist())
     
-    filter_df = df[df['filter']].reset_index(drop = True)
-    filter_df.to_csv(path.join(data, '{:s}_filter_delegator.csv'.format(time)))
-    print("-- Save csv files to ./csv/pure_delegator/{:s}_filter_delegator.csv --".format(time))
+    

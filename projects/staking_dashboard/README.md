@@ -44,4 +44,5 @@ To get the transaction history of one acoount
 `curl -O https://raw.githubusercontent.com/harmony-one/harmony-log-analysis/master/projects/staking_dashboard/transaction_history.py`
 
 ### Commands
-Run command: `python3 transaction_history.py`
+Run command: get all transaction history for a ONE account, with maximum 10000 reocrds and save it to a csv file and stored in `./csv/[NAME]_transaction.csv`: `python3 transaction_history.py --address [YOUR ONE ADDRESS] --name [YOUR NAME]`
+
