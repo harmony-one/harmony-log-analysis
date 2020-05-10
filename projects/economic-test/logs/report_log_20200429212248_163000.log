@@ -1,0 +1,5 @@
+2020-04-29 21:22:48,164: INFO: 
+=============== Starting R7_test ===============
+
+2020-04-29 21:22:48,164: INFO: Test-R7: Sum of validator and delegator earning should match the block reward
+2020-04-29 21:22:48,202: INFO: current and last block numbers: 1619, 1799

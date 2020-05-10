@@ -17,6 +17,11 @@ def getCommittees():
     params = []
     return get_information(method, params)['result']['current']
 
+def getSuperCommittees():
+    method = "hmy_getSuperCommittees"
+    params = []
+    return get_information(method, params)['result']['current']
+
 def getAllValidator():
     method = 'hmy_getAllValidatorAddresses'
     params = []
@@ -253,8 +258,10 @@ def diffAndFilter2(map1, map2):
     for key, val in map2.items():
         diff = dict()
         for k, v in map2[key].items():
-            if v - map1[key][k] != 0:
+            if key in map1 and k in map1[key]:
                 diff[k] = v - map1[key][k]
+            if key in map1 and k not in map1[key]:
+                diff[k] = map2[key][k]
         map3[key] = diff
     return map3
 

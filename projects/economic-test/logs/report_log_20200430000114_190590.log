@@ -1,0 +1,7 @@
+2020-04-30 00:01:14,191: INFO: 
+=============== Starting U1_test ===============
+
+2020-04-30 00:01:14,192: INFO: Test-U1: Delegator/validator stake locked until undelegate
+2020-04-30 00:01:14,233: INFO: current and last block numbers: 2791, 3149
+2020-04-30 00:01:14,247: INFO: current epoch number, 6, current block number, 2791, will begin testing...
+2020-04-30 00:01:19,900: INFO: next block reached, 2792, current epoch, 6, will compare the stakes

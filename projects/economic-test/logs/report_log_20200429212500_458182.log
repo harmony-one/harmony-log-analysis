@@ -1,0 +1,20 @@
+2020-04-29 21:25:00,459: INFO: 
+=============== Starting R7_test ===============
+
+2020-04-29 21:25:00,460: INFO: Test-R7: Sum of validator and delegator earning should match the block reward
+2020-04-29 21:25:00,500: INFO: current and last block numbers: 1635, 1799
+2020-04-29 21:25:00,500: INFO: current block 1635, will begin collecting infos...
+2020-04-29 21:25:03,162: INFO: new block 1636 reached, will begin testing...
+2020-04-29 21:25:11,493: INFO: new block 1637 reached, will begin testing...
+2020-04-29 21:25:11,521: INFO: Test-R7: Succeed
+
+2020-04-29 21:25:11,522: INFO: 
+========================= Test Results =========================
+
+2020-04-29 21:25:11,522: INFO: Total Tests: 1
+2020-04-29 21:25:11,522: INFO: Successful Tests: 1
+2020-04-29 21:25:11,522: INFO: Failed Tests: 0
+2020-04-29 21:25:11,522: INFO: Test doesn't meet requirements, need more tests: 0
+2020-04-29 21:25:11,522: INFO: Need to manual check: 0
+2020-04-29 21:25:11,522: INFO: Not applicable for tests: 0
+2020-04-29 21:25:11,522: INFO: Error tests: 0

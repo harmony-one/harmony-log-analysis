@@ -1,0 +1,19 @@
+2020-04-29 23:11:41,889: INFO: 
+=============== Starting U2_test ===============
+
+2020-04-29 23:11:41,889: INFO: Test-U2: After undelegate, the total stake amount for that validator should subtract the undelegation amount before next epoch
+2020-04-29 23:11:41,930: INFO: current and last block numbers: 2425, 2699
+2020-04-29 23:11:41,946: INFO: current epoch numebr: 5, block number: , 2425, will begin testing...
+2020-04-29 23:48:40,239: INFO: last block number reaches, 2699, will compare the stakes and undelegations
+2020-04-29 23:48:40,273: INFO: Test-U2: Succeed
+
+2020-04-29 23:48:40,273: INFO: 
+========================= Test Results =========================
+
+2020-04-29 23:48:40,273: INFO: Total Tests: 1
+2020-04-29 23:48:40,273: INFO: Successful Tests: 1
+2020-04-29 23:48:40,273: INFO: Failed Tests: 0
+2020-04-29 23:48:40,273: INFO: Test doesn't meet requirements, need more tests: 0
+2020-04-29 23:48:40,273: INFO: Need to manual check: 0
+2020-04-29 23:48:40,273: INFO: Not applicable for tests: 0
+2020-04-29 23:48:40,273: INFO: Error tests: 0

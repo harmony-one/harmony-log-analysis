@@ -1,0 +1,42 @@
+2020-04-29 21:19:27,716: INFO: 
+=============== Starting R6_test ===============
+
+2020-04-29 21:19:27,716: INFO: Test-R6: Tests whether the delegation reward is distributed correctly
+2020-04-29 21:19:27,760: INFO: current and last block numbers: 1595, 1799
+2020-04-29 21:19:27,760: INFO: current block 1595, will begin collecting infos...
+2020-04-29 21:19:29,426: INFO: new block 1596 reached, will begin testing...
+2020-04-29 21:19:29,455: WARNING: Test-R6: Fail
+2020-04-29 21:19:29,455: WARNING: for validator one1q98lxvxcxl228y4dt6xqjrzkha206usucfx02r delegation one1q98lxvxcxl228y4dt6xqjrzkha206usucfx02r, expected: 1.92715254352788889600e+18, actual: 1.92715254352788864000e+18
+
+2020-04-29 21:19:29,455: WARNING: Test-R6: Fail
+2020-04-29 21:19:29,455: WARNING: for validator one14e55qn02ux59x3musrvwrpfgv67u6cvq6sf69a delegation one14e55qn02ux59x3musrvwrpfgv67u6cvq6sf69a, expected: 1.92715254352788889600e+18, actual: 1.92715254352788864000e+18
+
+2020-04-29 21:19:29,456: WARNING: Test-R6: Fail
+2020-04-29 21:19:29,456: WARNING: for validator one147cqhdejuee0efkvfsd9c6k4grddh0vj264gga delegation one147cqhdejuee0efkvfsd9c6k4grddh0vj264gga, expected: 1.92715254352788889600e+18, actual: 1.92715254352788864000e+18
+
+2020-04-29 21:19:29,456: WARNING: Test-R6: Fail
+2020-04-29 21:19:29,456: WARNING: for validator one1dzjvumwsmflf89m5r0w579lhn6p40xc487ry04 delegation one1dzjvumwsmflf89m5r0w579lhn6p40xc487ry04, expected: 2.07979828954989977600e+18, actual: 2.07979828954989952000e+18
+
+2020-04-29 21:19:29,456: WARNING: Test-R6: Fail
+2020-04-29 21:19:29,456: WARNING: for validator one1n9at5vm0wwkh2zj6ldtgp5aqe0tsnx7ymnglp6 delegation one1n9at5vm0wwkh2zj6ldtgp5aqe0tsnx7ymnglp6, expected: 1.92715254352788889600e+18, actual: 1.92715254352788864000e+18
+
+2020-04-29 21:19:29,456: WARNING: Test-R6: Fail
+2020-04-29 21:19:29,456: WARNING: for validator one10rr5n6qvjxlyhrhnkzxtjslzffrp4trl3wtsuh delegation one10rr5n6qvjxlyhrhnkzxtjslzffrp4trl3wtsuh, expected: 1.92715254352788889600e+18, actual: 1.92715254352788864000e+18
+
+2020-04-29 21:19:29,457: WARNING: Test-R6: Fail
+2020-04-29 21:19:29,457: WARNING: for validator one1ygchq3eve4u2majguwh8e55k3ys8l4t5nex224 delegation one1ygchq3eve4u2majguwh8e55k3ys8l4t5nex224, expected: 1.92715254352788889600e+18, actual: 1.92715254352788864000e+18
+
+2020-04-29 21:19:29,457: WARNING: Test-R6: Fail
+2020-04-29 21:19:29,457: WARNING: for validator one10nm7t7a77q4ke0094xlekhcmrf4ke38t820k66 delegation one10nm7t7a77q4ke0094xlekhcmrf4ke38t820k66, expected: 1.92715254352788889600e+18, actual: 1.92715254352788864000e+18
+
+2020-04-29 21:19:29,457: INFO: 
+========================= Test Results =========================
+
+2020-04-29 21:19:29,457: INFO: Total Tests: 1
+2020-04-29 21:19:29,457: INFO: Successful Tests: 0
+2020-04-29 21:19:29,457: INFO: Failed Tests: 1
+2020-04-29 21:19:29,458: INFO: ['R6_test']
+2020-04-29 21:19:29,458: INFO: Test doesn't meet requirements, need more tests: 0
+2020-04-29 21:19:29,458: INFO: Need to manual check: 0
+2020-04-29 21:19:29,458: INFO: Not applicable for tests: 0
+2020-04-29 21:19:29,458: INFO: Error tests: 0

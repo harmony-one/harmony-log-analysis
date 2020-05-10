@@ -1,0 +1,6 @@
+2020-04-29 21:14:19,226: INFO: 
+=============== Starting E1_test ===============
+
+2020-04-29 21:14:19,227: INFO: Test-E1: A staked validator whose stake is in the top #slots stakes is always considered for election
+2020-04-29 21:14:19,297: INFO: current and last block numbers: 1558, 1799
+2020-04-29 21:14:19,297: INFO: current block, 1558, begin collecting eligible validators...

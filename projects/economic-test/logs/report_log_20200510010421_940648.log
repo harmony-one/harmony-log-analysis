@@ -1,0 +1,4 @@
+2020-05-10 01:04:21,941: INFO: 
+=============== Starting M5_test ===============
+
+2020-05-10 01:04:21,941: INFO: Test-M5: No effective stake is out of range: [median-0.15*median, median+0.15*median]
