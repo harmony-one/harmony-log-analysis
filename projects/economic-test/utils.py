@@ -5,7 +5,7 @@ import requests
 from collections import defaultdict
 
 def get_information(method, params):
-    url = 'https://api.s0.os.hmny.io/'
+    url = 'https://api.s0.dry.hmny.io'
     headers = {'Content-Type': 'application/json'}
     data = {"jsonrpc":"2.0", "method": method, "params": params, "id":1}
     r = requests.post(url, headers=headers, data = json.dumps(data))
@@ -13,11 +13,6 @@ def get_information(method, params):
     return content
 
 def getCommittees():
-    method = "hmy_getSuperCommittees"
-    params = []
-    return get_information(method, params)['result']['current']
-
-def getSuperCommittees():
     method = "hmy_getSuperCommittees"
     params = []
     return get_information(method, params)['result']['current']
@@ -165,10 +160,11 @@ def getAprByShards():
     for i in validator_infos:
         if i['currently-in-committee'] == True:
             apr = float(i['lifetime']['apr'])
-            for s in i['metrics']['by-bls-key']:
-                shard = s['key']['shard-id']
-                count[shard] += 1
-                apr_sum[shard] += apr
+            if i['metrics']:
+                for s in i['metrics']['by-bls-key']:
+                    shard = s['key']['shard-id']
+                    count[shard] += 1
+                    apr_sum[shard] += apr
     apr_avg = dict()
     for k,v in apr_sum.items():
         apr_avg[k] = v/count[k]
@@ -182,7 +178,7 @@ def getAvailabilityAndRewards():
             sign = i['current-epoch-performance']['current-epoch-signing-percent']
             if sign['current-epoch-to-sign'] == 0:
                 continue
-            perc = sign['current-epoch-signed']/sign['current-epoch-to-sign']
+            perc = float(sign['current-epoch-signing-percentage'])
             if perc > 2/3:
                 address = i['validator']['address']
                 reward_accumulated = i['lifetime']['reward-accumulated']

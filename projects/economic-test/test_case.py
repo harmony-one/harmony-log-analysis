@@ -323,10 +323,6 @@ def M3_test(single):
         logger.info(f"test {iterations+1} will begin ...")
         block, last_block = getCurrentAndLastBlock()
         logger.info(f"current and last block numbers: {block}, {last_block}")
-        logger.info(f"wait until the new epoch begins ...")
-        while block < last_block+1:
-            block = getBlockNumber()
-        logger.info(f"new epoch first block reached {block}, will wait for 5 secondss to begin testing...")
         time.sleep(5)
         # get the median from rpc call
         median = getEposMedian()
@@ -342,6 +338,12 @@ def M3_test(single):
             logger.warning(f"manually calculated median stake: {cal_median}")
             logger.warning(f"harmony apr call median stake: {median}\n")    
         iterations += 1  
+        
+        logger.info(f"wait until the new epoch begins ...")
+        getBlockNumber()
+        while block < last_block+1:
+            block = getBlockNumber()
+        logger.info(f"new epoch first block reached {block}, will wait for 5 secondss to begin testing...")
     if single:
         curr_test = None
     else:
@@ -357,7 +359,7 @@ def M5_test(single):
     flag = True
     curr_test = None
     # get the median stake and the upper and lower level 
-    result = getSuperCommittees()
+    result = getCommittees()
     median = float(result['epos-median-stake'])
     lower = (median- 0.15*median)
     upper = (median + 0.15*median)
@@ -664,14 +666,16 @@ def R6_test(single):
     
     block, last_block = getCurrentAndLastBlock()
     logger.info(f"current and last block numbers: {block}, {last_block}")
-    if block == last_block or block + 1 == last_block:
-        logger.info(f"current at the last block or last second block, wait until the 5th/6th block in the new epoch")
-        while block < last_block+6:
-            block = getBlockNumber()
-    logger.info(f"current block {block}, will begin collecting infos...")
 
+    if block != last_block:
+        while block < last_block:
+            block = getBlockNumber()
+        logger.info(f"current block {block}, will begin collecting delegator infos...")
+        time.sleep(4)
+    
     acc_rewards_prev = dict()
     delegations_prev = dict()
+    total_stake = dict()
     validator_infos = getAllValidatorInformation()
     for i in validator_infos:
         if i['currently-in-committee'] == True:
@@ -685,6 +689,7 @@ def R6_test(single):
                 d_reward = d['reward']
                 dels[d_addr] = d_reward
             delegations_prev[address] = dels
+            total_stake[address] = i['total-delegation']
 
     next_block = block + 1
     while block < next_block:
@@ -698,8 +703,6 @@ def R6_test(single):
     for i in validator_infos:
         if i['currently-in-committee'] == True:
             address = i['validator']['address']
-#             if address != "one18vn078vyp5jafma8q7kek6w0resrgex9yufqws":
-#                 continue
             reward_accumulated = i['lifetime']['reward-accumulated']
             acc_rewards_curr[address] = reward_accumulated
             if address not in acc_rewards_prev:
@@ -707,17 +710,17 @@ def R6_test(single):
             reward = reward_accumulated - acc_rewards_prev[address]
             if reward == 0:
                 continue
-            elif reward < 0:
-                reward = -reward # first time delegations
             commission = float(i['validator']['rate']) * reward
             total_delegation_reward = reward - commission
-            total_delegation = i['total-delegation']
+            total_delegation = total_stake[address]
             ds = i['validator']['delegations']
             del_rewards = 0
             dels = delegations_prev[address]
             dels_curr = dict()
             for d in ds:
                 d_addr = d['delegator-address']
+                if d_addr not in dels:
+                    continue
                 d_reward = d['reward']
                 dels_curr[d_addr] = d_reward
                 d_amount = d['amount']
@@ -836,7 +839,7 @@ def R7_test(single):
 def R8_test(single):
     logger.info(f"Test-R8: Block reward inversely proportional to staked amount")
     logger.warning(f"Test-R8: Not Applicable")
-    curr_test = None
+    curr_test = R9_test
     return "Not Applicable", curr_test
 
 def R9_test(single):
@@ -889,7 +892,7 @@ def R9_test(single):
     if single:
         curr_test = None
     else:
-        curr_test = R14_test    
+        curr_test = R11_test    
     if flag:
         logger.info(f"Test R9: Succeed\n")
         return True, curr_test
@@ -899,7 +902,7 @@ def R9_test(single):
 def R11_test(single):
     logger.info(f"Test-R11: Earning is proportional to effective stake ")
     logger.warning(f"Test-R11: Not Applicable")
-    curr_test = None
+    curr_test = R14_test
     return "Not Applicable", curr_test
     
     
@@ -930,12 +933,9 @@ def CN1_test(single):
     
     block, last_block = getCurrentAndLastBlock()
     logger.info(f"current and last block numbers: {block}, {last_block}")
-    while last_block - block > 29:
-        block = getBlockNumber()
-    time.sleep(5)
     if block == last_block or block == last_block -1:
-        logger.info(f"current at the last block or last second block, wait until the 9th block in the new epoch")
-        while block < last_block+9:
+        logger.info(f"current at the last block or last second block, wait until the 5th block in the new epoch")
+        while block < last_block+5:
             block = getBlockNumber()
     logger.info(f"current block: {block}, will begin collecting infos...")
     # get the validator's reward who just meets the 2/3 cut-off  
@@ -1095,27 +1095,20 @@ def S1_test(single):
 def S6_test(single):
     global curr_test
     logger.info(f"Test-S6: Total staked tokens cannot exceed circulating supply")
-    num = 1
-    try:        
-        current_block = getBlockNumber()
-        iterations = 0
-        flag = True
-        while iterations < num:
-            logger.info(f"current block, {current_block}")
-            supply, stake = getStakingMetrics()
+    flag = True
+    current_block = getBlockNumber()
+    try:
+        logger.info(f"current block, {current_block}")
+        supply, stake = getStakingMetrics()
 
-            logger.info(f"supply: {supply}")
-            logger.info(f"stake: {stake}")
+        logger.info(f"supply: {supply}")
+        logger.info(f"stake: {stake}")
 
-            if stake > supply:
-                logger.warning(f"Test-S6: Fail")
-                logger.warning(f"stake is higher than supply. stake: {stake}, supply: {supply}\n")
-                flag = False
-            last_block = current_block
-            current_block = getBlockNumber()
-            while current_block == last_block:
-                current_block = getBlockNumber()
-            iterations = iterations + 1
+        if stake > supply:
+            logger.warning(f"Test-S6: Fail")
+            logger.warning(f"stake is higher than supply. stake: {stake}, supply: {supply}\n")
+            flag = False
+
     except TypeError as e:
         logger.error(f"error: {e}")
     if single:
@@ -1157,7 +1150,8 @@ def S7_test(single):
             current_block = getBlockNumber()
             while current_block == last_block:
                 current_block = getBlockNumber()
-            iterations = iterations + 1
+                
+            iterations += 1
     except TypeError as e:
         logger.error(f"error: {e}")
     curr_test = None    

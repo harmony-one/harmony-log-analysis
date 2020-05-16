@@ -1,33 +1,21 @@
 # Daily Feature Tracker
-This page provides daily analysis of Open Staking Network and Mainnet.
+This page provides daily analysis for Mainnet.
 
-## Pangaea
-- [2020/04/30](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/ostn_2020_04_30.html)
-- [2020/04/29](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/ostn_2020_04_29.html)
-- [2020/04/28](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/ostn_2020_04_28.html)
-- [2020/04/27](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/ostn_2020_04_27.html)
-- [2020/04/26](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/ostn_2020_04_26.html)
-- [2020/04/25](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/ostn_2020_04_25.html)
-- [2020/04/24](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/ostn_2020_04_24.html)
-- [2020/04/23](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/ostn_2020_04_23.html)
-- [2020/04/22](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/ostn_2020_04_22.html)
-- [2020/04/21](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/ostn_2020_04_21.html)
-- [2020/04/20](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/ostn_2020_04_20.html)
-- [2020/04/19](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/2020_04_19.html)
-- [2020/04/18](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/2020_04_18.html)
-- [2020/04/17](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/2020_04_17.html)
-- [2020/04/16](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/2020_04_16.html)
+## Latest Reports
+- [2020/05/01](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_01.html)
+- [2020/05/02](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_02.html)
+- [2020/05/03](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_03.html)
+- [2020/05/04](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_04.html)
+- [2020/05/05](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_05.html)
+- [2020/05/06](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_06.html)
+- [2020/05/07](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_07.html)
+- [2020/05/08](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_08.html)
+- [2020/05/09](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_09.html)
+- [2020/05/10](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_10.html)
+- [2020/05/11](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_11.html)
+- [2020/05/12](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_12.html)
+- [2020/05/13](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_13.html)
+- [2020/05/14](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_14.html)
+- [2020/05/15](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_15.html)
 
-## Mainnet 
-- [2020/04/30](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_04_30.html)
-- [2020/04/29](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_04_29.html)
-- [2020/04/28](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_04_28.html)
-- [2020/04/27](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_04_27.html)
-- [2020/04/26](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_04_26.html)
-- [2020/04/25](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_04_25.html)
-- [2020/04/24](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_04_24.html)
-- [2020/04/23](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_04_23.html)
-- [2020/04/22](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_04_22.html)
-- [2020/04/21](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_04_21.html)
-- [2020/04/20](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_04_20.html)
-
+### [Old Reports](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/old_report/index.md)

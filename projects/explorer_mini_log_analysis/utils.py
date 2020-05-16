@@ -138,7 +138,7 @@ def draw_graph_time(df, png_path, html_dir, colors):
         display_path = html_path + "total_transaction_per_second_vs_time.html"
         display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
         fig.write_image(png_path + "total_transaction_per_second_vs_time.png",width=900, height=500)
-                    
+    
     fig = px.line(df, x='timestamp', y='transaction_per_second', color='shard', color_discrete_sequence=colors,                   title = 'Transaction Per Second vs Time', hover_data=hover)
     fig.update_layout(xaxis_title="utc_time")
 #     fig.show(renderer="svg",width=900, height=500)
@@ -208,6 +208,7 @@ def draw_graph_block(df, png_path, html_dir, colors):
         display_path = html_path + "total_transaction_per_second_vs_time.html"
         display(HTML("<a href='" + display_path + "' target='_blank'>" + display_path + "</a>"))
         fig.write_image(png_path + "total_transaction_per_second_vs_block_height.png",width=900, height=500)
+
 
     fig = px.line(df, x='block', y='transaction_per_second', color='shard', color_discrete_sequence=colors,                   title = 'Transaction Per Second vs Block Height', hover_data=hover)
 #     fig.show(renderer="svg",width=900, height=500)
