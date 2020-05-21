@@ -1,0 +1,10 @@
+# credential 
+*.sh
+credential/*
+
+# data
+logs/*
+csv/*
+address/*
+old_file/*
+html/
