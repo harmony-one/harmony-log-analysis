@@ -18,6 +18,8 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import time
+import pyhmy
+from pyhmy import rpc
 
 def new_log(network):
     logging.basicConfig(level=logging.INFO)
@@ -69,10 +71,10 @@ def getBalance(shard, address) -> int:
     params = [address, 'latest']
     return get_information(url, method, params)
 
-def getTransactionCount(shard, address) -> int:
+def getTransactionsCount(shard, address) -> int:
     url = endpoint[shard]
-    method = 'hmy_getTransactionCount'
-    params = [address, 'latest']
+    method = 'hmy_getTransactionsCount'
+    params = [address, 'ALL']
     return get_information(url, method, params)
 
 
@@ -125,17 +127,18 @@ if __name__ == "__main__":
             balance = 0
             transaction = 0
             addr = address[i]
+            balance = 0
             for shard in range(len(endpoint)):
-                res = getBalance(shard, addr)
+                res = rpc.account.get_balance(addr, endpoint[shard])
                 if res != None:
-                    balance += round(res['result']/1e18,2)
-                    count = getTransactionCount(shard, addr)
+                    balance += res/1e18
+                    count = getTransactionsCount(shard, addr)
                     if count != None:
                         if 'result' in count:
-                            transaction += int(count['result'],16)
+                            transaction += count['result']
             t = {
                 "address": addr,
-                "balance": balance,
+                "balance": np.round(balance,2),
                 "transaction-count": transaction
             }
             logger.info(json.dumps(t))
@@ -158,6 +161,7 @@ if __name__ == "__main__":
                 print('bad json: ', line)
     df = pd.DataFrame(result)
     df.sort_values(by=['balance'], ascending=False, inplace = True) 
+    df['balance'] = df['balance'].apply(lambda c: '{:,.2f}'.format(c))
     df.reset_index(drop = True, inplace = True)
     data = json.loads(df.to_json())
     cred = credentials.Certificate(path.join(json_dir, "harmony-explorer-mainnet-firebase-adminsdk.json"))

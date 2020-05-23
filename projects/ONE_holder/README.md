@@ -1,5 +1,5 @@
 # ONE Holder Tracker
-This project provides the backend support for [ONE holder tracker website](https://harmony-explorer-75c6d.web.app/#/). It collects all the ONE address who have txs history in mainnet history, as well as foundational nodes, and tracks the balance and txs count for each address. The data is stored on Firebase. To connect to firebase, you need to set up Admin SDK by following the [instruction](https://firebase.google.com/docs/database/admin/start#python).
+This project provides the backend support for [ONE holder tracker website](https://harmony-explorer-75c6d.web.app/#/). Check frontend [here](https://github.com/harmony-one/simple-list). It collects all the ONE address who have txs history in mainnet history, as well as foundational nodes, and tracks the balance and txs count for each address. The data is stored on Firebase. To connect to firebase, you need to set up Admin SDK by following the [instruction](https://firebase.google.com/docs/database/admin/start#python).
 
 ## Requirements
 `python3 -m pip install -r requirements.txt`
@@ -14,4 +14,4 @@ Open list of cron jobs using `crontab -e`
 
 Create `one_holder_track.sh` file, add the command `python3 /path/to/script/one_holder_track.py --endpoints [ENDPOINT] --network mainnet`
 
-Currently it's running every 2 minutes, the command is `*/2 * * * * python3 /path/to/script/one_holder_track.sh` 
+Currently it's running every 3 minutes, the command is `*/2 * * * * python3 /path/to/script/one_holder_track.sh` 

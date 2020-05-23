@@ -16,55 +16,11 @@ import time
 import pandas as pd
 import copy
 import re
+import pyhmy 
+from pyhmy import rpc
 
 base = path.dirname(path.realpath(__file__))
 data = path.abspath(path.join(base, 'address'))
-
-def getLatestHeader(shard) -> dict:
-    url = endpoint[shard]
-    payload = json.dumps({
-        "jsonrpc": "2.0",
-        "method": "hmy_latestHeader",
-        "params": ['latest'],
-        "id": 1
-    })
-    headers = {
-        'Content-Type': 'application/json'
-    }
-    response = requests.request('POST', url, headers=headers, data=payload, allow_redirects=False, timeout=30)
-    try:
-        returned = json.loads(response.content)["result"]
-        return returned
-    except Exception:  # Catch all to not halt
-        logger.info(f"\n[!!!] Failed to json load latestHeader. Content: {response.content}\n")
-
-
-def getBlockByNumber(shard, block, logger):
-    url = endpoint[shard]
-    payload = json.dumps({
-        "jsonrpc": "2.0",
-        "method": "hmyv2_getBlockByNumber",
-        "params": [
-            block, 
-            {"fullTx":True,"inclTx": True, "withSigners":False,"InclStaking":False}
-        ],
-        "id": 1
-    })
-    headers = {
-        'Content-Type': 'application/json'
-    }
-    response = requests.request('POST', url, headers=headers, data=payload, allow_redirects=False, timeout=30)
-    try:
-        returned = json.loads(response.content)["result"]
-        return returned
-    except Exception:  # Catch all to not halt
-        t= {
-            'block-num': block,
-            'reason': f"Failed to json load block {block}. Content: {response.content}"
-        }
-        logger.info(json.dumps(t))
-        print(f"\n[!!!] Failed to json load block {block}. Content: {response.content}\n")
-
 
 if __name__ == "__main__":
 
@@ -74,8 +30,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     endpoint = []
     if args.endpoints:
-        endpoint = [x.strip() for x in args.endpoints.strip().split(',')]
-        
+        endpoint = [x.strip() for x in args.endpoints.strip().split(',')]        
     else:
         print('List of endpoints is required.')
         exit(1)
@@ -104,11 +59,12 @@ if __name__ == "__main__":
             exit(1)
 
     pkl_file = path.join(data,'address_{}.pickle'.format(network))
-
     if path.exists(pkl_file):
+        # restart from last records
         with open(pkl_file, 'rb') as f:
             address = pickle.load(f)
-    else:      
+    else: 
+        # first time setup: since some foundational nodes doesn't have txs history
         filename = path.join(data, 'fn_addresses.csv')
         fn_addr = pd.read_csv(filename, header = None, names = ['address', 'shard'])
         address = set(fn_addr['address'].tolist())
@@ -124,23 +80,33 @@ if __name__ == "__main__":
         addr_length = len(address)
         curr = defaultdict(int)
         for shard in range(len(endpoint)):
-            latest = getLatestHeader(shard)
-            if latest == None:
-                curr[shard] = prev[shard]
+            fail = True
+            while fail:
+                try:
+                    latest = rpc.blockchain.get_latest_header(endpoint[shard])
+                    fail = False
+                except rpc.exceptions.RequestsTimeoutError:
+                    time.sleep(10)
+                    pass
+            if latest:
+                curr[shard] = latest['blockNumber'] 
             else:
-                curr[shard] = latest['blockNumber']  
+                curr[shard] = prev[shard]
         total = 0
         for shard in range(len(endpoint)):
             length = curr[shard] - prev[shard]
             total += length
-
+        if total == 0:
+            # means no new change for any shard
+            time.sleep(30)
+            continue
         q = Queue()
         def collect_data(q): 
             while not q.empty():
                 global address
                 i, shard = q.get()
-                res = getBlockByNumber(shard, i, logger)
-                if res != None:
+                res = rpc.blockchain.get_block_by_number(i, endpoint[shard], include_full_tx=True)
+                if res:
                     transactions = res['transactions']
                     if transactions:
                         for txs in transactions:
@@ -151,7 +117,7 @@ if __name__ == "__main__":
                                 address.add(txs['to'])                                
                     if i % 1000 == 1:
                         timestamp = res['timestamp']
-                        timestamp = datetime.fromtimestamp(timestamp).strftime('%Y_%m_%d %H:%M:%S')
+                        timestamp = datetime.fromtimestamp(int(timestamp,16)).strftime('%Y_%m_%d %H:%M:%S')
                         t = {
                             "block": i,
                             "shard": shard,
@@ -171,12 +137,16 @@ if __name__ == "__main__":
             worker.start()
 
         q.join()
+        
+        # save data if we have new address
         if len(address) != addr_length:
             logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} pickle file updated")
             with open(pkl_file, 'wb') as f:
                 pickle.dump(address, f)
-        prev = copy.deepcopy(curr)  
         
+        # deep copy dictionary
+        prev = copy.deepcopy(curr)  
+        # to quickly consume when any request error happen
         with open(shard_info, 'wb') as f:
             pickle.dump(prev, f)
         time.sleep(30)
