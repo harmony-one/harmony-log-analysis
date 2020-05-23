@@ -14,4 +14,4 @@ Open list of cron jobs using `crontab -e`
 
 Create `one_holder_track.sh` file, add the command `python3 /path/to/script/one_holder_track.py --endpoints [ENDPOINT] --network mainnet`
 
-Currently it's running every 3 minutes, the command is `*/2 * * * * python3 /path/to/script/one_holder_track.sh` 
+Currently it's running every 3 minutes, the command is `*/3 * * * * python3 /path/to/script/one_holder_track.sh` 
