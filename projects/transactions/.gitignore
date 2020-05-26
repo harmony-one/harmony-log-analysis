@@ -1,2 +1,4 @@
 *.pkl
 /logs/*
+*.json
+.ipynb_checkpoints/
