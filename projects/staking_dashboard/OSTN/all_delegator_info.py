@@ -12,7 +12,7 @@ from collections import defaultdict
 import datetime
 
 def get_information(method, params):
-    url = 'https://api.s0.os.hmny.io/'
+    url = 'https://api.s0.t.hmny.io/'
     headers = {'Content-Type': 'application/json'}
     data = {"jsonrpc":"2.0", "method": method, "params": params, "id":1}
     r = requests.post(url, headers=headers, data = json.dumps(data))

@@ -1,48 +1,48 @@
-# Staking Dashboard Analysis
-Get validators or delegators' information on staking dashboard: https://staking.harmony.one/validators
+# Validator and Delegator Analysis for mainnet
+Get validators and delegators' information, including all the info on [staking dashboard](https://staking.harmony.one/validators) like profile, performance, general info, and also some other basic information. The following instruction assumes you are running on [Analytics VM](http://analytics.hmny.io/tree/harmony-log-analysis/projects/staking_dashboard) If you want to run locally, please skip the folllowing instructions and go to [RUN LOCALLY](https://github.com/harmony-one/harmony-log-analysis/tree/master/projects/staking_dashboard#run-locally)
 
-## Requirements
+## Validator Key Information
+To get name, ONE address, apr, total-stake, self-stake, fees, uptime, epos-status and boot status for
+ validators. It's currently updating every epoch.
+
+### Commands
+Open a terminal, and run command: `python3 [path/to/script]/mainnet_validator_stats.py`
+
+### Output
+- [google spreadsheet tab validator-tracker](https://docs.google.com/spreadsheets/d/1AyYHWSkKOCzMY0ZvoT049DapIDvkEhpnfbA1WidJm3o/edit?usp=sharing)
+- [google spreadsheet tab filter-validator-tracker](https://docs.google.com/spreadsheets/d/1AyYHWSkKOCzMY0ZvoT049DapIDvkEhpnfbA1WidJm3o/edit?usp=sharing)
+
+## Validator Dashboard Information
+To get min-self-delegation, max-total-delegation, rate, max-rate, max-change-rate, name, identity, website, security-contact, details, creation-height, address, self-stake, total-stake, active-nodes, elected-nodes, uptime-percentage, apr, lifetime-reward-accumulated, all the information on dashboard. It's currently manual updated.
+
+### Commands
+Open a terminal, and run command: `python3 [path/to/script]/mainnet_validator_dashboard.py`
+
+### Output
+`./csv/validator_info_mainnet.csv`
+
+## Delegator Key Information
+To get address, current-reward, total-stake, balance, staking-transaction-count, normal-transaction-count for delegators. It's currently updating every day.
+
+### Commands
+Open a terminal, and run command: `python3 [path/to/script]/mainnet_delegator_stats.py`
+
+### Output
+[google spreadsheet tab delegator-tracker](https://docs.google.com/spreadsheets/d/1AyYHWSkKOCzMY0ZvoT049DapIDvkEhpnfbA1WidJm3o/edit?usp=sharing)
+
+## Run locally
+If you want to run locally, you need to install the required packages and download the script, remember to download the script with `local` keyword. Take validator key information for example.
+
+### Requirements
 `python3 -m pip install requests pandas numpy`
-
 If you meet permission denied errors, try using `python3 -m pip install --user requests pandas numpy`
 
-## Output
-`./csv/*`
-
-## Validator Info
-To get information including name, address, website, details, security-contact, identity, epos-status, currently-in-committee, apr, delegator-num, bls-key-num, current-epoch-signed, current-epoch-signing-percentage, current-epoch-to-sign, num-beacon-blocks-until-next-epoch, reward, uptime-percentage
-
 ### Download newest script
-`curl -O https://raw.githubusercontent.com/harmony-one/harmony-log-analysis/master/notebooks/staking_dashboard/validator_info.py`
+`curl -O https://raw.githubusercontent.com/harmony-one/harmony-log-analysis/master/notebooks/staking_dashboard/mainnet_validator_stats_local.py`
 
 ### Commands
-Run command: default is to get all the information of validators and save it to a csv file and stored in `./csv/validator_info.csv`: `python3 validator_info.py`
+Run command: `python3 mainnet_validator_stats_local.py`
 
-To change the output file name: `python3 validator_info.py --output_file new_name`
-
-To print the statistics of epos-status: `python3 validator_info.py --epos_status`
-
-To print the statistics of unique users' epos-status: `python3 validator_info.py --epos_status_unique`
-
-To print the new validators who are not in the `harmony.one/keys`: `python3 validator_info.py --new_validators`
-
-To print both information: `python3 validator_info.py --all`
-
-## Delegator Info
-To get the accumulated rewards(after claiming), balance, and stakes for pure delegators.
-
-### Download newest script
-`curl -O https://raw.githubusercontent.com/harmony-one/harmony-log-analysis/master/notebooks/staking_dashboard/delegator_info.py`
-
-### Commands
-Run command: `python3 delegator_info.py`
-
-## Transaction History 
-To get the transaction history of one acoount
-
-### Download newest script
-`curl -O https://raw.githubusercontent.com/harmony-one/harmony-log-analysis/master/projects/staking_dashboard/transaction_history.py`
-
-### Commands
-Run command: get all transaction history for a ONE account, with maximum 10000 reocrds and save it to a csv file and stored in `./csv/[NAME]_transaction.csv`: `python3 transaction_history.py --address [YOUR ONE ADDRESS] --name [YOUR NAME]`
-
+### Output
+- `./csv/mainnet_validator/*_validator.csv`
+- `./csv/mainnet_validator/*_filter_validator.csv` (the validator who has more than 80% uptime but not eligible to be elcted) 
