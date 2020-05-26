@@ -1,5 +1,12 @@
 # Validator and Delegator Analysis for mainnet
-Get validators and delegators' information, including all the info on [staking dashboard](https://staking.harmony.one/validators) like profile, performance, general info, and also some other basic information. The following instruction assumes you are running on [Analytics VM](http://analytics.hmny.io/tree/harmony-log-analysis/projects/staking_dashboard) If you want to run locally, please skip the folllowing instructions and go to [RUN LOCALLY](https://github.com/harmony-one/harmony-log-analysis/tree/master/projects/staking_dashboard#run-locally)
+Get validators and delegators' information, including all the info on [staking dashboard](https://staking.harmony.one/validators) like profile, performance, general info, and also some other basic information. 
+
+The following instruction assumes you are running on [Analytics VM](http://analytics.hmny.io/tree/harmony-log-analysis/projects/staking_dashboard) If you want to run locally, please skip the following instructions and go to [RUN LOCALLY](https://github.com/harmony-one/harmony-log-analysis/tree/master/projects/staking_dashboard#run-locally)
+
+## Goal
+- Track validator/delegator's performance, catch any abnormal activities (too frequent transactions, abnormal balance)
+- Help validator troublesheet the reasons why they are not elected, filter those who have high uptime but still not get elected.
+- Marketing purpose, manage the general info about our validators, email, website.
 
 ## Validator Key Information
 To get name, ONE address, apr, total-stake, self-stake, fees, uptime, epos-status and boot status for
