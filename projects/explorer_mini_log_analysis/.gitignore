@@ -2,3 +2,4 @@ bin/*
 .ipynb_checkpoints/*
 tmp/*
 __pycache__/*
+cron.log
