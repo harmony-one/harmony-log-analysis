@@ -887,7 +887,7 @@ def R9_test(single):
             total_reward = total_reward + reward   
     if total_reward < min_total_reward or total_reward > max_total_reward:
         logger.warning(f"Test R9: Fail")
-        logger.warning(f"block reward below minimum or above maximum, block reward: {total_reward}, minimum: {min_total_reward}, maximum: {max_total_reward}\n")
+        logger.warning(f"block reward below minimum or above maximum, block reward: {format(total_reward, '.20e')}, minimum: {min_total_reward}, maximum: {max_total_reward}\n")
         flag = False
     if single:
         curr_test = None
@@ -938,28 +938,54 @@ def CN1_test(single):
         while block < last_block+5:
             block = getBlockNumber()
     logger.info(f"current block: {block}, will begin collecting infos...")
-    # get the validator's reward who just meets the 2/3 cut-off  
-    cutoff_rewards = getAvailabilityAndRewards()
-    if not cutoff_rewards:
-        logger.info(f"no validators sign more than 2/3 in this test\n")
+    signer_address = getBlockSigner(block)
+    acc_rewards_prev = dict()
+    validator_infos = getAllValidatorInformation()
+    for i in validator_infos:
+        address = i['validator']['address']
+        if address in signer_address:
+            reward_accumulated = i['lifetime']['reward-accumulated']
+            acc_rewards_prev[address] = reward_accumulated
 
-        return "Need More Tests", curr_test
-    new_block = block + 1
-    while block < new_block:
+    next_block = block + 1
+    while block < next_block:
         block = getBlockNumber()
-    logger.info(f"new block reached, {block}, will wait for 5 seconds to begin testing")
-    time.sleep(5)
-    next_rewards, status = getRewardsAndStatus(cutoff_rewards)
+    logger.info(f"new block {block} reached, will begin testing...")
     flag = True
-    for k,v in next_rewards.items():
-        reward_per_block = v - cutoff_rewards[k]
-        if reward_per_block == 0 or status[k] == 'not eligible to be elected next epoch':
-            flag = False
-            logger.warning(f"Test-CN1: Fail")
-            if reward_per_block == 0:
-                logger.warning(f"Slow validator {k} doesn't get reward\n")
-            if status[k] == 'not eligible to be elected next epoch':
-                logger.warning(f"Slow validator {k} is no longer eligible\n")
+    # get the validator info and compute validator rewards
+    new_signer_address = getBlockSigner(block)
+    validator_infos = getAllValidatorInformation()
+    for i in validator_infos:
+        address = i['validator']['address']
+        if address in new_signer_address:           
+            reward_accumulated = i['lifetime']['reward-accumulated']
+            if address not in acc_rewards_prev:
+                continue
+            reward = reward_accumulated - acc_rewards_prev[address]
+            if reward == 0:
+                flag = False
+                logger.warning(f"Test-CN1: Fail")
+                logger.warning(f"validator {address} who is a signer doesn't get reward\n")
+    if flag:
+        logger.info(f"Test-CN1: All signers get rewards")
+    
+    while block < last_block:
+        block = getBlockNumber()
+    logger.info(f"last block in this epoch reached, {block}")
+    validator_infos = getAllValidatorInformation()
+    for i in validator_infos:
+        if i['current-epoch-performance']:
+            sign = i['current-epoch-performance']['current-epoch-signing-percent']
+            if sign['current-epoch-to-sign'] == 0:
+                continue
+            perc = float(sign['current-epoch-signing-percentage'])
+            if perc > 2/3:
+                address = i['validator']['address']
+                epos_status = i['epos-status']
+                if epos_status == 'not eligible to be elected next epoch':
+                    flag = False
+                    logger.warning(f"Test-CN1: Fail")
+                    logger.warning(f"validator {address} who is a signer is not eligible to be elected next epoch\n")
 
     if flag:
         logger.info(f"Test-CN1: Succeed\n")

@@ -5,7 +5,7 @@ import requests
 from collections import defaultdict
 
 def get_information(method, params):
-    url = 'https://api.s0.dry.hmny.io'
+    url = 'https://api.s0.t.hmny.io'
     headers = {'Content-Type': 'application/json'}
     data = {"jsonrpc":"2.0", "method": method, "params": params, "id":1}
     r = requests.post(url, headers=headers, data = json.dumps(data))
@@ -88,6 +88,11 @@ def get_median(lst):
     else: 
         median = lst[n//2] 
     return median
+
+def getBlockSigner(block):
+    method = "hmyv2_getBlockSigners"
+    params = [block]
+    return get_information(method, params)['result']
 
 def getRewards():
     rewards = dict()
