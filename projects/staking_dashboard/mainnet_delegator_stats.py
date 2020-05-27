@@ -204,6 +204,3 @@ if __name__ == "__main__":
     worksheet = sh.worksheet("delegator-tracker")
     worksheet.update([df.columns.values.tolist()] + df.values.tolist())
     
-#     filter_df = df[df['filter']].reset_index(drop = True)
-#     filter_df.to_csv(path.join(data, '{:s}_filter_delegator.csv'.format(time)))
-#     print("-- Save csv files to ./csv/mainnet_delegator/{:s}_filter_delegator.csv --".format(time))
