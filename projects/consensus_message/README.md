@@ -15,6 +15,6 @@ Each validator should receive announce, prepared, committed message sent from th
 Based on the result, we can see the issue should be more on the leader side since the missing issue happens on all validators level.
 
 ## ViewID check
-ViewID is similar to block height, but will always be no less than block height since whenever there is a viewchange, the viewID will increaae. The viewID should be consecutive, and only increase not decrease. This project is used to check whether viewID is recorded right. 
+ViewID is similar to block height, but will always be no less than block height since whenever there is a viewchange, the viewID will increaae. The viewID should be consecutive, and only increase not decrease. This project is used to check whether viewID is recorded right. For OSTN, we use zero logs to check in a week level. For mainnet, we add a viewID field to RPC call `getBlockByNumber` and check from our mainnet launch till May 29th 2020.  
 - [ostn](https://github.com/harmony-one/harmony-log-analysis/blob/master/projects/consensus_message/viewID_check_ostn.ipynb)
-- [mainnet](https://github.com/harmony-one/harmony-log-analysis/blob/master/projects/consensus_message/viewid_check_mainnet.ipynb)
+- [mainnet](https://github.com/harmony-one/harmony-log-analysis/blob/master/projects/consensus_message/viewID_whole_level_mainnet.ipynb)
