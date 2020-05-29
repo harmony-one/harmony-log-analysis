@@ -1,4 +1,6 @@
-*.pkl
-/logs/*
+pickle/*
+logs/*
 *.json
 .ipynb_checkpoints/
+*.sh
+
