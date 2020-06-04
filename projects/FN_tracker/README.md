@@ -2,7 +2,7 @@
 This project provides info for foundational nodes before our mainnet enters into open-staking period on May 16th 2020, including signing percentage, accumulated earned rewards, balance and txs history.
 
 ## Requirements
-`python3 -m pip install requests, pandas, pyhmy==20.5.5`
+`python3 -m pip install requests, pandas, pyhmy==20.5.3`
 
 ## Signing Percentage Calculation
 - get signer every block: 
@@ -14,26 +14,22 @@ This project provides info for foundational nodes before our mainnet enters into
 - get signing percentage: `python3 get_signing_percentage.py`
 
 ## Accumulated rewards earned
-### Method1
-balance + ONE-sent - ONE-received + total-stake (during pre-staking) 
+### Every FN nodes
+balance + ONE-sent - ONE-received + total-stake (during pre-staking) + txs-fee + staking-txs-fee 
 
 #### Command
 Run `python3 balance_tracker.py`
 
 #### Result 
-[google spreadsheet FN-tracker](https://docs.google.com/spreadsheets/d/1AyYHWSkKOCzMY0ZvoT049DapIDvkEhpnfbA1WidJm3o/edit?usp=sharing)
+[google spreadsheet FN-tracker](https://monitor.hmny.io/fn_earnings)
 
-### Method2
+### Total rewards
 sum of block-number for each shard when enter into open-staking
 
 #### Command
-Run [jupyter notebook](https://github.com/harmony-one/harmony-log-analysis/tree/master/projects/FN_tracker/notebooks/get_block_number_open_staking.ipynb)
+- First get the block-number in shard 0 when we enter into epoch 186, `block-number-shard-0 = mainnetEpochBlock1 + 185*blocksPerEpoch`
+- Run `python3 get_open_staking_block_number.py` to get the time when we enter into open-staking and get the block number in non-beacon shards which is closest to the time. 
+- Calculate: `sum(block-number-in-all-shards) * 24`
 
 #### Result
-shard 0:`3375104`, time: `2020_05_16_15:08:52 UTC` (`2020_05_16_08:08:52 PST`)
-
-shard 1:`3286736`, time: `2020_05_16_15:08:53 UTC` (`2020_05_16_08:08:53 PST`)
-
-shard 2:`3326152`, time: `2020_05_16_15:08:56 UTC` (`2020_05_16_08:08:56 PST`)
-
-shard 3:`3313571`, time: `2020_05_16_15:08:53 UTC` (`2020_05_16_08:08:53 PST`)
+We burned [319237512 tokens](https://twitter.com/harmonyprotocol/status/1265793826251108353)
