@@ -84,10 +84,11 @@ if __name__ == "__main__":
     else:
         curr = 1
         
-    target = 185
+    target = 150
     while curr <= target:
         def collect_data(shard):
             fail = True
+            address = []
             while fail:
                 try:
                     address = rpc.blockchain.get_validators(curr,endpoint[shard])['validators']
@@ -124,7 +125,23 @@ if __name__ == "__main__":
         logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} pickle file updated, epoch: {curr}")
         
         curr += 1
+    
+    for shard in range(len(endpoint)):
+        address = rpc.blockchain.get_validators(151,endpoint[shard])['validators']
+        if address:
+            for i in address:
+                addr = i['address']
+                if addr == 'one1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqquzw7vz':
+                    continue
+                count[shard][addr] += blocksPerEpoch * (185-151+1)  
+       
+    with open(count_file, 'wb') as f:
+        pickle.dump(count, f)
+            
+    with open(shard_info, 'wb') as f:
+        pickle.dump(curr, f)
         
+    logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} finished updating pickle file, from epoch 151 to 185")
 
         
 

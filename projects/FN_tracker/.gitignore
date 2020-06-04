@@ -2,3 +2,5 @@ logs/*
 csv/*
 credential/*
 pickle/*
+address/*
+notebooks/*

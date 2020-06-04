@@ -69,95 +69,92 @@ if __name__ == "__main__":
     logger = new_log(date, network)
     
     # the block when we enter into open-staking period
-    curr_dict = {0: 3375104, 1: 3286736, 2: 3326152, 3: 3313571}
+    curr = {0: 3375104, 1: 3286736, 2: 3326152, 3: 3313571}
+    prev = {0: 3290002, 1: 3290002, 2: 3290002, 3: 3290002}
 
-#     total = 0
-#     for shard in range(len(endpoint)):
-#         length = curr[shard] - prev[shard]
-#         total += length
-  
+    total_block = 0
+    for shard in range(len(endpoint)):
+        length = curr[shard] - prev[shard]
+        total_block += length
+
     shard_info = path.join(pkl_dir,'shard_info_{}.pickle'.format(network))
-    if path.exists(shard_info):
-        with open(shard_info, 'rb') as f:
-            number = pickle.load(f)
-    else:
-        number = 0
-    block_num = np.arange(number+1, 3309002, 30000).tolist()
-    for n in range(len(block_num)-1):
-        prev = block_num[n]
-        curr = block_num[n+1]
+#     if path.exists(shard_info):
+#         with open(shard_info, 'rb') as f:
+#             number = pickle.load(f)
+#     else:
+#         number = 0
+#     block_num = np.arange(number+1, 3309002, 30000).tolist()
+#     for n in range(len(block_num)-1):
+#         prev = block_num[n]
+#         curr = block_num[n+1]
         
-        count_file = path.join(pkl_dir,'signer_count_{}.pickle'.format(network))
-        if path.exists(count_file):
-            with open(count_file, 'rb') as f:
-                count = pickle.load(f)
-        else:                     
-            count = defaultdict(dict)
+    count_file = path.join(pkl_dir,'signer_count_{}.pickle'.format(network))
+    if path.exists(count_file):
+        with open(count_file, 'rb') as f:
+            count = pickle.load(f)
+    else:                     
+        count = defaultdict(dict)
         
-        total_block = 30000
-        # set up queue object
-        q = Queue()
+    # set up queue object
+    q = Queue()
 
-        # output from queue
-        def collect_data(q):
-            while not q.empty():
-                global count
-                i, shard = q.get()
-                fail = True
-                while fail:
-                    try:
-                        signer = rpc.blockchain.get_block_signers(i, endpoint[shard], 60)
-                        fail = False
-                    except rpc.exceptions.RequestsTimeoutError:
-                        time.sleep(10)
-                        pass
-                if signer:
-                    for s in set(signer):
-                        if s not in count[shard]:
-                            count[shard][s] = 1
-                        else:
-                            count[shard][s] += 1
-                    if (i % 1000 == 1) and (shard == 0):                                   
-                        with open(count_file, 'wb') as f:
-                            pickle.dump(count, f)
-                        logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} signer_count pickle file updated, current block number {i}")
-                        
-                        with open(shard_info, 'wb') as f:
-                            pickle.dump(i, f)
-                        logger.info(f"tracking block number {i}")
-                else:
-                    t = {
-                        'block-num': i,
-                        'reason': f"Block {i} had a null response: {signer}"
-                        }
-                    logger.info(json.dumps(t))
-                    
-                time.sleep(5)
-                q.task_done()
-                
-                
-        # input to queue
-#         min_start = min(prev.values())
-#         max_end = max(curr.values())
-        for x in range(prev,curr):
-            for shard in range(len(endpoint)):
-#                 if prev[shard] <= x <= curr[shard]:
-                q.put((x,shard))
-                    
-        # set up thread processing
-        num_threads = min(100, total_block)
-        for i in range(num_threads):
-            worker = Thread(target = collect_data, args = (q,))
-            worker.setDaemon(True)
-            worker.start()            
-         
-        q.join()
+    # output from queue
+    def collect_data(q):
+        while not q.empty():
+            global count
+            i, shard = q.get()
+            fail = True
+            while fail:
+                try:
+                    signer = rpc.blockchain.get_block_signers(i, endpoint[shard], 60)
+                    fail = False
+                except rpc.exceptions.RequestsTimeoutError:
+                    time.sleep(10)
+                    pass
+            if signer:
+                for s in set(signer):
+                    if s not in count[shard]:
+                        count[shard][s] = 1
+                    else:
+                        count[shard][s] += 1
+                if (i % 1000 == 1):                                   
+                    with open(count_file, 'wb') as f:
+                        pickle.dump(count, f)
+                    logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} signer_count pickle file updated, current block number {i}, shard {shard}")
 
-        with open(count_file, 'wb') as f:
-            pickle.dump(count, f)
-        logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} signer_count pickle file updated, from {prev} to {curr-1}")
+                    with open(shard_info, 'wb') as f:
+                        pickle.dump((i,shard), f)
+                    logger.info(f"tracking block number {i} shard {shard}")
+            else:
+                t = {
+                    'block-num': i,
+                    'reason': f"Block {i} had a null response: {signer}"
+                    }
+                logger.info(json.dumps(t))
+
+            time.sleep(5)
+            q.task_done()
+
+
+    # input to queue
+    for shard in range(len(endpoint)):
+        for x in range(prev[shard],curr[shard]):
+            q.put((x,shard))
+
+    # set up thread processing
+    num_threads = min(100, total_block)
+    for i in range(num_threads):
+        worker = Thread(target = collect_data, args = (q,))
+        worker.setDaemon(True)
+        worker.start()            
+
+    q.join()
+
+    with open(count_file, 'wb') as f:
+        pickle.dump(count, f)
+    logger.info(f"finish updating {datetime.now().strftime('%Y_%m_%d %H:%M:%S')} signer_count pickle file updated")
         
-        time.sleep(15) 
+
         
 
 

@@ -116,17 +116,23 @@ if __name__ == "__main__":
 
     block_num = {0:3375104, 1:3286736, 2:3326152, 3:3313571}
     time_dict = {0: "2020_05_16_15:08:52", 1: "2020_05_16_15:08:53", 2: "2020_05_16_15:08:56", 3:"2020_05_16_15:08:53"} 
+    fail_txs_count = 0
+    fail_staking_txs_count = 0
     def collect_data(x):
-        for i in thread_lst[x]: 
+        global fail_txs_count, fail_staking_txs_count
+        for i in thread_lst[x]:     
             balance = 0
             stake = 0
+            stake_txs_fee = 0
             txs_sum = 0
+            txs_fee = 0
             hash_set = set()
+            staking_hash_set = set()
             addr = address[i]
             for shard in range(len(endpoint)):
                 fail = True
                 retry = False
-                res = 0
+                res = None
                 while fail:
                     try:
                         res = rpc.account.get_balance_by_block(addr, block_num[shard], endpoint[shard])
@@ -140,7 +146,23 @@ if __name__ == "__main__":
                         pass
                     if res:
                         balance += res/1e18
-                    transactions = rpc.account.get_transaction_history(addr, page=0, page_size=10000, include_full_tx=True, tx_type='ALL',order='ASC', endpoint=endpoint[shard])
+
+                fail = True
+                retry = False
+                transactions = []
+                while fail:
+                    try:
+                        transactions = rpc.account.get_transaction_history(addr, page=0, page_size=10000, include_full_tx=True, tx_type='ALL',order='ASC', endpoint=endpoint[shard], timeout = 180)
+                        fail = False
+                        if retry:
+                            logger.info("retry succeed")
+                    except:
+                        logger.info(f"addr {addr} has problems in get transaction history")
+                        fail_txs_count += 1
+                        time.sleep(2)
+                        retry = True
+                        pass
+
                     for txs in transactions:
                         txs_hash = txs['hash']
                         if txs_hash in hash_set:
@@ -153,27 +175,57 @@ if __name__ == "__main__":
                             continue
                         if txs['from'] == addr:
                             txs_sum -= int(txs['value'],16)/1e18
+                            txs_fee += int(txs['gas'],16)*int(txs['gasPrice'],16)/1e18
                         if txs['to'] == addr:
                             txs_sum += int(txs['value'],16)/1e18
-            staking_txs = rpc.account.get_staking_transaction_history(addr, page=0, page_size=10000, include_full_tx=True, tx_type='ALL', order='ASC', endpoint=endpoint[0])
-            for s in staking_txs:
-                str_time = datetime.fromtimestamp(s['timestamp']).strftime('%Y_%m_%d_%H:%M:%S')
-                if str_time > time_dict[0]:
-                    continue
-                if s['type'] == 'Delegate':
-                    stake += s['msg']['amount']/1e18
-                elif s['type'] == 'Undelegate':
-                    stake -= s['msg']['amount']/1e18
-                elif s['type'] == 'CreateValidator':
-                    stake += s['msg']['amount']/1e18
-            net_balance = balance - txs_sum + stake
-                    
+                            
+            fail = True
+            retry = False
+            staking_txs = []
+            while fail:
+                try:
+                    staking_txs = rpc.account.get_staking_transaction_history(addr, page=0, page_size=1000, include_full_tx=True, tx_type='ALL', order='ASC', endpoint=endpoint[0], timeout = 180)
+                    fail = False
+                    if retry:
+                        logger.info("retry succeed")
+                except:
+                    print(f"addr {addr} has problems in get staking transaction history")
+                    fail_staking_txs_count += 1
+                    time.sleep(2)
+                    retry = True
+                    pass
+        
+                for s in staking_txs:
+                    txs_hash = s['hash']
+                    if txs_hash in staking_hash_set:
+                        continue
+                    else:
+                        staking_hash_set.add(txs_hash)
+                    str_time = datetime.fromtimestamp(s['timestamp']).strftime('%Y_%m_%d_%H:%M:%S')
+                    if str_time > time_dict[0]:
+                        continue
+                    if s['type'] == 'Delegate' and s['msg']['delegatorAddress'] == addr:
+                        stake += s['msg']['amount']/1e18
+                        stake_txs_fee += s['gas']*s['gasPrice']/1e18
+                    elif s['type'] == 'Undelegate' and s['msg']['delegatorAddress'] == addr:
+                        stake -= s['msg']['amount']/1e18
+                        stake_txs_fee += s['gas']*s['gasPrice']/1e18
+                    elif s['type'] == 'CreateValidator':
+                        stake += s['msg']['amount']/1e18
+                        stake_txs_fee += s['gas']*s['gasPrice']/1e18
+                    elif s['type'] == 'EditValidator':
+                        stake_txs_fee += s['gas']*s['gasPrice']/1e18
+
+            net_balance = balance - txs_sum + stake + txs_fee + stake_txs_fee
+
             t = {
                 "address": addr,
                 "curr-balance": balance,
                 "txs-sum": txs_sum,
                 "total-stake": stake,
-                "net-balance": net_balance
+                "txs-fee": txs_fee,
+                "stake-txs-fee": stake_txs_fee,
+                "net-balance": net_balance,
             }
             logger.info(json.dumps(t))
 
@@ -187,7 +239,7 @@ if __name__ == "__main__":
         t.join()
 
 
-    
+    print(f"fail txs count: {fail_txs_count}, fail staking txs count: {fail_staking_txs_count}")
     file_name = path.join(log_dir, "tracking_FN_{}.log".format(network))
     result = []
     with open(file_name, errors='ignore') as f:
