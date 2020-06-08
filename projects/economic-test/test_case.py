@@ -573,8 +573,6 @@ def R4_test(single):
             reward = reward_accumulated - acc_rewards_prev[address]
             if reward == 0:
                 continue
-            elif reward < 0:
-                reward = -reward # first time delegations
             del_rewards = 0
             dels = delegations_prev[address]
             ds = i['validator']['delegations']
