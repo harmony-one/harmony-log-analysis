@@ -7,7 +7,10 @@ from os import path
 from collections import defaultdict
 from threading import Thread
 import pyhmy
-from pyhmy import rpc
+from pyhmy import (
+        blockchain,
+        account
+        )
 
 if __name__ == "__main__":
 
@@ -22,7 +25,7 @@ if __name__ == "__main__":
 
     print("-- Start Data Processing --")
     print(f"Current Epoch number: 196, Block number: 95172")
-    df = pd.read_csv("shard_1_delegator.csv", index_col=0)
+    df = pd.read_csv("csv/shard_1_delegator.csv", index_col=0)
 
     balance = defaultdict(float)
     txs_sum = defaultdict(float)
@@ -35,7 +38,7 @@ if __name__ == "__main__":
         global balance
         for i in thread_lst[x]:
             addr = address_lst[i]
-            res = rpc.account.get_balance_by_block(addr, 95172)
+            res = account.get_balance_by_block(addr, 95172)
             if res != None:
                 balance[addr] += res/1e18
     threads = []
@@ -47,13 +50,13 @@ if __name__ == "__main__":
         t.join()
 
     thread_lst = defaultdict(list)
-    for i in range(95172):
+    for i in range(95173):
         thread_lst[i%100].append(i)
 
     def collect_data(x):
         global txs_sum
         for i in thread_lst[x]:
-            transactions = rpc.blockchain.get_block_by_number(i, include_full_tx=True)['transactions']
+            transactions = blockchain.get_block_by_number(i, include_full_tx=True)['transactions']
             for txs in transactions:
                 if txs['from'] in address_lst:
                     addr = txs['from']
@@ -74,7 +77,15 @@ if __name__ == "__main__":
 
     df = df.join(balance_df.set_index('address'), on = 'address')
     df = df.join(txs_sum_df.set_index('address'), on = 'address')
+    # df['total-lifetime-reward'] = df['current-reward'] + df['balance'] + df['total-stake'] + df['pending-undelegation'] - df['txs_sum']
 
+    # print("-- Filter the delegators in the google sheet --")
+    # html = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTDAqXO-xVP4UwJlNJ6Qaws4N-TZ3FNZXqiSidPzU1I8pX5DS063d8h0jw84QhPmMDVBgKhopHhilFy/pub?gid=0&single=true&output=csv'
+    # delegator = read_csv(html)
+    # df['filter'] = df.apply(lambda c: True if c['address'] in delegator else False, axis = 1)
     print("-- Save csv files to ./csv/shard_2_delegator.csv --")
     df.to_csv(path.join(data, 'shard_2_delegator.csv'))
 
+    # filter_df = df[df['filter']].reset_index(drop = True)
+    # filter_df.to_csv(path.join(data, 'shard_1_filter_delegator.csv'))
+    # print("-- Save csv files to ./csv/mainnet_delegator/shard_1_filter_delegator.csv --")
