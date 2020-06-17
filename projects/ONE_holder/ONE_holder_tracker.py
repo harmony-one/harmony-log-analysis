@@ -19,7 +19,12 @@ from firebase_admin import credentials
 from firebase_admin import db
 import time
 import pyhmy
-from pyhmy import rpc
+from pyhmy import (
+    rpc,
+    blockchain,
+    account,
+    staking
+)
 
 def new_log(network):
     logging.basicConfig(level=logging.INFO)
@@ -79,7 +84,7 @@ def getTransactionsCount(shard, address) -> int:
 
 
 if __name__ == "__main__":
-    start = time.time()
+    
     parser = argparse.ArgumentParser()
     parser.add_argument('--endpoints', required = True, help = 'Endpoints to query from, seperated by commas.')
     parser.add_argument('--network', required = True, help = 'Network to query from')
@@ -111,73 +116,122 @@ if __name__ == "__main__":
             except:
                 print("Could not make data directory")
                 exit(1)
-    
-    logger = new_log(network)
-    
-    filename = path.join(addr_dir, 'address_{}.pickle'.format(network))
-    with open(filename, 'rb') as f:
-        address = pickle.load(f)
-    address = list(address)
-    thread_lst = defaultdict(list)
-    for i in range(len(address)):
-        thread_lst[i%200].append(i)
-
-    def collect_data(x):
-        for i in thread_lst[x]: 
-            balance = 0
-            transaction = 0
-            addr = address[i]
-            balance = 0
-            for shard in range(len(endpoint)):
-                res = rpc.account.get_balance(addr, endpoint[shard])
-                if res != None:
-                    balance += res/1e18
-                    count = getTransactionsCount(shard, addr)
-                    if count != None:
-                        if 'result' in count:
-                            transaction += count['result']
-            t = {
-                "address": addr,
-                "balance": np.round(balance,2),
-                "transaction-count": transaction
-            }
-            logger.info(json.dumps(t))
-
-    threads = []
-    for x in range(200):
-        threads.append(Thread(target = collect_data, args = [x]))
-    for t in threads:
-        t.start()
-    for t in threads:
-        t.join()
-    
-    file_name = path.join(log_dir, "tracking_{}.log".format(network))
-    result = []
-    with open(file_name, errors='ignore') as f:
-        for line in f.readlines():
-            try: 
-                result.append(json.loads(line))
-            except:
-                print('bad json: ', line)
-    df = pd.DataFrame(result)
-    df.sort_values(by=['balance'], ascending=False, inplace = True) 
-    df['balance'] = df['balance'].apply(lambda c: '{:,.2f}'.format(c))
-    df.reset_index(drop = True, inplace = True)
-    data = json.loads(df.to_json())
+                
     cred = credentials.Certificate(path.join(json_dir, "harmony-explorer-mainnet-firebase-adminsdk.json"))
     # Initialize the app with a service account, granting admin privileges
     firebase_admin.initialize_app(cred, {'databaseURL': "https://harmony-explorer-mainnet.firebaseio.com"})
-    ref = db.reference('one-holder')
-    ref.set(data)
-    print(f"total running time: {time.time()-start}")
-#     csv_name = "{}_{}_tracker.csv".format(network, datetime.now().strftime("%Y_%m_%d %H:%M:%S"))
-#     df.to_csv(path.join(csv_dir, csv_name))
+    while True:
+        start = time.time()
+        logger = new_log(network)
+        filename = path.join(addr_dir, 'address_{}.txt'.format(network))
+        address = []
+        with open(filename, 'r') as f:
+            for line in f:
+                curr = line[:-1]
+                address.append(curr)  
     
-#     html_name = "{}_{}_tracker.html".format(network, datetime.now().strftime("%Y_%m_%d %H:%M:%S"))
-#     df.to_html(path.join(html_dir, html_name))
-                                
-#     json_file = path.join(base, 'credential/jsonFileFromGoogle.json')
-#     gc = gspread.service_account(json_file)
-#     sh = gc.open("harmony-{}-tracker".format(network))
-#     worksheet = sh.get_worksheet(0)
-#     worksheet.update([df.columns.values.tolist()] + df.values.tolist())
+        validator_infos = staking.get_all_validator_information(endpoint = endpoint[0])
+        del_stake = defaultdict(float)
+        for info in validator_infos:
+            for d in info['validator']['delegations']:
+                del_address = d['delegator-address']
+                amount = d['amount']/1e18
+                del_stake[del_address] += amount
+        
+        stake_df = pd.DataFrame(del_stake.items(), columns=['address', 'total-stake'])        
+        
+        thread_lst = defaultdict(list)
+        for i in range(len(address)):
+            thread_lst[i%50].append(i)
+
+        def collect_data(x):
+            for i in thread_lst[x]: 
+                balance = 0
+                transaction = 0
+                addr = address[i]
+                balance = 0
+                for shard in range(len(endpoint)):
+                    res = account.get_balance(addr, endpoint[shard])
+                    if res != None:
+                        balance += res/1e18
+                        count = getTransactionsCount(shard, addr)
+                        if count != None:
+                            if 'result' in count:
+                                transaction += count['result']
+                t = {
+                    "address": addr,
+                    "transaction-count": transaction,
+                    "available-ONE": np.round(balance,2),
+                }
+                logger.info(json.dumps(t))
+
+        threads = []
+        for x in range(50):
+            threads.append(Thread(target = collect_data, args = [x]))
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        file_name = path.join(log_dir, "tracking_{}.log".format(network))
+        result = []
+        with open(file_name, errors='ignore') as f:
+            for line in f.readlines():
+                try: 
+                    result.append(json.loads(line))
+                except:
+                    print('bad json: ', line)
+        df = pd.DataFrame(result)
+        df = df.join(stake_df.set_index('address'), on = 'address')
+        df.fillna(0, inplace = True)
+        df['total-balance'] = df['total-stake'] + df['available-ONE']
+        df.drop(columns = ['total-stake'], inplace = True)
+        df.sort_values(by=['total-balance'], ascending=False, inplace = True) 
+        df['available-ONE'] = df['available-ONE'].apply(lambda c: '{:,.2f}'.format(c))
+        df['total-balance'] = df['total-balance'].apply(lambda c: '{:,.2f}'.format(c))
+        df.reset_index(drop = True, inplace = True)
+        data = json.loads(df.to_json())
+        
+        ref = db.reference('one-holder')
+#         addr_ref = ref.child('address')
+#         addr_lst = addr_ref.get()
+#         total_balance_ref = ref.child('total-balance')
+#         total_balance_lst = total_balance_ref.get()
+#         balance_ref = ref.child('available-ONE')
+#         balance_lst = balance_ref.get()
+#         txs_ref = ref.child('transaction-count')
+#         txs_lst = txs_ref.get()
+#         addr_index = dict(zip(addr_lst,range(len(addr_lst))))
+#         balance_dict = dict(zip(addr_lst, balance_lst))
+#         total_balance_dict = dict(zip(addr_lst, total_balance_lst))
+#         txs_dict = dict(zip(addr_lst, txs_lst))
+        
+#         addr_set = set(addr_lst)
+#         length = len(addr_lst)
+
+#         for i in range(len(df)):
+#             res = df.iloc[i]
+#             addr = res['address']
+#             balance = res['available-ONE']
+#             total_balance = res['total-balance']
+#             txs_count = res['transaction-count']
+#             if addr not in addr_set:
+#                 addr_ref.child(str(length)).set(addr)
+#                 balance_ref.child(str(length)).set(balance)
+#                 total_balance_ref.child(str(length)).set(total_balance)
+#                 txs_ref.child(str(length)).set(int(txs_count))
+
+#                 length += 1
+#             else:
+#                 if balance != balance_dict[addr]:
+#                     idx = addr_index[addr]
+#                     balance_ref.child(str(idx)).update(balance)
+#                 if total_balance != total_balance_dict[addr]:
+#                     idx = addr_index[addr]
+#                     total_balance_ref.child(str(idx)).update(total_balance)
+#                 if txs_count != txs_dict[addr]:
+#                     idx = addr_index[addr]
+#                     txs_ref.child(str(idx)).update(int(txs_count))
+        ref.update(data)
+        print(f"total running time: {time.time()-start}")
+        time.sleep(60)

@@ -17,7 +17,10 @@ import pandas as pd
 import copy
 import re
 import pyhmy 
-from pyhmy import rpc
+from pyhmy import (
+    blockchain,
+    rpc
+)
 
 base = path.dirname(path.realpath(__file__))
 data = path.abspath(path.join(base, 'address'))
@@ -58,21 +61,24 @@ if __name__ == "__main__":
             print("Could not make address directory")
             exit(1)
 
-    pkl_file = path.join(data,'address_{}.pickle'.format(network))
-    if path.exists(pkl_file):
+    addr_file = path.join(data,'address_{}.txt'.format(network))
+    if path.exists(addr_file):
         # restart from last records
-        with open(pkl_file, 'rb') as f:
-            address = pickle.load(f)
+        address = set()
+        with open(addr_file, 'r') as f:
+            for line in f:
+                curr = line[:-1]
+                address.add(curr)       
     else: 
         # first time setup: since some foundational nodes doesn't have txs history
         filename = path.join(data, 'fn_addresses.csv')
         fn_addr = pd.read_csv(filename, header = None, names = ['address', 'shard'])
         address = set(fn_addr['address'].tolist())
         
-    shard_info = path.join(data,'shard_info_{}.pickle'.format(network))
+    shard_info = path.join(data,'shard_info_{}.txt'.format(network))
     if path.exists(shard_info):
-        with open(shard_info, 'rb') as f:
-            prev = pickle.load(f)
+        with open(shard_info, 'r') as f:
+            prev = json.load(f, object_hook=lambda d: {int(k): v for k, v in d.items()})
     else:
         prev = {0:1, 1:1, 2:1, 3:1}
 
@@ -83,7 +89,7 @@ if __name__ == "__main__":
             fail = True
             while fail:
                 try:
-                    latest = rpc.blockchain.get_latest_header(endpoint[shard])
+                    latest = blockchain.get_latest_header(endpoint[shard])
                     fail = False
                 except rpc.exceptions.RequestsTimeoutError:
                     time.sleep(10)
@@ -105,7 +111,14 @@ if __name__ == "__main__":
             while not q.empty():
                 global address
                 i, shard = q.get()
-                res = rpc.blockchain.get_block_by_number(i, endpoint[shard], include_full_tx=True)
+                fail = True
+                while fail:
+                    try:
+                        res = blockchain.get_block_by_number(i, endpoint[shard], include_full_tx=True)
+                        fail = False
+                    except rpc.exceptions.RequestsTimeoutError:
+                        time.sleep(20)
+                        pass
                 if res:
                     transactions = res['transactions']
                     if transactions:
@@ -140,13 +153,14 @@ if __name__ == "__main__":
         
         # save data if we have new address
         if len(address) != addr_length:
-            logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} pickle file updated")
-            with open(pkl_file, 'wb') as f:
-                pickle.dump(address, f)
+            logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} address file updated")
+            with open(addr_file, 'w') as f:
+                for i in address:
+                    f.write('%s\n' % i)
         
         # deep copy dictionary
         prev = copy.deepcopy(curr)  
         # to quickly consume when any request error happen
-        with open(shard_info, 'wb') as f:
-            pickle.dump(prev, f)
+        with open(shard_info, 'w') as f:
+            json.dump(prev, f)
         time.sleep(30)

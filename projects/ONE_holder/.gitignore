@@ -8,3 +8,6 @@ csv/*
 address/*
 old_file/*
 html/
+
+# harmony cli
+bin/*
