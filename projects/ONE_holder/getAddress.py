@@ -24,6 +24,7 @@ from pyhmy import (
 
 base = path.dirname(path.realpath(__file__))
 data = path.abspath(path.join(base, 'address'))
+log_dir = path.abspath(path.join(base, 'logs'))
 
 if __name__ == "__main__":
 
@@ -46,7 +47,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger("ONE_holder")
     logger.setLevel(logging.INFO)
-    filename = "./logs/get_{}_address.log".format(network)
+    filename = path.join(log_dir, "get_{}_address.log".format(network))
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.INFO)
     file_handler = logging.FileHandler(filename)
