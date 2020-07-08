@@ -47,7 +47,6 @@
 - [2020/05/31](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_05_31.html)
 
 ## June
-## Latest Reports
 - [2020/06/01](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_06_01.html)
 - [2020/06/02](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_06_02.html)
 - [2020/06/03](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_06_03.html)
@@ -77,3 +76,4 @@
 - [2020/06/27](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_06_27.html)
 - [2020/06/28](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_06_28.html)
 - [2020/06/29](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_06_29.html)
+- [2020/06/30](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_06_30.html)
