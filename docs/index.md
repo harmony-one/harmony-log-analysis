@@ -1,8 +1,11 @@
-# Harmony's Data Analysis Project 
-This website displays the performance of Harmony network. It provides stats of transaction, transaction per second (tps), block time, size and their visualization.
+# Harmony Charts and Statistics
 
-- [Total Transaction Tracker](https://harmony-one.github.io/harmony-log-analysis/notebooks/transactions/)
+---
 
-- [Daily Feature Tracker](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/)
+[Blockchain Data](graphs/transparency_report/index.md)
+<img src="thumbnail/blockchain.jpeg?raw=true"/>
+
+[Daily Feature Tracker](notebooks/explorer_mini_logs/index.md)
+<img src="thumbnail/feature.jpeg?raw=true"/>
 
 

@@ -1,1 +1,12 @@
+title: Harmony
+logo: "thumbnail/harmony-logo.jpg?raw=true" 
+description: >
+  To scale trust and create a radically fair economy
+  <br><br>
+  Harmony is a fast and secure blockchain for decentralized applications. Our production mainnet supports 4 shards of 1000 nodes, producing blocks in 8 seconds with finality.
+  <br><br>
+  Our Effective Proof-of-Stake (EPoS) reduces centralization while supporting stake delegation, reward compounding and double-sign slashing.
+  <br><br>
+  <a href="https://www.harmony.one/">Join Us</a> 
+  
 theme: jekyll-theme-minimal
