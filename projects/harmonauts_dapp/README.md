@@ -9,10 +9,13 @@ Support transaction history for harmonauts.
 	- [Generate a private key file for your service account and initialize the SDK](https://firebase.google.com/docs/admin/setup#initialize-sdk)
     
 ## Commands
-- Create a bash file: `vim get_punk.sh`
-`/home/ubuntu/anaconda3/bin/python3 /home/ubuntu/jupyter/harmony-log-analysis/projects/harmonauts_dapp/get_punk_txs_history.py --endpoints [ENDPOINT] --address [ADDRESS]`
+- Create a bash file: `vim get_punk.sh`	
+```
+/home/ubuntu/anaconda3/bin/python3 /home/ubuntu/jupyter/harmony-log-analysis/projects/harmonauts_dapp/get_punk_txs_history.py --endpoints [ENDPOINT] --address [ADDRESS]
+```
 - Create a service file: `sudo vim /etc/systemd/system/get-punk.service`
-`[Unit]
+```
+[Unit]
 Description=get punk daemon
 After=network.target
 StartLimitIntervalSec=0
@@ -26,7 +29,7 @@ ExecStart=/bin/bash /home/ubuntu/jupyter/harmony-log-analysis/projects/harmonaut
 
 [Install]
 WantedBy=multi-user.target
-`
+```
 - Start the service: run `systemctl start get-punk`
 - Automatically get it to start on boot: run `systemctl enable get-punk`
 
