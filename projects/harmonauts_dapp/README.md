@@ -9,6 +9,8 @@ Support transaction history for harmonauts.
 	- [Generate a private key file for your service account and initialize the SDK](https://firebase.google.com/docs/admin/setup#initialize-sdk)
     
 ## Commands
+- Create a bash file: `vim get_punk.sh`
+`/home/ubuntu/anaconda3/bin/python3 /home/ubuntu/jupyter/harmony-log-analysis/projects/harmonauts_dapp/get_punk_txs_history.py --endpoints [ENDPOINT] --address [ADDRESS]`
 - Create a service file: `sudo vim /etc/systemd/system/get-punk.service`
 `[Unit]
 Description=get punk daemon
@@ -32,3 +34,6 @@ WantedBy=multi-user.target
 - logs folder: `/logs`
 - data stored on [firebase](https://console.firebase.google.com/u/0/project/harmony-explorer-mainnet/database/harmony-explorer-mainnet/data/harmony-punk), run API: `curl https://harmony-explorer-mainnet.firebaseio.com/harmony-punk.json`
 - backup data: `/address`
+
+## Decode Transaction History
+see `punk_explore.ipynb`
