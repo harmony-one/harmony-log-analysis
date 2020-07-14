@@ -2,7 +2,10 @@
 Support transaction history for harmonauts.
 
 ## Requirements
-- `python3 -m pip install -r requirements.txt`
+- Install packages
+```
+python3 -m pip install -r requirements.txt
+```
 - Connect to Firebase
 	- [Create a Firebase project](https://console.firebase.google.com/u/0/)
 	- [Add the Firebase Admin Python SDK](https://firebase.google.com/docs/admin/setup#add-sdk)
