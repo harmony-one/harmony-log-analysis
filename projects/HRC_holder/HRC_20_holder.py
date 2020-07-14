@@ -76,7 +76,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--endpoints', required = True, help = 'Endpoints to query from, seperated by commas')
-    parser.add_argument('--address', required = True, help = 'HRC address to query from, seperated by commas')
+    parser.add_argument('--address', required = True, help = 'HRC20 address to query from, seperated by commas')
+    parser.add_argument('--name', required = True, help = 'HRC20 name to query from, seperated by commas')
     args = parser.parse_args()
     endpoint = []
     if args.endpoints:
@@ -89,7 +90,14 @@ if __name__ == "__main__":
     else:
         print('Address is required.')
         exit(1)
-        
+    if args.name:
+        name = [x.strip() for x in args.address.strip().split(',')]        
+    else:
+        print('Address is required.')
+        exit(1)
+    length = len(address)
+    name_dict = dict(zip(list(range(length)), name))
+    addr_dict = dict(zip(list(range(length)), address))
     data = [addr_dir, log_dir, json_dir]
     for d in data:
         if not path.exists(d):
@@ -136,8 +144,13 @@ if __name__ == "__main__":
     cred = credentials.Certificate(path.join(json_dir, "harmony-explorer-mainnet-firebase-adminsdk.json"))
     # Initialize the app with a service account, granting admin privileges
     firebase_admin.initialize_app(cred, {'databaseURL': "https://harmony-explorer-mainnet.firebaseio.com"})
+    ref = db.reference('HRC-holder')
+    ref.child('address').update(addr_dict)
+    ref.child('name').update(name_dict)
     while True:  
         transactions = dict.fromkeys(address,[])
+        txs_dict = defaultdict(int)
+        idx = 0
         for addr in address:  
             addr_length = len(addr_set[addr])
             for shard in range(len(endpoint)):
@@ -152,11 +165,11 @@ if __name__ == "__main__":
                         res = getTransactionsHistory(shard, addr, page, 1000)
                         transactions[addr].extend(res[0:len(res)])
                     prev[addr][shard] = page*1000+len(res)
-                    
+                    txs_dict[idx] += prev[addr][shard]
                     with open(page_info, 'wb') as f:
                         pickle.dump(prev, f)
                     logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} page info for {addr} shard {shard} updates: {prev[addr][shard]}")
-                    
+            idx += 1
             thread_lst = defaultdict(list)
             total = min(50, len(transactions[addr]))
             for i in range(len(transactions[addr])):
@@ -190,6 +203,7 @@ if __name__ == "__main__":
                     pickle.dump(addr_set, f)
             addr_list = defaultdict(list)
             addr_list[addr] = list(addr_set[addr])
-        ref = db.reference('HRC-holder')
+        
+        ref.child('transactions').update(txs_dict)
         ref.update(addr_list)
         time.sleep(300)

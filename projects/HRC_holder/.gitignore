@@ -2,3 +2,5 @@ credential/*
 address/*
 logs/*
 bin/*
+get_holder.sh
+
