@@ -8,6 +8,10 @@
 [Unique Address Chart](unique_address.html)
 <img src="../../thumbnail/address.png?raw=true"/>
 
+--
+[Daily Volumn Chart](daily_volumn.html)
+<img src="../../thumbnail/volumn.jpg?raw=true"/>
+
 ---
 [Average Block Size Chart](avg_size.html)
 <img src="../../thumbnail/size.png?raw=true"/>
