@@ -1,5 +1,5 @@
 # HRC20 Holder Tracker
-This project provides the backend support for [HRC20 holder tracker website](https://harmony-hrc-holder.firebaseapp.com/#/). Check frontend [here](https://github.com/ivorytowerdds/hrc20-hodler). It collects all the HRC20 wallets' address. The data is stored on [Firebase](https://harmony-explorer-mainnet.firebaseio.com/HRC-holder). 
+This project provides the backend support for [HRC20 holder tracker website](https://harmony-hrc-holder.firebaseapp.com/#/). Check frontend [here](https://github.com/ivorytowerdds/hrc20-hodler). It collects all the HRC20 wallets' address. The data is stored on [Firebase](https://console.firebase.google.com/project/harmony-explorer-mainnet/database/harmony-explorer-mainnet/data/HRC-holder). 
 
 ## Requirements
 - Install packages
@@ -39,7 +39,7 @@ WantedBy=multi-user.target
 
 ## Outputs
 - logs folder: `/logs`
-- data stored on [firebase]https://console.firebase.google.com/project/harmony-explorer-mainnet/database/harmony-explorer-mainnet/data/HRC-holder), 
+- data stored on [firebase](https://console.firebase.google.com/project/harmony-explorer-mainnet/database/harmony-explorer-mainnet/data/HRC-holder) 
     - query HRC20 smart contract address API: 
     ```
     curl https://harmony-explorer-mainnet.firebaseio.com/HRC-holder/address.json
