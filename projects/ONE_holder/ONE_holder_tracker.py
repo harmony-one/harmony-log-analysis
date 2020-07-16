@@ -104,11 +104,9 @@ if __name__ == "__main__":
     base = path.dirname(path.realpath(__file__))
     addr_dir = path.abspath(path.join(base, 'address'))
     log_dir = path.abspath(path.join(base, 'logs'))
-    csv_dir = path.abspath(path.join(base, 'csv/{}'.format(network)))
     json_dir = path.abspath(path.join(base, 'credential'))
-#     html_dir = path.abspath(path.join(base, 'html'))
     
-    folder = [log_dir, csv_dir, addr_dir]
+    folder = [log_dir, addr_dir, json_dir]
     for f in folder:
         if not path.exists(f):
             try:
@@ -116,13 +114,12 @@ if __name__ == "__main__":
             except:
                 print("Could not make data directory")
                 exit(1)
-                
+    logger = new_log(network)            
     cred = credentials.Certificate(path.join(json_dir, "harmony-explorer-mainnet-firebase-adminsdk.json"))
     # Initialize the app with a service account, granting admin privileges
     firebase_admin.initialize_app(cred, {'databaseURL': "https://harmony-explorer-mainnet.firebaseio.com"})
     while True:
         start = time.time()
-        logger = new_log(network)
         filename = path.join(addr_dir, 'address_{}.txt'.format(network))
         address = []
         with open(filename, 'r') as f:
@@ -193,45 +190,6 @@ if __name__ == "__main__":
         data = json.loads(df.to_json())
         
         ref = db.reference('one-holder')
-#         addr_ref = ref.child('address')
-#         addr_lst = addr_ref.get()
-#         total_balance_ref = ref.child('total-balance')
-#         total_balance_lst = total_balance_ref.get()
-#         balance_ref = ref.child('available-ONE')
-#         balance_lst = balance_ref.get()
-#         txs_ref = ref.child('transaction-count')
-#         txs_lst = txs_ref.get()
-#         addr_index = dict(zip(addr_lst,range(len(addr_lst))))
-#         balance_dict = dict(zip(addr_lst, balance_lst))
-#         total_balance_dict = dict(zip(addr_lst, total_balance_lst))
-#         txs_dict = dict(zip(addr_lst, txs_lst))
-        
-#         addr_set = set(addr_lst)
-#         length = len(addr_lst)
-
-#         for i in range(len(df)):
-#             res = df.iloc[i]
-#             addr = res['address']
-#             balance = res['available-ONE']
-#             total_balance = res['total-balance']
-#             txs_count = res['transaction-count']
-#             if addr not in addr_set:
-#                 addr_ref.child(str(length)).set(addr)
-#                 balance_ref.child(str(length)).set(balance)
-#                 total_balance_ref.child(str(length)).set(total_balance)
-#                 txs_ref.child(str(length)).set(int(txs_count))
-
-#                 length += 1
-#             else:
-#                 if balance != balance_dict[addr]:
-#                     idx = addr_index[addr]
-#                     balance_ref.child(str(idx)).update(balance)
-#                 if total_balance != total_balance_dict[addr]:
-#                     idx = addr_index[addr]
-#                     total_balance_ref.child(str(idx)).update(total_balance)
-#                 if txs_count != txs_dict[addr]:
-#                     idx = addr_index[addr]
-#                     txs_ref.child(str(idx)).update(int(txs_count))
         ref.update(data)
         print(f"total running time: {time.time()-start}")
         time.sleep(60)

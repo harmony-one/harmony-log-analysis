@@ -21,10 +21,14 @@ from pyhmy import (
     blockchain,
     rpc
 )
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
 
 base = path.dirname(path.realpath(__file__))
 data = path.abspath(path.join(base, 'address'))
 log_dir = path.abspath(path.join(base, 'logs'))
+json_dir = path.abspath(path.join(base, 'credential'))
 
 if __name__ == "__main__":
 
@@ -55,12 +59,14 @@ if __name__ == "__main__":
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
     
-    if not path.exists(data):
-        try:
-            os.mkdir(data)
-        except:
-            print("Could not make address directory")
-            exit(1)
+    folder = [data, log_dir, json_dir]
+    for f in folder:
+        if not path.exists(f):
+            try:
+                os.makedirs(f)
+            except:
+                print("Could not make data directory")
+                exit(1)
 
     addr_file = path.join(data,'address_{}.txt'.format(network))
     if path.exists(addr_file):
@@ -72,10 +78,10 @@ if __name__ == "__main__":
                 address.add(curr)       
     else: 
         # first time setup: since some foundational nodes doesn't have txs history
-        filename = path.join(data, 'fn_addresses.csv')
-        fn_addr = pd.read_csv(filename, header = None, names = ['address', 'shard'])
-        address = set(fn_addr['address'].tolist())
-        
+        filename = path.join(addr_dir, 'All_FN_address.csv')
+        fn_addr = pd.read_csv(filename)
+        fn_address = set(fn_addr['address'].tolist() )
+
     shard_info = path.join(data,'shard_info_{}.txt'.format(network))
     if path.exists(shard_info):
         with open(shard_info, 'r') as f:
@@ -83,8 +89,17 @@ if __name__ == "__main__":
     else:
         prev = {0:1, 1:1, 2:1, 3:1}
 
+    cred = credentials.Certificate(path.join(json_dir, "harmony-explorer-mainnet-firebase-adminsdk.json"))
+    # Initialize the app with a service account, granting admin privileges
+    firebase_admin.initialize_app(cred, {'databaseURL': "https://harmony-explorer-mainnet.firebaseio.com"})
+    ref = db.reference('one-holder')
     while True:
         addr_length = len(address)
+        length_ref = ref.child('length')
+        length_ref.set(addr_length)
+        
+        shard_ref = ref.child('shard-info')
+        prev = dict(zip(list(range(4)), shard_ref.get()))
         curr = defaultdict(int)
         for shard in range(len(endpoint)):
             fail = True
@@ -99,6 +114,7 @@ if __name__ == "__main__":
                 curr[shard] = latest['blockNumber'] 
             else:
                 curr[shard] = prev[shard]
+        
         total = 0
         for shard in range(len(endpoint)):
             length = curr[shard] - prev[shard]
@@ -107,6 +123,7 @@ if __name__ == "__main__":
             # means no new change for any shard
             time.sleep(30)
             continue
+        shard_ref.update(curr)
         q = Queue()
         def collect_data(q): 
             while not q.empty():
@@ -159,9 +176,8 @@ if __name__ == "__main__":
                 for i in address:
                     f.write('%s\n' % i)
         
-        # deep copy dictionary
-        prev = copy.deepcopy(curr)  
         # to quickly consume when any request error happen
         with open(shard_info, 'w') as f:
-            json.dump(prev, f)
+            json.dump(curr, f)
+
         time.sleep(30)
