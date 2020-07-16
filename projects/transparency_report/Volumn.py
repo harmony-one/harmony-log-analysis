@@ -63,8 +63,8 @@ if __name__ == "__main__":
             
     logger = new_log()
     
-    prev = {0:1, 1:1, 2:1, 3:1}
-    curr = {0: 3797299, 1:3769233, 2:3806793, 3:3806793}
+    
+    prev = {0: 3797300, 1:3769234, 2:3806794, 3:3806794}
     while True:
         # get the number of threads
         total_block = 0

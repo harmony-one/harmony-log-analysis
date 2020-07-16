@@ -10,7 +10,7 @@
 
 ---
 [Daily Volumn Chart](daily_volumn.html)
-<img src="../../thumbnail/volumn.jpg?raw=true"/>
+<img src="../../thumbnail/volumn.png?raw=true"/>
 
 ---
 [Average Block Size Chart](avg_size.html)
