@@ -46,8 +46,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--address', required = True, help = 'ONE address to query from')
     parser.add_argument('--name', required = True, help = 'Your Name who is query from')
+    parser.add_argument('--endpoints', required = True, help = 'Endpoints to query from, seperated by commas.')
     args = parser.parse_args()
-    endpoint = ['https://api.s0.os.hmny.io/', 'https://api.s1.os.hmny.io/', 'https://api.s2.os.hmny.io/', 'https://api.s3.os.hmny.io/']
+    endpoint = []
+    if args.endpoints:
+        endpoint = [x.strip() for x in args.endpoints.strip().split(',')]   
+    else:
+        print('List of endpoints is required.')
+        exit(1)
     addr = args.address
     name = args.name
 
@@ -68,7 +74,7 @@ if __name__ == "__main__":
     df = pd.DataFrame.from_dict(res, orient='columns')
     df['timestamp'] = df['timestamp'].apply(lambda c: datetime.datetime.fromtimestamp(c))
     df['value'] = df['value'].apply(lambda c: int(c/1e18))
-    txs = df[['timestamp','from','to','value']]
+    txs = df[['timestamp','from','to','value', 'hash']]
     txs.to_csv(path.join(csv, f'{name}_transaction.csv'))
     print("csv successfully save to ./csv/{}_transaction.csv".format(name))
 

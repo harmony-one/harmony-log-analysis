@@ -59,56 +59,54 @@ if __name__ == "__main__":
             print("Could not make csv directory")
             exit(1)
     
-    while True:
-        epoch = getEpoch()
-        block = getBlockNumber()
-        print("-- Start Data Processing --")
-        # get the total validator number
-        val_infos = getAllValidatorInformation()
-        address = []
-        name = []
-        apr = []
-        uptime = []
-        stake = []
-        self_stake = []
-        rate = []
-        epos_status = []
-        boot_status = []
-        for i in val_infos:
-            address.append(i['validator']['address'])
-            name.append(i['validator']['name'])
-            apr.append("{0:.2f}%".format(float(i['lifetime']['apr'])*100))
-            sign_info = i['lifetime']['blocks']
-            if float(sign_info['to-sign']) != 0:
-                sign_perc = float(sign_info['signed'])/float(sign_info['to-sign'])
-                uptime.append("{0:.2f}%".format(sign_perc*100))
-            else:
-                uptime.append(None)    
-            stake.append(int(float(i['total-delegation'])/1e18))
-            self_stake.append(i['validator']['delegations'][0]['amount']/1e18)
-            rate.append("{0:.2f}%".format(float(i['validator']['rate'])))
-            epos_status.append(i['epos-status'])
-            boot_status.append(i['booted-status'])
-        df = pd.DataFrame(list(zip(address, name, apr, stake, self_stake, rate, uptime, epos_status, boot_status)), columns =['address', 'name', 'apr', 'total-stake', 'self-stake', 'fees', 'uptime', 'epos-status','boot_status'])
 
+    print("-- Start Data Processing --")
+    # get the total validator number
+    val_infos = getAllValidatorInformation()
+    address = []
+    name = []
+    apr = []
+    uptime = []
+    curr_uptime = []
+    stake = []
+    self_stake = []
+    rate = []
+    epos_status = []
+    boot_status = []
+    for i in val_infos:
+        address.append(i['validator']['address'])
+        name.append(i['validator']['name'])
+        apr.append("{0:.2f}%".format(float(i['lifetime']['apr'])*100))
+        sign_info = i['lifetime']['blocks']
+        if float(sign_info['to-sign']) != 0:
+            sign_perc = float(sign_info['signed'])/float(sign_info['to-sign'])
+            uptime.append("{0:.2f}%".format(sign_perc*100))
+        else:
+            uptime.append(None)   
+        if i['current-epoch-performance']:
+            curr_perc = float(i['current-epoch-performance']['current-epoch-signing-percent']['current-epoch-signing-percentage'])
+            curr_uptime.append("{0:.2f}%".format(curr_perc*100))
+        else:
+            curr_uptime.append(None)
+        stake.append(int(float(i['total-delegation'])/1e18))
+        self_stake.append(i['validator']['delegations'][0]['amount']/1e18)
+        rate.append("{0:.2f}".format(float(i['validator']['rate'])))
+        epos_status.append(i['epos-status'])
+        boot_status.append(i['booted-status'])
+    df = pd.DataFrame(list(zip(address, name, apr, stake, self_stake, rate, uptime, curr_uptime, epos_status, boot_status)), columns =['address', 'name', 'apr', 'total-stake', 'self-stake', 'fees', 'history_uptime', 'curr_epoch_uptime','epos-status','boot_status'])
 #         timestamp = datetime.datetime.now().strftime("%Y_%m_%d %H:%M:%S") 
-        print("-- Save csv files to ./csv/mainnet_validator/{}_{}_validator.csv --".format(epoch,block))
-        df.to_csv(path.join(data, '{}_{}_validator.csv'.format(epoch, block)), index = False)
-        gc = gspread.service_account('/home/ubuntu/jupyter/harmony-log-analysis/projects/staking_dashboard/credential/jsonFileFromGoogle.json')
-        sh = gc.open("harmony-mainnet-tracker")
-        worksheet = sh.worksheet("validator-tracker")
-        worksheet.update([df.columns.values.tolist()] + df.values.tolist())
-        
-        df['uptime'] = df['uptime'].apply(lambda c: float(c.replace("%",""))/100 if type(c) == str else c)
-        filter_df = df[(df['epos-status'] == 'not eligible to be elected next epoch') & (df['uptime'] > 0.8)]
-        filter_df.reset_index(drop = True, inplace = True)
-        print("-- Save csv files to ./csv/mainnet_validator/{}_{}_filter_validator.csv --".format(epoch,block))
-        filter_df.to_csv(path.join(data, '{}_{}_filter_validator.csv'.format(epoch, block)), index = False)
-        worksheet = sh.worksheet("filter-validator-tracker")
-        worksheet.update([filter_df.columns.values.tolist()] + filter_df.values.tolist())
-        
-        curr_epoch = getEpoch()
-        while epoch == curr_epoch:
-            time.sleep(7200)
-            curr_epoch = getEpoch()
- 
+#         print("-- Save csv files to ./csv/mainnet_validator/{}_{}_validator.csv --".format(epoch,block))
+#         df.to_csv(path.join(data, '{}_{}_validator.csv'.format(epoch, block)), index = False)
+    gc = gspread.service_account('/home/ubuntu/jupyter/harmony-log-analysis/projects/staking_dashboard/credential/jsonFileFromGoogle.json')
+    sh = gc.open("harmony-mainnet-tracker")
+    worksheet = sh.worksheet("validator-tracker")
+    worksheet.update([df.columns.values.tolist()] + df.values.tolist())
+
+    df['history_uptime'] = df['history_uptime'].apply(lambda c: float(c.replace("%",""))/100 if type(c) == str else c)
+    filter_df = df[(df['epos-status'] == 'not eligible to be elected next epoch') & (df['history_uptime'] > 0.8)]
+    filter_df.reset_index(drop = True, inplace = True)
+#         print("-- Save csv files to ./csv/mainnet_validator/{}_{}_filter_validator.csv --".format(epoch,block))
+#         filter_df.to_csv(path.join(data, '{}_{}_filter_validator.csv'.format(epoch, block)), index = False)
+    worksheet = sh.worksheet("filter-validator-tracker")
+    worksheet.update([filter_df.columns.values.tolist()] + filter_df.values.tolist())
+    print('update to google sheet')
