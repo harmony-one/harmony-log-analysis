@@ -1,0 +1,24 @@
+{
+  "name": "hrc_holder",
+  "version": "1.0.0",
+  "description": "hrc20 holder",
+  "main": "getBalance.js",
+  "dependencies": {
+    "@harmony-js/core": "^0.1.48",
+    "tslib": "^2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harmony-one/harmony-log-analysis.git"
+  },
+  "author": "yishuang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harmony-one/harmony-log-analysis/issues"
+  },
+  "homepage": "https://github.com/harmony-one/harmony-log-analysis#readme"
+}

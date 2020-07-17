@@ -91,10 +91,11 @@ if __name__ == "__main__":
         print('Address is required.')
         exit(1)
     if args.name:
-        name = [x.strip() for x in args.address.strip().split(',')]        
+        name = [x.strip() for x in args.name.strip().split(',')]        
     else:
-        print('Address is required.')
+        print('Name is required.')
         exit(1)
+        
     length = len(address)
     name_dict = dict(zip(list(range(length)), name))
     addr_dict = dict(zip(list(range(length)), address))
@@ -150,8 +151,8 @@ if __name__ == "__main__":
     while True:  
         transactions = dict.fromkeys(address,[])
         txs_dict = defaultdict(int)
-        idx = 0
-        for addr in address:  
+        for idx in range(len(addr_dict)):  
+            addr = addr_dict[idx]
             addr_length = len(addr_set[addr])
             for shard in range(len(endpoint)):
                 prev_count = prev[addr][shard]
@@ -165,11 +166,10 @@ if __name__ == "__main__":
                         res = getTransactionsHistory(shard, addr, page, 1000)
                         transactions[addr].extend(res[0:len(res)])
                     prev[addr][shard] = page*1000+len(res)
-                    txs_dict[idx] += prev[addr][shard]
                     with open(page_info, 'wb') as f:
                         pickle.dump(prev, f)
                     logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} page info for {addr} shard {shard} updates: {prev[addr][shard]}")
-            idx += 1
+                txs_dict[idx] += prev[addr][shard]
             thread_lst = defaultdict(list)
             total = min(50, len(transactions[addr]))
             for i in range(len(transactions[addr])):
@@ -197,13 +197,17 @@ if __name__ == "__main__":
             for t in threads:
                 t.join()
         
+            sub_ref = ref.child(addr)
             if len(addr_set[addr]) != addr_length:
                 logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} hrc_address {addr} updated")
                 with open(pkl_file, 'wb') as f:
                     pickle.dump(addr_set, f)
-            addr_list = defaultdict(list)
-            addr_list[addr] = list(addr_set[addr])
+                addr_list = defaultdict(list)
+                addr_list[addr] = list(addr_set[addr])
+                length = len(addr_set[addr])
+                sub_ref.child('address').update(dict(zip(list(range(length)), addr_set[addr])))
+                sub_ref.child('name').set(name_dict[idx])
         
         ref.child('transactions').update(txs_dict)
-        ref.update(addr_list)
+        print("txs update")
         time.sleep(300)

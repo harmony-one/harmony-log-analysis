@@ -3,4 +3,5 @@ address/*
 logs/*
 bin/*
 get_holder.sh
-
+node_modules/*
+*.ipynb
