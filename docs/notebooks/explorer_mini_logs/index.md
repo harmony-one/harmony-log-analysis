@@ -18,5 +18,6 @@ This page provides daily analysis for Mainnet.
 - [2020/07/14](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_07_14.html)
 - [2020/07/15](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_07_15.html)
 - [2020/07/16](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_07_16.html)
+- [2020/07/17](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/mainnet_2020_07_17.html)
 
 ### [Old Reports](https://harmony-one.github.io/harmony-log-analysis/notebooks/explorer_mini_logs/old_report)
