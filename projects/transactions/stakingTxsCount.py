@@ -136,7 +136,7 @@ if __name__ == "__main__":
         with open(count_file, 'w') as f:
             f.write(str(total))
         with open(shard_info, 'w') as f:
-            f.write(str(prev))
+            f.write(str(curr))
         prev = curr
         print("update count and shard info in txt file")
         

@@ -3,4 +3,4 @@ logs/*
 *.json
 .ipynb_checkpoints/
 *.sh
-
+txt/*
