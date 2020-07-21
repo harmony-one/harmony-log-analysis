@@ -45,7 +45,7 @@ if __name__ == "__main__":
         if i not in remove:
             new_column.append(i)
     df = pd.DataFrame(validator, columns = new_column)
-    percent_change = ['rate','max-rate','max-change-rate', 'apr','last_apr','uptime_percentage']
+    percent_change = ['rate','max-rate','max-change-rate', 'last_apr','uptime_percentage']
     for name in percent_change:
         df[name] = df[name].apply(lambda c: None if np.isnan(float(c)) else "{0:.2f}%".format(float(c)*100))
     atto_change = ['min-self-delegation','max-total-delegation', 'self_stake', 'total_stake', 'lifetime_reward_accumulated']
