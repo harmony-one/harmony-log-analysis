@@ -99,6 +99,7 @@ if __name__ == "__main__":
     length = len(address)
     name_dict = dict(zip(list(range(length)), name))
     addr_dict = dict(zip(list(range(length)), address))
+    addr_to_name = dict(zip(address, name))
     data = [addr_dir, log_dir, json_dir]
     for d in data:
         if not path.exists(d):
@@ -126,11 +127,25 @@ if __name__ == "__main__":
     version_str = re.search('version v.*-', pyhmy_version).group(0).split('-')[0].replace("version v", "")
     assert int(version_str) >= 321
     
+    cred = credentials.Certificate(path.join(json_dir, "harmony-explorer-mainnet-firebase-adminsdk.json"))
+    # Initialize the app with a service account, granting admin privileges
+    firebase_admin.initialize_app(cred, {'databaseURL': "https://harmony-explorer-mainnet.firebaseio.com"})
+    ref = db.reference('HRC-holder')
+    ref.child('address').set(addr_dict)
+    ref.child('name').set(name_dict)
+    
     pkl_file = path.join(addr_dir,'address_HRC.pkl')
     if path.exists(pkl_file):
         # restart from last records
         with open(pkl_file, 'rb') as f:
             addr_set = pickle.load(f)
+            if len(address) != len(addr_set):
+                for i in address:
+                    if i not in addr_set:
+                        addr_set[i] = set()
+                        sub_ref = ref.child(i)
+                        sub_ref.child('name').set(addr_to_name[i])
+                    print(f"add new address {i} to address_HRC")
     else: 
         addr_set = dict.fromkeys(address, set())
         
@@ -138,18 +153,19 @@ if __name__ == "__main__":
     if path.exists(page_info):
         with open(page_info, 'rb') as f:
             prev = pickle.load(f)
+            if len(address) != len(prev):
+                for i in address:
+                    if i not in prev:
+                        info = {0:0, 1:0, 2:0, 3:0}
+                        prev[i] = info
+                    print(f"add new address {i} to txs page info")
     else:
         info = {0:0, 1:0, 2:0, 3:0}
         prev = dict.fromkeys(address,info)
     
-    cred = credentials.Certificate(path.join(json_dir, "harmony-explorer-mainnet-firebase-adminsdk.json"))
-    # Initialize the app with a service account, granting admin privileges
-    firebase_admin.initialize_app(cred, {'databaseURL': "https://harmony-explorer-mainnet.firebaseio.com"})
-    ref = db.reference('HRC-holder')
-    ref.child('address').update(addr_dict)
-    ref.child('name').update(name_dict)
+
     while True:  
-        transactions = dict.fromkeys(address,[])
+        transactions = defaultdict(list)
         txs_dict = defaultdict(int)
         for idx in range(len(addr_dict)):  
             addr = addr_dict[idx]
@@ -158,6 +174,9 @@ if __name__ == "__main__":
                 prev_count = prev[addr][shard]
                 page = max(0, (prev_count-1))//1000
                 size = max(0, (prev_count-1))%1000+1
+                if size == 1000:
+                    page += 1
+                    size = 0
                 res = getTransactionsHistory(shard, addr, page, 1000)
                 if len(res) != 0 and len(res) != size:
                     transactions[addr].extend(res[size:len(res)])
@@ -172,9 +191,10 @@ if __name__ == "__main__":
                 txs_dict[idx] += prev[addr][shard]
             thread_lst = defaultdict(list)
             total = min(50, len(transactions[addr]))
+            logger.info(f"address {addr}, total processing thread, {total}")
             for i in range(len(transactions[addr])):
                 thread_lst[i%total].append(i)
-
+            
             def collect_data(x):
                 for i in thread_lst[x]: 
                     global addr_set
@@ -196,7 +216,8 @@ if __name__ == "__main__":
                 t.start()
             for t in threads:
                 t.join()
-        
+            time.sleep(30)
+            
             sub_ref = ref.child(addr)
             if len(addr_set[addr]) != addr_length:
                 logger.info(f"{datetime.now().strftime('%Y_%m_%d %H:%M:%S')} hrc_address {addr} updated")
@@ -205,9 +226,10 @@ if __name__ == "__main__":
                 addr_list = defaultdict(list)
                 addr_list[addr] = list(addr_set[addr])
                 length = len(addr_set[addr])
-                sub_ref.child('address').update(dict(zip(list(range(length)), addr_set[addr])))
-                sub_ref.child('name').set(name_dict[idx])
+                sub_ref.child('address').set(dict(zip(list(range(length)), addr_set[addr])))
+                sub_ref.child('length').set(length)
+                
         
-        ref.child('transactions').update(txs_dict)
+        ref.child('transactions').set(txs_dict)
         print("txs update")
         time.sleep(300)

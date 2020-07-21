@@ -5,6 +5,7 @@
   "main": "getBalance.js",
   "dependencies": {
     "@harmony-js/core": "^0.1.48",
+    "firebase-admin": "^9.0.0",
     "tslib": "^2.0.0"
   },
   "devDependencies": {},
