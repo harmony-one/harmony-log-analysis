@@ -49,9 +49,8 @@ if __name__ == "__main__":
     for i in range(4):
         txs += client.collection(u'data').document(u'shard{}'.format(i)).get().to_dict()['txCount']
         
-    link = "https://harmony-explorer-mainnet.firebaseio.com/total-stakingTxs-count.json"
-    res = requests.get(link)
-    staking_txs = json.loads(res.content)
+    staking_txs = client.collection(u'data').document(u'shard0').get().to_dict()['stakingTxCount']
+
     date = (datetime.date.today()-datetime.timedelta(days=1)).strftime("%Y_%m_%d")
 #     date = datetime.date.today().strftime("%Y_%m_%d")
     txs_count[date] = txs

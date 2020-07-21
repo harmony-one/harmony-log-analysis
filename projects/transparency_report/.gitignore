@@ -1,4 +1,5 @@
 data/
 logs/
 *.log
+transaction_data/*
 

@@ -20,7 +20,7 @@ from pyhmy import (
 
 base = path.dirname(path.realpath(__file__))
 logs = path.abspath(path.join(base, 'logs'))
-
+data = path.abspath(path.join(base, 'data'))
 def new_log():
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger("volumn")
@@ -52,7 +52,7 @@ if __name__ == "__main__":
         print('Network is required.')
         exit(1)
         
-    directory = [logs]
+    directory = [logs, data]
     for d in directory:
         if not path.exists(d):
             try:
@@ -63,10 +63,26 @@ if __name__ == "__main__":
             
     logger = new_log()
     
-    
-    prev = {0: 3797300, 1:3769234, 2:3806794, 3:3806794}
+    shard_info = path.join(data,'volumn_shard_info.txt')
+    if path.exists(shard_info):
+        with open(shard_info, 'r') as f:
+            prev = json.load(f, object_hook=lambda d: {int(k): v for k, v in d.items()})
+    else:
+        prev = {0: 3797300, 1:3769234, 2:3806794, 3:3806794}
+    curr = defaultdict(int)
     while True:
         # get the number of threads
+        for shard in range(len(endpoint)):
+            fail = True
+            while fail:
+                try:
+                    latest = blockchain.get_latest_header(endpoint[shard])
+                    fail = False
+                except rpc.exceptions.RequestsTimeoutError:
+                    time.sleep(10)
+                    pass
+            if latest:
+                curr[shard] = latest['blockNumber'] 
         total_block = 0
         for shard in range(len(endpoint)):
             length = curr[shard] - prev[shard]
@@ -78,7 +94,6 @@ if __name__ == "__main__":
         # output from queue
         def collect_data(q):
             while not q.empty():
-                global total
                 i, shard = q.get()
                 res = blockchain.get_block_by_number(i, endpoint=endpoint[shard], include_full_tx=True)
                 if res != None:
@@ -110,3 +125,8 @@ if __name__ == "__main__":
             worker.start()            
                 
         q.join()
+        
+        with open(shard_info, 'w') as f:
+            json.dump(curr, f)
+        prev = copy.deepcopy(curr)  
+        time.sleep(30)
