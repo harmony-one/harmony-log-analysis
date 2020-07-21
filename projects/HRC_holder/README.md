@@ -12,7 +12,7 @@ python3 -m pip install -r requirements.txt
 	- [Generate a private key file for your service account and initialize the SDK](https://firebase.google.com/docs/admin/setup#initialize-sdk)
 
 
-## Run on a service
+## Run on a service to get holders
 - Create a bash file: `vim get_holder.sh`
 ```
 /home/ubuntu/anaconda3/bin/python3 /home/ubuntu/jupyter/harmony-log-analysis/projects/HRC_holder/HRC_20_holder.py --endpoints [ENDPOINTS] --address [ADDRES] --name [NAME]
@@ -36,6 +36,10 @@ WantedBy=multi-user.target
 ```
 - Start the service: run `sudo systemctl start hrc20`
 - Automatically get it to start on boot: run `sudo systemctl enable hrc20`
+
+## Use cronjob to get balance
+- edit crontab: `crontab -e`, 
+- run a cronjob every 5 minutes: `*/5 * * * * cd /home/ubuntu/jupyter/harmony-log-analysis/projects/HRC_holder && /usr/bin/node getBalance.js`
 
 ## Outputs
 - logs folder: `/logs`
