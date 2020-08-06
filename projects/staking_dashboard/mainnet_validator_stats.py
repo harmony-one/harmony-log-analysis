@@ -102,11 +102,11 @@ if __name__ == "__main__":
     worksheet = sh.worksheet("validator-tracker")
     worksheet.update([df.columns.values.tolist()] + df.values.tolist())
 
-    df['history_uptime'] = df['history_uptime'].apply(lambda c: float(c.replace("%",""))/100 if type(c) == str else c)
-    filter_df = df[(df['epos-status'] == 'not eligible to be elected next epoch') & (df['history_uptime'] > 0.8)]
-    filter_df.reset_index(drop = True, inplace = True)
+#     df['history_uptime'] = df['history_uptime'].apply(lambda c: float(c.replace("%",""))/100 if type(c) == str else c)
+#     filter_df = df[(df['epos-status'] == 'not eligible to be elected next epoch') & (df['history_uptime'] > 0.8)]
+#     filter_df.reset_index(drop = True, inplace = True)
 #         print("-- Save csv files to ./csv/mainnet_validator/{}_{}_filter_validator.csv --".format(epoch,block))
 #         filter_df.to_csv(path.join(data, '{}_{}_filter_validator.csv'.format(epoch, block)), index = False)
-    worksheet = sh.worksheet("filter-validator-tracker")
-    worksheet.update([filter_df.columns.values.tolist()] + filter_df.values.tolist())
+#     worksheet = sh.worksheet("filter-validator-tracker")
+#     worksheet.update([filter_df.columns.values.tolist()] + filter_df.values.tolist())
     print('update to google sheet')
