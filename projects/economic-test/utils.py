@@ -5,7 +5,7 @@ import requests
 from collections import defaultdict
 
 def get_information(method, params):
-    url = 'https://api.s0.t.hmny.io'
+    url = 'https://api.s0.b.hmny.io'
     headers = {'Content-Type': 'application/json'}
     data = {"jsonrpc":"2.0", "method": method, "params": params, "id":1}
     r = requests.post(url, headers=headers, data = json.dumps(data))
@@ -25,6 +25,12 @@ def getAllValidator():
 def getAllValidatorInformation():
     method = 'hmy_getAllValidatorInformation'
     params = [-1]
+    return get_information(method, params)['result']
+
+
+def getAllValidatorInformationByBlockNumber(blocknum):
+    method = 'hmyv2_getAllValidatorInformationByBlockNumber'
+    params = [-1, blocknum]
     return get_information(method, params)['result']
 
 def getAllElectedValidator():
