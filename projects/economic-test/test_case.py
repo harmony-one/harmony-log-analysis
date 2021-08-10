@@ -598,22 +598,21 @@ def R4_test(single):
 
 def R5_test(single):
     logger.info(f"Test-R5: Reward given out to block signers sums up to the total block reward")
-    logger.info(f"check sum over earned-reward diff of all keys per shard = 28")
+    logger.info(f"check sum over earned-reward diff of all keys per shard = 7 * 64 = 448")
+
     block, last_block = getCurrentAndLastBlock()
     logger.info(f"current and last block numbers: {block}, {last_block}")
-    if block == last_block or block == last_block -1:
-        logger.info(f"current at the last block or last second block, wait until the first block in the new epoch")
-        while block < last_block+1:
+    if block > last_block - 65:
+        logger.info(f"Less than 65 blocks to go before epoch change, wait until the 5th block in the new epoch")
+        while block < last_block+5:
             block = getBlockNumber()
-                    
-    next_block = block + 1
-    while block < next_block:
-        block = getBlockNumber()
-    time.sleep(3)
+
+    block = getBlockNumber()
+    logger.info(f"current block number {block}")
     logger.info(f"current block {block}, will begin collecting infos...")
 
     earn_rewards_prev = defaultdict(dict)
-    validator_infos = getAllValidatorInformation()
+    validator_infos = getAllValidatorInformationByBlockNumber(block)
     for i in validator_infos:
         if i['metrics']:
             for k in i['metrics']['by-bls-key']:
@@ -623,7 +622,8 @@ def R5_test(single):
                 earn_reward = k['earned-reward']
                 earn_rewards_prev[shard][bls_key] = earn_reward
                 
-    next_block = block + 1
+    next_block = block + 64
+    logger.info(f"Info captured now need to wait another 64 blocks for new reward calculation")
     while block < next_block:
         block = getBlockNumber()
     time.sleep(3)
@@ -631,8 +631,8 @@ def R5_test(single):
     flag = True
     # get the validator info and compute validator rewards
     earn_rewards_curr = defaultdict(dict)
-    validator_infos = getAllValidatorInformation()
-    block_reward = 28e18
+    validator_infos = getAllValidatorInformationByBlockNumber(next_block)
+    block_reward = 7e18
     for i in validator_infos:
         if i['metrics']:
             for k in i['metrics']['by-bls-key']:
@@ -644,9 +644,10 @@ def R5_test(single):
     earn_reward_diff = diffAndFilter2(earn_rewards_prev, earn_rewards_curr) 
     for shard, diff in earn_reward_diff.items():
         reward = sum(diff.values())
-        if format(reward, '.20e') != format(block_reward, '.20e'):
+
+        if format(reward, '.20e') != format(64 *block_reward, '.20e'):
             logger.warning(f"Test-R5: Fail")
-            logger.warning(f"shard: {shard}, block: {block}, sum of earned reward: {reward:.20e}, block reward: {block_reward:.20e}\n")
+            logger.warning(f"shard: {shard}, block: {block}, sum of earned reward: {reward:.20e}, block reward: {64 * block_reward:.20e}\n")
             flag = False
     
     if single:
@@ -664,17 +665,16 @@ def R6_test(single):
     
     block, last_block = getCurrentAndLastBlock()
     logger.info(f"current and last block numbers: {block}, {last_block}")
-
-    if block != last_block:
-        while block < last_block:
+    if block > last_block - 65:
+        logger.info(f"Less than 65 blocks to go before epoch change, wait until the 5th block in the new epoch")
+        while block < last_block+5:
             block = getBlockNumber()
-        logger.info(f"current block {block}, will begin collecting delegator infos...")
-        time.sleep(4)
-    
+
     acc_rewards_prev = dict()
     delegations_prev = dict()
     total_stake = dict()
-    validator_infos = getAllValidatorInformation()
+    logger.info(f"Capturing information on block {block}")
+    validator_infos = getAllValidatorInformationByBlockNumber(block)
     for i in validator_infos:
         if i['currently-in-committee'] == True:
             address = i['validator']['address']
@@ -689,7 +689,8 @@ def R6_test(single):
             delegations_prev[address] = dels
             total_stake[address] = i['total-delegation']
 
-    next_block = block + 1
+    next_block = block + 64
+    logger.info(f"Waiting for 64 blocks to ensure next reward distribution")
     while block < next_block:
         block = getBlockNumber()
     logger.info(f"new block {block} reached, will begin testing...")
@@ -697,7 +698,7 @@ def R6_test(single):
     # get the validator info and compute validator rewards
     acc_rewards_curr = dict()
     delegations_curr = dict()
-    validator_infos = getAllValidatorInformation()
+    validator_infos = getAllValidatorInformationByBlockNumber(next_block)
     for i in validator_infos:
         if i['currently-in-committee'] == True:
             address = i['validator']['address']
@@ -748,16 +749,16 @@ def R7_test(single):
     
     block, last_block = getCurrentAndLastBlock()
     logger.info(f"current and last block numbers: {block}, {last_block}")
-    if block == last_block or block + 1 == last_block:
-        logger.info(f"current at the last block (or last block - 1), wait until the 5th/6th block in the new epoch")
-        while block < last_block+6:
-            block = getBlockNumber()
-            time.sleep (5)
+    if block > last_block - 65:
+        logger.info(f"Less than 65 blocks to go before epoch change, wait until the 5th block in the new epoch")
+        while block < last_block+5:
+            block = getBlockNumber()    
+    
     logger.info(f"current block {block}, will begin collecting infos...")
 
     acc_rewards_prev = dict()
     delegations_prev = dict()
-    validator_infos = getAllValidatorInformation()
+    validator_infos = getAllValidatorInformationByBlockNumber(block)
     for i in validator_infos:
         if i['currently-in-committee'] == True:
             address = i['validator']['address']
@@ -774,15 +775,16 @@ def R7_test(single):
     num = 2
     flag = True
     while iterations < num:
-        next_block = block+1
+        next_block = block + 64
+        logger.info(f"Waiting 64 blocks to make sure there is a new reward distribution")
         while block < next_block:
             block = getBlockNumber()
         logger.info(f"new block {block} reached, will begin testing...")
             # get the validator info and compute validator rewards
         acc_rewards_curr = dict()
         delegations_curr = dict()
-        validator_infos = getAllValidatorInformation()
-        block_reward = 28e18
+        validator_infos = getAllValidatorInformationByBlockNumber(next_block)
+        block_reward = 7e18
         validator_rewards = 0
         total_reward = 0
         signers = 0
@@ -845,24 +847,29 @@ def R9_test(single):
     
     block, last_block = getCurrentAndLastBlock()
     logger.info(f"current and last block numbers: {block}, {last_block}")
-    if block == last_block or block+1 == last_block:
-        logger.info(f"current at the last block or last second block, wait until the 5th/6th block in the new epoch")
-        while block < last_block+6: 
-            block = getBlockNumber()
-    logger.info(f"current block: {block}, will begin collecting infos...")
+    if block > last_block - 65:
+        logger.info(f"Less than 65 blocks to go before epoch change, wait until the 5th block in the new epoch")
+        while block < last_block+5:
+            block = getBlockNumber()    
+    
+    logger.info(f"current block {block}, will begin collecting infos...")
+
     acc_rewards_prev = dict()
     validator_infos = getAllValidatorInformation()
     for i in validator_infos:
         if i['currently-in-committee'] == True:
             address = i['validator']['address']
             reward_accumulated = i['lifetime']['reward-accumulated']
-            acc_rewards_prev[address] = reward_accumulated        
-    next_block = block + 1
+            acc_rewards_prev[address] = reward_accumulated   
+
+    logger.info(f"Waiting 64 blocks to make sure there is a new reward distribution")
+    next_block = block + 64
     while block < next_block:
         block = getBlockNumber()
+
     logger.info(f"new block reached: {block}, will begin testing...")        
     # per-shard
-    # default reward = 18 ONEs
+    # default reward = 7 ONEs
     # min reward = 0, when >= 80% staked instead of 35% (of the circulating supply)
     # max reward = 32, when ~0% staked instead of 35% (of the circulating supply)
     # so, for four shards, (min, max) = (0, 128)
@@ -922,8 +929,73 @@ def R14_test(single):
         logger.info(f"the average apr for each shard: {apr_avg}\n")
         iterations += 1  
 
-    curr_test = None
+    curr_test = R15_test
     return "Need Manually Check", curr_test
+
+def R15_test(single):
+    logger.info(f"Test-R15: Block reward aggregation: reward are accrued only every 64 blocks, 2 blocks shouln't have reward")
+
+    block, last_block = getCurrentAndLastBlock()
+    logger.info(f"current and last block numbers: {block}, {last_block}")
+    if block > last_block - 65:
+        logger.info(f"Only 65 blocks to go before epoch change, wait until the 5th block in the new epoch")
+        while block < last_block+5:
+            block = getBlockNumber()
+
+    block = getBlockNumber()
+    logger.info(f"current block number {block}")
+
+    acc_rewards_curr = getRewards()
+
+    next_block = block + 1
+    while block < next_block:
+        block = getBlockNumber()
+    logger.info(f"new block {block} reached, will begin testing...")
+
+    new_rewards = getRewards()
+    for val_add in acc_rewards_curr.keys():
+        if new_rewards[val_add] != acc_rewards_curr[val_add]:
+            logger.info(f"test just fail but let's confirm since we might just hit the 64th block distribution")
+            #wait for another block since we might have hit just the 64th block reward distribution
+            next_block = block + 1
+            while block < next_block:
+                block = getBlockNumber()
+            logger.info(f"new block {block} reached, will begin testing...")
+            if new_rewards[val_add] != acc_rewards_curr[val_add]:
+                logger.warning(f"Test-R15: Fail")
+                logger.warning(f"Reward are distributed more often than every 64th block\n")
+        break #no need to test all validator
+    logger.info(f"Test-R15: Succeed\n")
+    return True, R16_test
+            
+def R16_test(single):
+    logger.info(f"Test-R16: Block reward aggregation: reward are accrued only every 64 blocks, wait 64 blocks")
+
+    block, last_block = getCurrentAndLastBlock()
+    logger.info(f"current and last block numbers: {block}, {last_block}")
+    if block > last_block - 65:
+        logger.info(f"Only 65 blocks to go before epoch change, wait until the 5th block in the new epoch")
+        while block < last_block+5:
+            block = getBlockNumber()
+
+    block = getBlockNumber()
+    logger.info(f"current block number {block}")
+
+    acc_rewards_curr = getRewards()
+
+    next_block = block + 64
+    while block < next_block:
+        block = getBlockNumber()
+    logger.info(f"new block {block} reached, will begin testing...")
+
+    new_rewards = getRewards()
+    for val_add in acc_rewards_curr.keys():
+        if new_rewards[val_add] == acc_rewards_curr[val_add]:
+            logger.warning(f"Test-R15: Fail")
+            logger.warning(f"Reward aren't earned after 64 blocks\n")
+        break #no need to test all validator
+    logger.info(f"Test-R16: Succeed\n")
+    return True, None
 
 def CN1_test(single):
     logger.info(f"Test-CN1: Slow validator is never starved (should be able to sign blocks)")
